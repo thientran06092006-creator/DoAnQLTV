@@ -48,11 +48,30 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DbConnection.cs" />
+    <Compile Include="FrmDanhSachPhieuMuon.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmDanhSachPhieuMuon.Designer.cs">
+      <DependentUpon>FrmDanhSachPhieuMuon.cs</DependentUpon>
+    </Compile>
     <Compile Include="FrmDocGia.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="FrmDocGia.Designer.cs">
       <DependentUpon>FrmDocGia.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrmHuongDanSuDung.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmHuongDanSuDung.Designer.cs">
+      <DependentUpon>FrmHuongDanSuDung.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrmLapPhieuMuon.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmLapPhieuMuon.Designer.cs">
+      <DependentUpon>FrmLapPhieuMuon.cs</DependentUpon>
     </Compile>
     <Compile Include="FrmLogin.cs">
       <SubType>Form</SubType>
@@ -84,16 +103,55 @@
     <Compile Include="FrmTacGia.Designer.cs">
       <DependentUpon>FrmTacGia.cs</DependentUpon>
     </Compile>
+    <Compile Include="FrmTestConnection.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmTestConnection.Designer.cs">
+      <DependentUpon>FrmTestConnection.cs</DependentUpon>
+    </Compile>
     <Compile Include="FrmTheLoai.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="FrmTheLoai.Designer.cs">
       <DependentUpon>FrmTheLoai.cs</DependentUpon>
     </Compile>
+    <Compile Include="FrmThongTinChuongTrinh.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmThongTinChuongTrinh.Designer.cs">
+      <DependentUpon>FrmThongTinChuongTrinh.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrmThongTinDocGia.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmThongTinDocGia.Designer.cs">
+      <DependentUpon>FrmThongTinDocGia.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrmTimKiemSach.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmTimKiemSach.Designer.cs">
+      <DependentUpon>FrmTimKiemSach.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrmTraSach.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmTraSach.Designer.cs">
+      <DependentUpon>FrmTraSach.cs</DependentUpon>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="FrmDanhSachPhieuMuon.resx">
+      <DependentUpon>FrmDanhSachPhieuMuon.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="FrmDocGia.resx">
       <DependentUpon>FrmDocGia.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmHuongDanSuDung.resx">
+      <DependentUpon>FrmHuongDanSuDung.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmLapPhieuMuon.resx">
+      <DependentUpon>FrmLapPhieuMuon.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FrmLogin.resx">
       <DependentUpon>FrmLogin.cs</DependentUpon>
@@ -110,8 +168,23 @@
     <EmbeddedResource Include="FrmTacGia.resx">
       <DependentUpon>FrmTacGia.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="FrmTestConnection.resx">
+      <DependentUpon>FrmTestConnection.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="FrmTheLoai.resx">
       <DependentUpon>FrmTheLoai.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmThongTinChuongTrinh.resx">
+      <DependentUpon>FrmThongTinChuongTrinh.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmThongTinDocGia.resx">
+      <DependentUpon>FrmThongTinDocGia.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmTimKiemSach.resx">
+      <DependentUpon>FrmTimKiemSach.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmTraSach.resx">
+      <DependentUpon>FrmTraSach.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using System.Data.SqlClient;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -17,54 +18,55 @@ namespace DoAnQLTV
         {
             InitializeComponent();
 
-            HienThiDuLieuMau();
+            LoadDocGia();
         }
 
-        private void HienThiDuLieuMau()
+        private void LoadDocGia()
         {
-            dgvDocGia.Rows.Clear();
+            try
+            {
+                using (SqlConnection conn = DbConnection.GetConnection())
+                {
+                    conn.Open();
 
-            dgvDocGia.Rows.Add(
-                "DG001",
-                "Nguyễn Văn An",
-                "01/01/2004",
-                "TP. Hồ Chí Minh",
-                "0900000001");
+                    string sql = @"
+                SELECT MaDocGia, TenDocGia, NgaySinh, DiaChi, SoDienThoai
+                FROM DocGia
+                ORDER BY MaDocGia";
 
-            dgvDocGia.Rows.Add(
-                "DG002",
-                "Trần Thị Bình",
-                "15/03/2004",
-                "TP. Hồ Chí Minh",
-                "0900000002");
+                    using (SqlDataAdapter adapter = new SqlDataAdapter(sql, conn))
+                    {
+                        DataTable dt = new DataTable();
+                        adapter.Fill(dt);
 
-            dgvDocGia.Rows.Add(
-                "DG003",
-                "Lê Văn Cường",
-                "20/05/2003",
-                "Đồng Nai",
-                "0900000003");
+                        dgvDocGia.Rows.Clear();
 
-            dgvDocGia.Rows.Add(
-                "DG004",
-                "Phạm Thị Dung",
-                "10/08/2004",
-                "Bình Dương",
-                "0900000004");
-
-            dgvDocGia.Rows.Add(
-                "DG005",
-                "Hoàng Văn Em",
-                "25/12/2003",
-                "Long An",
-                "0900000005");
+                        foreach (DataRow row in dt.Rows)
+                        {
+                            dgvDocGia.Rows.Add(
+                                row["MaDocGia"].ToString(),
+                                row["TenDocGia"].ToString(),
+                                Convert.ToDateTime(row["NgaySinh"]).ToString("dd/MM/yyyy"),
+                                row["DiaChi"].ToString(),
+                                row["SoDienThoai"].ToString());
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    "Không thể tải dữ liệu độc giả.\n\n" + ex.Message,
+                    "Lỗi",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+            }
         }
-
         private void btnThem_Click(object sender, EventArgs e)
         {
             string maDocGia = txtMaDocGia.Text.Trim();
             string tenDocGia = txtTenDocGia.Text.Trim();
-            string ngaySinh = dtpNgaySinh.Value.ToString("dd/MM/yyyy");
+            DateTime ngaySinh = dtpNgaySinh.Value;
             string diaChi = txtDiaChi.Text.Trim();
             string soDienThoai = txtSoDienThoai.Text.Trim();
 
@@ -116,47 +118,74 @@ namespace DoAnQLTV
                 return;
             }
 
-            foreach (DataGridViewRow row in dgvDocGia.Rows)
+            try
             {
-                if (row.IsNewRow)
-                    continue;
+                using (SqlConnection conn = DbConnection.GetConnection())
+                {
+                    conn.Open();
 
-                string maCu = row.Cells["colMaDocGia"].Value?.ToString() ?? "";
+                    string sql = @"
+                INSERT INTO DocGia
+                    (MaDocGia, TenDocGia, NgaySinh, DiaChi, SoDienThoai)
+                VALUES
+                    (@MaDocGia, @TenDocGia, @NgaySinh, @DiaChi, @SoDienThoai)";
 
-                if (maCu.Equals(maDocGia, StringComparison.OrdinalIgnoreCase))
+                    using (SqlCommand cmd = new SqlCommand(sql, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@MaDocGia", maDocGia);
+                        cmd.Parameters.AddWithValue("@TenDocGia", tenDocGia);
+                        cmd.Parameters.AddWithValue("@NgaySinh", ngaySinh);
+                        cmd.Parameters.AddWithValue("@DiaChi", diaChi);
+                        cmd.Parameters.AddWithValue("@SoDienThoai", soDienThoai);
+
+                        cmd.ExecuteNonQuery();
+                    }
+                }
+
+                MessageBox.Show(
+                    "Thêm độc giả thành công.",
+                    "Thông báo",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information);
+
+                LoadDocGia();
+
+                txtMaDocGia.Clear();
+                txtTenDocGia.Clear();
+                txtDiaChi.Clear();
+                txtSoDienThoai.Clear();
+
+                dtpNgaySinh.Value = DateTime.Now;
+
+                txtMaDocGia.Focus();
+            }
+            catch (SqlException ex)
+            {
+                if (ex.Number == 2627 || ex.Number == 2601)
                 {
                     MessageBox.Show(
                         "Mã độc giả đã tồn tại.",
                         "Thông báo",
                         MessageBoxButtons.OK,
                         MessageBoxIcon.Warning);
-
-                    txtMaDocGia.Focus();
-                    return;
+                }
+                else
+                {
+                    MessageBox.Show(
+                        "Không thể thêm độc giả.\n\n" + ex.Message,
+                        "Lỗi",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Error);
                 }
             }
-
-            dgvDocGia.Rows.Add(
-                maDocGia,
-                tenDocGia,
-                ngaySinh,
-                diaChi,
-                soDienThoai);
-
-            MessageBox.Show(
-                "Thêm độc giả thành công.",
-                "Thông báo",
-                MessageBoxButtons.OK,
-                MessageBoxIcon.Information);
-
-            txtMaDocGia.Clear();
-            txtTenDocGia.Clear();
-            txtDiaChi.Clear();
-            txtSoDienThoai.Clear();
-
-            dtpNgaySinh.Value = DateTime.Now;
-
-            txtMaDocGia.Focus();
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    "Đã xảy ra lỗi.\n\n" + ex.Message,
+                    "Lỗi",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+            }
         }
 
         private void dgvDocGia_CellClick(object sender, DataGridViewCellEventArgs e)
@@ -198,7 +227,7 @@ namespace DoAnQLTV
 
             string maDocGia = txtMaDocGia.Text.Trim();
             string tenDocGia = txtTenDocGia.Text.Trim();
-            string ngaySinh = dtpNgaySinh.Value.ToString("dd/MM/yyyy");
+            DateTime ngaySinh = dtpNgaySinh.Value;
             string diaChi = txtDiaChi.Text.Trim();
             string soDienThoai = txtSoDienThoai.Text.Trim();
 
@@ -250,26 +279,91 @@ namespace DoAnQLTV
                 return;
             }
 
-            DataGridViewRow row = dgvDocGia.Rows[dongDangChon];
+            try
+            {
+                using (SqlConnection conn = DbConnection.GetConnection())
+                {
+                    conn.Open();
 
-            row.Cells["colMaDocGia"].Value = maDocGia;
-            row.Cells["colTenDocGia"].Value = tenDocGia;
-            row.Cells["colNgaySinh"].Value = ngaySinh;
-            row.Cells["colDiaChi"].Value = diaChi;
-            row.Cells["colSoDienThoai"].Value = soDienThoai;
+                    string sql = @"
+                UPDATE DocGia
+                SET
+                    TenDocGia = @TenDocGia,
+                    NgaySinh = @NgaySinh,
+                    DiaChi = @DiaChi,
+                    SoDienThoai = @SoDienThoai
+                WHERE MaDocGia = @MaDocGia";
 
-            MessageBox.Show(
-                "Sửa thông tin độc giả thành công.",
-                "Thông báo",
-                MessageBoxButtons.OK,
-                MessageBoxIcon.Information);
+                    using (SqlCommand cmd = new SqlCommand(sql, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@TenDocGia", tenDocGia);
+                        cmd.Parameters.AddWithValue("@NgaySinh", ngaySinh);
+                        cmd.Parameters.AddWithValue("@DiaChi", diaChi);
+                        cmd.Parameters.AddWithValue("@SoDienThoai", soDienThoai);
+                        cmd.Parameters.AddWithValue("@MaDocGia", maDocGia);
 
-            dongDangChon = -1;
+                        int soDong = cmd.ExecuteNonQuery();
+
+                        if (soDong == 0)
+                        {
+                            MessageBox.Show(
+                                "Không tìm thấy mã độc giả cần sửa.",
+                                "Thông báo",
+                                MessageBoxButtons.OK,
+                                MessageBoxIcon.Warning);
+
+                            return;
+                        }
+                    }
+                }
+
+                MessageBox.Show(
+                    "Sửa thông tin độc giả thành công.",
+                    "Thông báo",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information);
+
+                LoadDocGia();
+
+                txtMaDocGia.Clear();
+                txtTenDocGia.Clear();
+                txtDiaChi.Clear();
+                txtSoDienThoai.Clear();
+
+                dtpNgaySinh.Value = DateTime.Now;
+
+                dongDangChon = -1;
+
+                dgvDocGia.ClearSelection();
+
+                txtMaDocGia.Focus();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    "Không thể cập nhật độc giả.\n\n" + ex.Message,
+                    "Lỗi",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+            }
         }
 
         private void btnXoa_Click(object sender, EventArgs e)
         {
             if (dongDangChon == -1)
+            {
+                MessageBox.Show(
+                    "Vui lòng chọn độc giả cần xóa.",
+                    "Thông báo",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+
+                return;
+            }
+
+            string maDocGia = txtMaDocGia.Text.Trim();
+
+            if (maDocGia == "")
             {
                 MessageBox.Show(
                     "Vui lòng chọn độc giả cần xóa.",
@@ -286,20 +380,88 @@ namespace DoAnQLTV
                 MessageBoxButtons.YesNo,
                 MessageBoxIcon.Question);
 
-            if (result == DialogResult.No)
+            if (result != DialogResult.Yes)
             {
                 return;
             }
 
-            dgvDocGia.Rows.RemoveAt(dongDangChon);
+            try
+            {
+                using (SqlConnection conn = DbConnection.GetConnection())
+                {
+                    conn.Open();
 
-            dongDangChon = -1;
+                    string sql = @"
+                DELETE FROM DocGia
+                WHERE MaDocGia = @MaDocGia";
 
-            MessageBox.Show(
-                "Xóa độc giả thành công.",
-                "Thông báo",
-                MessageBoxButtons.OK,
-                MessageBoxIcon.Information);
+                    using (SqlCommand cmd = new SqlCommand(sql, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@MaDocGia", maDocGia);
+
+                        int soDong = cmd.ExecuteNonQuery();
+
+                        if (soDong == 0)
+                        {
+                            MessageBox.Show(
+                                "Không tìm thấy độc giả cần xóa.",
+                                "Thông báo",
+                                MessageBoxButtons.OK,
+                                MessageBoxIcon.Warning);
+
+                            return;
+                        }
+                    }
+                }
+
+                MessageBox.Show(
+                    "Xóa độc giả thành công.",
+                    "Thông báo",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information);
+
+                LoadDocGia();
+
+                txtMaDocGia.Clear();
+                txtTenDocGia.Clear();
+                txtDiaChi.Clear();
+                txtSoDienThoai.Clear();
+
+                dtpNgaySinh.Value = DateTime.Now;
+
+                dongDangChon = -1;
+
+                dgvDocGia.ClearSelection();
+
+                txtMaDocGia.Focus();
+            }
+            catch (SqlException ex)
+            {
+                if (ex.Number == 547)
+                {
+                    MessageBox.Show(
+                        "Không thể xóa độc giả này vì đang được sử dụng trong phiếu mượn.",
+                        "Thông báo",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Warning);
+                }
+                else
+                {
+                    MessageBox.Show(
+                        "Không thể xóa độc giả.\n\n" + ex.Message,
+                        "Lỗi",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Error);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    "Đã xảy ra lỗi.\n\n" + ex.Message,
+                    "Lỗi",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+            }
         }
 
         private void btnTimKiem_Click(object sender, EventArgs e)
@@ -318,69 +480,96 @@ namespace DoAnQLTV
                 return;
             }
 
-            bool timThay = false;
-
-            foreach (DataGridViewRow row in dgvDocGia.Rows)
+            try
             {
-                if (row.IsNewRow)
-                    continue;
-
-                string maDocGia =
-                    row.Cells["colMaDocGia"].Value?.ToString() ?? "";
-
-                string tenDocGia =
-                    row.Cells["colTenDocGia"].Value?.ToString() ?? "";
-
-                string soDienThoai =
-                    row.Cells["colSoDienThoai"].Value?.ToString() ?? "";
-
-                if (maDocGia.IndexOf(
-                        tuKhoa,
-                        StringComparison.OrdinalIgnoreCase) >= 0 ||
-                    tenDocGia.IndexOf(
-                        tuKhoa,
-                        StringComparison.OrdinalIgnoreCase) >= 0 ||
-                    soDienThoai.IndexOf(
-                        tuKhoa,
-                        StringComparison.OrdinalIgnoreCase) >= 0)
+                using (SqlConnection conn = DbConnection.GetConnection())
                 {
-                    row.Selected = true;
+                    conn.Open();
 
-                    dgvDocGia.CurrentCell =
-                        row.Cells["colMaDocGia"];
+                    string sql = @"
+                SELECT
+                    MaDocGia,
+                    TenDocGia,
+                    NgaySinh,
+                    DiaChi,
+                    SoDienThoai
+                FROM DocGia
+                WHERE MaDocGia LIKE @TuKhoa
+                   OR TenDocGia LIKE @TuKhoa
+                   OR SoDienThoai LIKE @TuKhoa
+                ORDER BY MaDocGia";
 
-                    txtMaDocGia.Text = maDocGia;
-                    txtTenDocGia.Text = tenDocGia;
-
-                    DateTime ngaySinh;
-
-                    if (DateTime.TryParse(
-                        row.Cells["colNgaySinh"].Value?.ToString(),
-                        out ngaySinh))
+                    using (SqlCommand cmd = new SqlCommand(sql, conn))
                     {
-                        dtpNgaySinh.Value = ngaySinh;
+                        cmd.Parameters.AddWithValue(
+                            "@TuKhoa",
+                            "%" + tuKhoa + "%");
+
+                        using (SqlDataAdapter adapter = new SqlDataAdapter(cmd))
+                        {
+                            DataTable dt = new DataTable();
+                            adapter.Fill(dt);
+
+                            dgvDocGia.Rows.Clear();
+
+                            foreach (DataRow row in dt.Rows)
+                            {
+                                dgvDocGia.Rows.Add(
+                                    row["MaDocGia"].ToString(),
+                                    row["TenDocGia"].ToString(),
+                                    Convert.ToDateTime(row["NgaySinh"])
+                                        .ToString("dd/MM/yyyy"),
+                                    row["DiaChi"].ToString(),
+                                    row["SoDienThoai"].ToString());
+                            }
+
+                            if (dt.Rows.Count == 0)
+                            {
+                                MessageBox.Show(
+                                    "Không tìm thấy độc giả phù hợp.",
+                                    "Thông báo",
+                                    MessageBoxButtons.OK,
+                                    MessageBoxIcon.Information);
+
+                                return;
+                            }
+
+                            if (dt.Rows.Count == 1)
+                            {
+                                txtMaDocGia.Text =
+                                    dt.Rows[0]["MaDocGia"].ToString();
+
+                                txtTenDocGia.Text =
+                                    dt.Rows[0]["TenDocGia"].ToString();
+
+                                dtpNgaySinh.Value =
+                                    Convert.ToDateTime(dt.Rows[0]["NgaySinh"]);
+
+                                txtDiaChi.Text =
+                                    dt.Rows[0]["DiaChi"].ToString();
+
+                                txtSoDienThoai.Text =
+                                    dt.Rows[0]["SoDienThoai"].ToString();
+
+                                dgvDocGia.Rows[0].Selected = true;
+
+                                dgvDocGia.CurrentCell =
+                                    dgvDocGia.Rows[0]
+                                        .Cells["colMaDocGia"];
+
+                                dongDangChon = 0;
+                            }
+                        }
                     }
-
-                    txtDiaChi.Text =
-                        row.Cells["colDiaChi"].Value?.ToString();
-
-                    txtSoDienThoai.Text = soDienThoai;
-
-                    dongDangChon = row.Index;
-
-                    timThay = true;
-
-                    break;
                 }
             }
-
-            if (!timThay)
+            catch (Exception ex)
             {
                 MessageBox.Show(
-                    "Không tìm thấy độc giả phù hợp.",
-                    "Thông báo",
+                    "Không thể tìm kiếm độc giả.\n\n" + ex.Message,
+                    "Lỗi",
                     MessageBoxButtons.OK,
-                    MessageBoxIcon.Information);
+                    MessageBoxIcon.Error);
             }
         }
 
@@ -394,6 +583,8 @@ namespace DoAnQLTV
             dtpNgaySinh.Value = DateTime.Now;
 
             dongDangChon = -1;
+
+            LoadDocGia();
 
             dgvDocGia.ClearSelection();
 

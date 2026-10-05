@@ -117,10 +117,35 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <metadata name="colMaTacGia.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="colTenTacGia.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
+  <data name="rtbHuongDan.Text" xml:space="preserve">
+    <value>HƯỚNG DẪN SỬ DỤNG CHƯƠNG TRÌNH QUẢN LÝ THƯ VIỆN
+
+1. ĐĂNG NHẬP
+- Nhập tên đăng nhập và mật khẩu.
+- Nhấn nút "Đăng nhập" để vào chương trình.
+
+2. QUẢN LÝ
+- Quản lý sách: thêm, sửa, xóa, tìm kiếm và làm mới thông tin sách.
+- Quản lý thể loại: thêm, sửa, xóa, tìm kiếm và làm mới thể loại.
+- Quản lý tác giả: thêm, sửa, xóa, tìm kiếm và làm mới tác giả.
+- Quản lý độc giả: thêm, sửa, xóa, tìm kiếm và làm mới thông tin độc giả.
+- Quản lý nhân viên: thêm, sửa, xóa, tìm kiếm và làm mới thông tin nhân viên.
+
+3. TRA CỨU
+- Tìm kiếm sách theo từ khóa.
+- Tra cứu thông tin độc giả theo từ khóa.
+
+4. MƯỢN - TRẢ
+- Lập phiếu mượn: nhập thông tin phiếu và thực hiện lập phiếu.
+- Trả sách: tìm phiếu mượn và thực hiện trả sách.
+- Danh sách phiếu mượn: xem và tìm kiếm các phiếu mượn.
+
+5. HỆ THỐNG
+- Đăng xuất: quay lại màn hình đăng nhập.
+- Thoát: đóng chương trình.
+
+6. TRỢ GIÚP
+- Thông tin chương trình: xem thông tin về đề tài và chương trình.
+- Hướng dẫn sử dụng: xem hướng dẫn thao tác.</value>
+  </data>
 </root>

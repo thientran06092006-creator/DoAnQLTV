@@ -1,4 +1,6 @@
-﻿using System;
+﻿using System.Data;
+using System.Data.SqlClient;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -17,18 +19,7 @@ namespace DoAnQLTV
         {
             InitializeComponent();
 
-            HienThiDuLieuMau();
-        }
-
-        private void HienThiDuLieuMau()
-        {
-            dgvTheLoai.Rows.Clear();
-
-            dgvTheLoai.Rows.Add("TL001", "Công nghệ thông tin");
-            dgvTheLoai.Rows.Add("TL002", "Giáo dục");
-            dgvTheLoai.Rows.Add("TL003", "Toán học");
-            dgvTheLoai.Rows.Add("TL004", "Kỹ năng");
-            dgvTheLoai.Rows.Add("TL005", "Ngoại ngữ");
+            LoadTheLoai();
         }
 
         private void btnThem_Click(object sender, EventArgs e)
@@ -36,67 +27,81 @@ namespace DoAnQLTV
             string maTheLoai = txtMaTheLoai.Text.Trim();
             string tenTheLoai = txtTenTheLoai.Text.Trim();
 
-            if (maTheLoai == "")
+            if (string.IsNullOrWhiteSpace(maTheLoai) ||
+                string.IsNullOrWhiteSpace(tenTheLoai))
             {
                 MessageBox.Show(
-                    "Vui lòng nhập mã thể loại.",
+                    "Vui lòng nhập đầy đủ mã thể loại và tên thể loại.",
                     "Thông báo",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Warning);
 
+                return;
+            }
+
+            try
+            {
+                using (SqlConnection conn = DbConnection.GetConnection())
+                {
+                    conn.Open();
+
+                    string sql = @"
+                INSERT INTO TheLoai (MaTheLoai, TenTheLoai)
+                VALUES (@MaTheLoai, @TenTheLoai)";
+
+                    using (SqlCommand cmd = new SqlCommand(sql, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@MaTheLoai", maTheLoai);
+                        cmd.Parameters.AddWithValue("@TenTheLoai", tenTheLoai);
+
+                        cmd.ExecuteNonQuery();
+                    }
+                }
+
+                MessageBox.Show(
+                    "Thêm thể loại thành công!",
+                    "Thông báo",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information);
+
+                LoadTheLoai();
+
+                txtMaTheLoai.Clear();
+                txtTenTheLoai.Clear();
                 txtMaTheLoai.Focus();
-                return;
             }
-
-            if (tenTheLoai == "")
+            catch (SqlException ex)
             {
-                MessageBox.Show(
-                    "Vui lòng nhập tên thể loại.",
-                    "Thông báo",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning);
-
-                txtTenTheLoai.Focus();
-                return;
-            }
-
-            foreach (DataGridViewRow row in dgvTheLoai.Rows)
-            {
-                if (row.IsNewRow)
-                    continue;
-
-                string maCu = row.Cells["colMaTheLoai"].Value?.ToString() ?? "";
-
-                if (maCu.Equals(maTheLoai, StringComparison.OrdinalIgnoreCase))
+                if (ex.Number == 2627 || ex.Number == 2601)
                 {
                     MessageBox.Show(
                         "Mã thể loại đã tồn tại.",
                         "Thông báo",
                         MessageBoxButtons.OK,
                         MessageBoxIcon.Warning);
-
-                    txtMaTheLoai.Focus();
-                    return;
+                }
+                else
+                {
+                    MessageBox.Show(
+                        "Không thể thêm thể loại.\n\n" + ex.Message,
+                        "Lỗi",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Error);
                 }
             }
-
-            dgvTheLoai.Rows.Add(maTheLoai, tenTheLoai);
-
-            MessageBox.Show(
-                "Thêm thể loại thành công.",
-                "Thông báo",
-                MessageBoxButtons.OK,
-                MessageBoxIcon.Information);
-
-            txtMaTheLoai.Clear();
-            txtTenTheLoai.Clear();
-
-            txtMaTheLoai.Focus();
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    "Đã xảy ra lỗi.\n\n" + ex.Message,
+                    "Lỗi",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+            }
         }
 
         private void btnSua_Click(object sender, EventArgs e)
         {
-            if (dongDangChon == -1)
+            if (dgvTheLoai.CurrentRow == null)
             {
                 MessageBox.Show(
                     "Vui lòng chọn thể loại cần sửa.",
@@ -110,42 +115,69 @@ namespace DoAnQLTV
             string maTheLoai = txtMaTheLoai.Text.Trim();
             string tenTheLoai = txtTenTheLoai.Text.Trim();
 
-            if (maTheLoai == "")
+            if (string.IsNullOrWhiteSpace(maTheLoai) ||
+                string.IsNullOrWhiteSpace(tenTheLoai))
             {
                 MessageBox.Show(
-                    "Vui lòng nhập mã thể loại.",
+                    "Vui lòng nhập đầy đủ mã thể loại và tên thể loại.",
                     "Thông báo",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Warning);
 
+                return;
+            }
+
+            try
+            {
+                using (SqlConnection conn = DbConnection.GetConnection())
+                {
+                    conn.Open();
+
+                    string sql = @"
+                UPDATE TheLoai
+                SET TenTheLoai = @TenTheLoai
+                WHERE MaTheLoai = @MaTheLoai";
+
+                    using (SqlCommand cmd = new SqlCommand(sql, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@TenTheLoai", tenTheLoai);
+                        cmd.Parameters.AddWithValue("@MaTheLoai", maTheLoai);
+
+                        int soDong = cmd.ExecuteNonQuery();
+
+                        if (soDong == 0)
+                        {
+                            MessageBox.Show(
+                                "Không tìm thấy mã thể loại cần sửa.",
+                                "Thông báo",
+                                MessageBoxButtons.OK,
+                                MessageBoxIcon.Warning);
+
+                            return;
+                        }
+                    }
+                }
+
+                MessageBox.Show(
+                    "Cập nhật thể loại thành công!",
+                    "Thông báo",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information);
+
+                LoadTheLoai();
+
+                txtMaTheLoai.Clear();
+                txtTenTheLoai.Clear();
                 txtMaTheLoai.Focus();
-                return;
             }
-
-            if (tenTheLoai == "")
+            catch (Exception ex)
             {
                 MessageBox.Show(
-                    "Vui lòng nhập tên thể loại.",
-                    "Thông báo",
+                    "Không thể cập nhật thể loại.\n\n" + ex.Message,
+                    "Lỗi",
                     MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning);
-
-                txtTenTheLoai.Focus();
-                return;
+                    MessageBoxIcon.Error);
             }
-
-            DataGridViewRow row = dgvTheLoai.Rows[dongDangChon];
-
-            row.Cells["colMaTheLoai"].Value = maTheLoai;
-            row.Cells["colTenTheLoai"].Value = tenTheLoai;
-
-            MessageBox.Show(
-                "Sửa thông tin thể loại thành công.",
-                "Thông báo",
-                MessageBoxButtons.OK,
-                MessageBoxIcon.Information);
-
-            dongDangChon = -1;
         }
 
         private void dgvTheLoai_CellClick(object sender, DataGridViewCellEventArgs e)
@@ -163,7 +195,7 @@ namespace DoAnQLTV
 
         private void btnXoa_Click(object sender, EventArgs e)
         {
-            if (dongDangChon == -1)
+            if (dgvTheLoai.CurrentRow == null)
             {
                 MessageBox.Show(
                     "Vui lòng chọn thể loại cần xóa.",
@@ -174,26 +206,96 @@ namespace DoAnQLTV
                 return;
             }
 
-            DialogResult result = MessageBox.Show(
+            string maTheLoai = txtMaTheLoai.Text.Trim();
+
+            if (string.IsNullOrWhiteSpace(maTheLoai))
+            {
+                MessageBox.Show(
+                    "Vui lòng chọn thể loại cần xóa.",
+                    "Thông báo",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+
+                return;
+            }
+
+            DialogResult ketQua = MessageBox.Show(
                 "Bạn có chắc chắn muốn xóa thể loại này không?",
                 "Xác nhận xóa",
                 MessageBoxButtons.YesNo,
                 MessageBoxIcon.Question);
 
-            if (result == DialogResult.No)
-            {
+            if (ketQua != DialogResult.Yes)
                 return;
+
+            try
+            {
+                using (SqlConnection conn = DbConnection.GetConnection())
+                {
+                    conn.Open();
+
+                    string sql = @"
+                DELETE FROM TheLoai
+                WHERE MaTheLoai = @MaTheLoai";
+
+                    using (SqlCommand cmd = new SqlCommand(sql, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@MaTheLoai", maTheLoai);
+
+                        int soDong = cmd.ExecuteNonQuery();
+
+                        if (soDong == 0)
+                        {
+                            MessageBox.Show(
+                                "Không tìm thấy thể loại cần xóa.",
+                                "Thông báo",
+                                MessageBoxButtons.OK,
+                                MessageBoxIcon.Warning);
+
+                            return;
+                        }
+                    }
+                }
+
+                MessageBox.Show(
+                    "Xóa thể loại thành công!",
+                    "Thông báo",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information);
+
+                LoadTheLoai();
+
+                txtMaTheLoai.Clear();
+                txtTenTheLoai.Clear();
+                txtMaTheLoai.Focus();
             }
-
-            dgvTheLoai.Rows.RemoveAt(dongDangChon);
-
-            dongDangChon = -1;
-
-            MessageBox.Show(
-                "Xóa thể loại thành công.",
-                "Thông báo",
-                MessageBoxButtons.OK,
-                MessageBoxIcon.Information);
+            catch (SqlException ex)
+            {
+                if (ex.Number == 547)
+                {
+                    MessageBox.Show(
+                        "Không thể xóa thể loại này vì đang được sử dụng bởi sách.",
+                        "Thông báo",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Warning);
+                }
+                else
+                {
+                    MessageBox.Show(
+                        "Không thể xóa thể loại.\n\n" + ex.Message,
+                        "Lỗi",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Error);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    "Đã xảy ra lỗi.\n\n" + ex.Message,
+                    "Lỗi",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+            }
         }
 
         private void btnTimKiem_Click(object sender, EventArgs e)
@@ -212,39 +314,73 @@ namespace DoAnQLTV
                 return;
             }
 
-            bool timThay = false;
-
-            foreach (DataGridViewRow row in dgvTheLoai.Rows)
+            try
             {
-                if (row.IsNewRow)
-                    continue;
-
-                string maTheLoai = row.Cells["colMaTheLoai"].Value?.ToString() ?? "";
-                string tenTheLoai = row.Cells["colTenTheLoai"].Value?.ToString() ?? "";
-
-                if (maTheLoai.IndexOf(tuKhoa, StringComparison.OrdinalIgnoreCase) >= 0 ||
-                    tenTheLoai.IndexOf(tuKhoa, StringComparison.OrdinalIgnoreCase) >= 0)
+                using (SqlConnection conn = DbConnection.GetConnection())
                 {
-                    row.Selected = true;
-                    dgvTheLoai.CurrentCell = row.Cells["colMaTheLoai"];
+                    conn.Open();
 
-                    txtMaTheLoai.Text = maTheLoai;
-                    txtTenTheLoai.Text = tenTheLoai;
+                    string sql = @"
+                SELECT MaTheLoai, TenTheLoai
+                FROM TheLoai
+                WHERE MaTheLoai LIKE @TuKhoa
+                   OR TenTheLoai LIKE @TuKhoa
+                ORDER BY MaTheLoai";
 
-                    dongDangChon = row.Index;
-                    timThay = true;
+                    using (SqlCommand cmd = new SqlCommand(sql, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@TuKhoa", "%" + tuKhoa + "%");
 
-                    break;
+                        using (SqlDataAdapter adapter = new SqlDataAdapter(cmd))
+                        {
+                            DataTable dt = new DataTable();
+                            adapter.Fill(dt);
+
+                            dgvTheLoai.Rows.Clear();
+
+                            foreach (DataRow row in dt.Rows)
+                            {
+                                dgvTheLoai.Rows.Add(
+                                    row["MaTheLoai"].ToString(),
+                                    row["TenTheLoai"].ToString());
+                            }
+
+                            if (dt.Rows.Count == 0)
+                            {
+                                MessageBox.Show(
+                                    "Không tìm thấy thể loại phù hợp.",
+                                    "Thông báo",
+                                    MessageBoxButtons.OK,
+                                    MessageBoxIcon.Information);
+
+                                return;
+                            }
+
+                            if (dt.Rows.Count == 1)
+                            {
+                                txtMaTheLoai.Text =
+                                    dt.Rows[0]["MaTheLoai"].ToString();
+
+                                txtTenTheLoai.Text =
+                                    dt.Rows[0]["TenTheLoai"].ToString();
+
+                                dgvTheLoai.Rows[0].Selected = true;
+                                dgvTheLoai.CurrentCell =
+                                    dgvTheLoai.Rows[0].Cells["colMaTheLoai"];
+
+                                dongDangChon = 0;
+                            }
+                        }
+                    }
                 }
             }
-
-            if (!timThay)
+            catch (Exception ex)
             {
                 MessageBox.Show(
-                    "Không tìm thấy thể loại phù hợp.",
-                    "Thông báo",
+                    "Không thể tìm kiếm thể loại.\n\n" + ex.Message,
+                    "Lỗi",
                     MessageBoxButtons.OK,
-                    MessageBoxIcon.Information);
+                    MessageBoxIcon.Error);
             }
         }
 
@@ -255,9 +391,50 @@ namespace DoAnQLTV
 
             dongDangChon = -1;
 
+            LoadTheLoai();
+
             dgvTheLoai.ClearSelection();
 
             txtMaTheLoai.Focus();
+        }
+
+        private void LoadTheLoai()
+        {
+            try
+            {
+                using (SqlConnection conn = DbConnection.GetConnection())
+                {
+                    conn.Open();
+
+                    string sql = @"
+                SELECT MaTheLoai, TenTheLoai
+                FROM TheLoai
+                ORDER BY MaTheLoai";
+
+                    using (SqlDataAdapter adapter = new SqlDataAdapter(sql, conn))
+                    {
+                        DataTable dt = new DataTable();
+                        adapter.Fill(dt);
+
+                        dgvTheLoai.Rows.Clear();
+
+                        foreach (DataRow row in dt.Rows)
+                        {
+                            dgvTheLoai.Rows.Add(
+                                row["MaTheLoai"].ToString(),
+                                row["TenTheLoai"].ToString());
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    "Không thể tải dữ liệu thể loại.\n\n" + ex.Message,
+                    "Lỗi",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+            }
         }
     }
 }

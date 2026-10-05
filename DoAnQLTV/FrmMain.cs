@@ -46,5 +46,83 @@ namespace DoAnQLTV
             FrmNhanVien frmNhanVien = new FrmNhanVien();
             frmNhanVien.ShowDialog();
         }
+
+        private void tìmKiếmSáchToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FrmTimKiemSach frmTimKiemSach = new FrmTimKiemSach();
+            frmTimKiemSach.ShowDialog();
+        }
+
+        private void thôngTinTácGiảToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FrmThongTinDocGia frmThongTinDocGia = new FrmThongTinDocGia();
+            frmThongTinDocGia.ShowDialog();
+        }
+
+        private void lậpPhiếuMượnToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FrmLapPhieuMuon frmLapPhieuMuon = new FrmLapPhieuMuon();
+            frmLapPhieuMuon.ShowDialog();
+        }
+
+        private void trảSáchToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FrmTraSach frmTraSach = new FrmTraSach();
+            frmTraSach.ShowDialog();
+        }
+
+        private void danhSáchPhiếuMượnToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FrmDanhSachPhieuMuon frmDanhSachPhieuMuon = new FrmDanhSachPhieuMuon();
+            frmDanhSachPhieuMuon.ShowDialog();
+        }
+
+        private void đăngXuấtToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            DialogResult ketQua = MessageBox.Show(
+                "Bạn có chắc chắn muốn đăng xuất không?",
+                "Xác nhận đăng xuất",
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Question);
+
+            if (ketQua == DialogResult.Yes)
+            {
+                FrmLogin frmLogin = new FrmLogin();
+                frmLogin.Show();
+
+                this.Hide();
+            }
+        }
+
+        private void thoátToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            DialogResult ketQua = MessageBox.Show(
+                "Bạn có chắc chắn muốn thoát chương trình không?",
+                "Xác nhận thoát",
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Question);
+
+            if (ketQua == DialogResult.Yes)
+            {
+                Application.Exit();
+            }
+        }
+
+        private void thôngTinChươngTrìnhToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FrmThongTinChuongTrinh frmThongTinChuongTrinh =
+                new FrmThongTinChuongTrinh();
+
+            frmThongTinChuongTrinh.ShowDialog();
+        }
+
+        private void hướngDẫnSửDụngToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FrmHuongDanSuDung frmHuongDanSuDung =
+                new FrmHuongDanSuDung();
+
+            frmHuongDanSuDung.ShowDialog();
+        }
     }
+    
 }

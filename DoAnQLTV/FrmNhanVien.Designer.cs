@@ -131,6 +131,7 @@
             this.btnSua.TabIndex = 9;
             this.btnSua.Text = "Sửa";
             this.btnSua.UseVisualStyleBackColor = true;
+            this.btnSua.Click += new System.EventHandler(this.btnSua_Click);
             // 
             // btnXoa
             // 
@@ -140,6 +141,7 @@
             this.btnXoa.TabIndex = 10;
             this.btnXoa.Text = "Xóa";
             this.btnXoa.UseVisualStyleBackColor = true;
+            this.btnXoa.Click += new System.EventHandler(this.btnXoa_Click);
             // 
             // btnTimKiem
             // 
@@ -149,6 +151,7 @@
             this.btnTimKiem.TabIndex = 11;
             this.btnTimKiem.Text = "Tìm kiếm";
             this.btnTimKiem.UseVisualStyleBackColor = true;
+            this.btnTimKiem.Click += new System.EventHandler(this.btnTimKiem_Click);
             // 
             // btnLamMoi
             // 
@@ -158,6 +161,7 @@
             this.btnLamMoi.TabIndex = 12;
             this.btnLamMoi.Text = "Làm mới";
             this.btnLamMoi.UseVisualStyleBackColor = true;
+            this.btnLamMoi.Click += new System.EventHandler(this.btnLamMoi_Click);
             // 
             // dgvNhanVien
             // 
@@ -171,6 +175,7 @@
             this.dgvNhanVien.Name = "dgvNhanVien";
             this.dgvNhanVien.Size = new System.Drawing.Size(442, 224);
             this.dgvNhanVien.TabIndex = 13;
+            this.dgvNhanVien.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvNhanVien_CellClick);
             // 
             // colMaNhanVien
             // 

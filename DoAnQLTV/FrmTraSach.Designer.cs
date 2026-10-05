@@ -1,0 +1,314 @@
+﻿namespace DoAnQLTV
+{
+    partial class FrmTraSach
+    {
+        /// <summary>
+        /// Required designer variable.
+        /// </summary>
+        private System.ComponentModel.IContainer components = null;
+
+        /// <summary>
+        /// Clean up any resources being used.
+        /// </summary>
+        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && (components != null))
+            {
+                components.Dispose();
+            }
+            base.Dispose(disposing);
+        }
+
+        #region Windows Form Designer generated code
+
+        /// <summary>
+        /// Required method for Designer support - do not modify
+        /// the contents of this method with the code editor.
+        /// </summary>
+        private void InitializeComponent()
+        {
+            this.lblMaPhieu = new System.Windows.Forms.Label();
+            this.lblDocGia = new System.Windows.Forms.Label();
+            this.lblSach = new System.Windows.Forms.Label();
+            this.lblNgayMuon = new System.Windows.Forms.Label();
+            this.lblHanTra = new System.Windows.Forms.Label();
+            this.lblNgayTra = new System.Windows.Forms.Label();
+            this.txtMaPhieu = new System.Windows.Forms.TextBox();
+            this.cboDocGia = new System.Windows.Forms.ComboBox();
+            this.cboSach = new System.Windows.Forms.ComboBox();
+            this.dtpNgayMuon = new System.Windows.Forms.DateTimePicker();
+            this.dtpHanTra = new System.Windows.Forms.DateTimePicker();
+            this.dtpNgayTra = new System.Windows.Forms.DateTimePicker();
+            this.btnTimKiem = new System.Windows.Forms.Button();
+            this.btnTraSach = new System.Windows.Forms.Button();
+            this.btnLamMoi = new System.Windows.Forms.Button();
+            this.dgvTraSach = new System.Windows.Forms.DataGridView();
+            this.colMaPhieu = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colDocGia = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colSach = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colNgayMuon = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colHanTra = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colNgayTra = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvTraSach)).BeginInit();
+            this.SuspendLayout();
+            // 
+            // lblMaPhieu
+            // 
+            this.lblMaPhieu.AutoSize = true;
+            this.lblMaPhieu.Location = new System.Drawing.Point(15, 11);
+            this.lblMaPhieu.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblMaPhieu.Name = "lblMaPhieu";
+            this.lblMaPhieu.Size = new System.Drawing.Size(62, 16);
+            this.lblMaPhieu.TabIndex = 0;
+            this.lblMaPhieu.Text = "Mã phiếu";
+            // 
+            // lblDocGia
+            // 
+            this.lblDocGia.AutoSize = true;
+            this.lblDocGia.Location = new System.Drawing.Point(16, 54);
+            this.lblDocGia.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblDocGia.Name = "lblDocGia";
+            this.lblDocGia.Size = new System.Drawing.Size(53, 16);
+            this.lblDocGia.TabIndex = 1;
+            this.lblDocGia.Text = "Độc giả";
+            // 
+            // lblSach
+            // 
+            this.lblSach.AutoSize = true;
+            this.lblSach.Location = new System.Drawing.Point(16, 97);
+            this.lblSach.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblSach.Name = "lblSach";
+            this.lblSach.Size = new System.Drawing.Size(38, 16);
+            this.lblSach.TabIndex = 2;
+            this.lblSach.Text = "Sách";
+            // 
+            // lblNgayMuon
+            // 
+            this.lblNgayMuon.AutoSize = true;
+            this.lblNgayMuon.Location = new System.Drawing.Point(16, 140);
+            this.lblNgayMuon.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblNgayMuon.Name = "lblNgayMuon";
+            this.lblNgayMuon.Size = new System.Drawing.Size(76, 16);
+            this.lblNgayMuon.TabIndex = 3;
+            this.lblNgayMuon.Text = "Ngày mượn";
+            // 
+            // lblHanTra
+            // 
+            this.lblHanTra.AutoSize = true;
+            this.lblHanTra.Location = new System.Drawing.Point(19, 180);
+            this.lblHanTra.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblHanTra.Name = "lblHanTra";
+            this.lblHanTra.Size = new System.Drawing.Size(50, 16);
+            this.lblHanTra.TabIndex = 4;
+            this.lblHanTra.Text = "Hạn trả";
+            // 
+            // lblNgayTra
+            // 
+            this.lblNgayTra.AutoSize = true;
+            this.lblNgayTra.Location = new System.Drawing.Point(20, 222);
+            this.lblNgayTra.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblNgayTra.Name = "lblNgayTra";
+            this.lblNgayTra.Size = new System.Drawing.Size(58, 16);
+            this.lblNgayTra.TabIndex = 5;
+            this.lblNgayTra.Text = "Ngày trả";
+            // 
+            // txtMaPhieu
+            // 
+            this.txtMaPhieu.Location = new System.Drawing.Point(117, 11);
+            this.txtMaPhieu.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.txtMaPhieu.Name = "txtMaPhieu";
+            this.txtMaPhieu.Size = new System.Drawing.Size(132, 22);
+            this.txtMaPhieu.TabIndex = 6;
+            // 
+            // cboDocGia
+            // 
+            this.cboDocGia.FormattingEnabled = true;
+            this.cboDocGia.Location = new System.Drawing.Point(117, 50);
+            this.cboDocGia.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.cboDocGia.Name = "cboDocGia";
+            this.cboDocGia.Size = new System.Drawing.Size(160, 24);
+            this.cboDocGia.TabIndex = 7;
+            // 
+            // cboSach
+            // 
+            this.cboSach.FormattingEnabled = true;
+            this.cboSach.Location = new System.Drawing.Point(117, 94);
+            this.cboSach.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.cboSach.Name = "cboSach";
+            this.cboSach.Size = new System.Drawing.Size(160, 24);
+            this.cboSach.TabIndex = 8;
+            // 
+            // dtpNgayMuon
+            // 
+            this.dtpNgayMuon.Location = new System.Drawing.Point(117, 133);
+            this.dtpNgayMuon.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.dtpNgayMuon.Name = "dtpNgayMuon";
+            this.dtpNgayMuon.Size = new System.Drawing.Size(265, 22);
+            this.dtpNgayMuon.TabIndex = 9;
+            // 
+            // dtpHanTra
+            // 
+            this.dtpHanTra.Location = new System.Drawing.Point(117, 172);
+            this.dtpHanTra.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.dtpHanTra.Name = "dtpHanTra";
+            this.dtpHanTra.Size = new System.Drawing.Size(265, 22);
+            this.dtpHanTra.TabIndex = 10;
+            // 
+            // dtpNgayTra
+            // 
+            this.dtpNgayTra.Location = new System.Drawing.Point(117, 214);
+            this.dtpNgayTra.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.dtpNgayTra.Name = "dtpNgayTra";
+            this.dtpNgayTra.Size = new System.Drawing.Size(265, 22);
+            this.dtpNgayTra.TabIndex = 11;
+            // 
+            // btnTimKiem
+            // 
+            this.btnTimKiem.Location = new System.Drawing.Point(475, 156);
+            this.btnTimKiem.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnTimKiem.Name = "btnTimKiem";
+            this.btnTimKiem.Size = new System.Drawing.Size(100, 28);
+            this.btnTimKiem.TabIndex = 12;
+            this.btnTimKiem.Text = "Tìm kiếm";
+            this.btnTimKiem.UseVisualStyleBackColor = true;
+            this.btnTimKiem.Click += new System.EventHandler(this.btnTimKiem_Click);
+            // 
+            // btnTraSach
+            // 
+            this.btnTraSach.Location = new System.Drawing.Point(604, 156);
+            this.btnTraSach.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnTraSach.Name = "btnTraSach";
+            this.btnTraSach.Size = new System.Drawing.Size(100, 28);
+            this.btnTraSach.TabIndex = 13;
+            this.btnTraSach.Text = "Trả sách";
+            this.btnTraSach.UseVisualStyleBackColor = true;
+            this.btnTraSach.Click += new System.EventHandler(this.btnTraSach_Click);
+            // 
+            // btnLamMoi
+            // 
+            this.btnLamMoi.Location = new System.Drawing.Point(740, 156);
+            this.btnLamMoi.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnLamMoi.Name = "btnLamMoi";
+            this.btnLamMoi.Size = new System.Drawing.Size(100, 28);
+            this.btnLamMoi.TabIndex = 14;
+            this.btnLamMoi.Text = "Làm mới";
+            this.btnLamMoi.UseVisualStyleBackColor = true;
+            this.btnLamMoi.Click += new System.EventHandler(this.btnLamMoi_Click);
+            // 
+            // dgvTraSach
+            // 
+            this.dgvTraSach.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvTraSach.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.colMaPhieu,
+            this.colDocGia,
+            this.colSach,
+            this.colNgayMuon,
+            this.colHanTra,
+            this.colNgayTra});
+            this.dgvTraSach.Location = new System.Drawing.Point(19, 262);
+            this.dgvTraSach.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.dgvTraSach.Name = "dgvTraSach";
+            this.dgvTraSach.RowHeadersWidth = 51;
+            this.dgvTraSach.Size = new System.Drawing.Size(801, 277);
+            this.dgvTraSach.TabIndex = 15;
+            this.dgvTraSach.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvTraSach_CellClick);
+            // 
+            // colMaPhieu
+            // 
+            this.colMaPhieu.HeaderText = "Mã phiếu";
+            this.colMaPhieu.MinimumWidth = 6;
+            this.colMaPhieu.Name = "colMaPhieu";
+            this.colMaPhieu.Width = 125;
+            // 
+            // colDocGia
+            // 
+            this.colDocGia.HeaderText = "Độc giả";
+            this.colDocGia.MinimumWidth = 6;
+            this.colDocGia.Name = "colDocGia";
+            this.colDocGia.Width = 125;
+            // 
+            // colSach
+            // 
+            this.colSach.HeaderText = "Sách";
+            this.colSach.MinimumWidth = 6;
+            this.colSach.Name = "colSach";
+            this.colSach.Width = 125;
+            // 
+            // colNgayMuon
+            // 
+            this.colNgayMuon.HeaderText = "Ngày mượn";
+            this.colNgayMuon.MinimumWidth = 6;
+            this.colNgayMuon.Name = "colNgayMuon";
+            this.colNgayMuon.Width = 125;
+            // 
+            // colHanTra
+            // 
+            this.colHanTra.HeaderText = "Hạn trả";
+            this.colHanTra.MinimumWidth = 6;
+            this.colHanTra.Name = "colHanTra";
+            this.colHanTra.Width = 125;
+            // 
+            // colNgayTra
+            // 
+            this.colNgayTra.HeaderText = "Ngày trả";
+            this.colNgayTra.MinimumWidth = 6;
+            this.colNgayTra.Name = "colNgayTra";
+            this.colNgayTra.Width = 125;
+            // 
+            // FrmTraSach
+            // 
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.ClientSize = new System.Drawing.Size(1067, 554);
+            this.Controls.Add(this.dgvTraSach);
+            this.Controls.Add(this.btnLamMoi);
+            this.Controls.Add(this.btnTraSach);
+            this.Controls.Add(this.btnTimKiem);
+            this.Controls.Add(this.dtpNgayTra);
+            this.Controls.Add(this.dtpHanTra);
+            this.Controls.Add(this.dtpNgayMuon);
+            this.Controls.Add(this.cboSach);
+            this.Controls.Add(this.cboDocGia);
+            this.Controls.Add(this.txtMaPhieu);
+            this.Controls.Add(this.lblNgayTra);
+            this.Controls.Add(this.lblHanTra);
+            this.Controls.Add(this.lblNgayMuon);
+            this.Controls.Add(this.lblSach);
+            this.Controls.Add(this.lblDocGia);
+            this.Controls.Add(this.lblMaPhieu);
+            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Name = "FrmTraSach";
+            this.Text = "Trả sách";
+            ((System.ComponentModel.ISupportInitialize)(this.dgvTraSach)).EndInit();
+            this.ResumeLayout(false);
+            this.PerformLayout();
+
+        }
+
+        #endregion
+
+        private System.Windows.Forms.Label lblMaPhieu;
+        private System.Windows.Forms.Label lblDocGia;
+        private System.Windows.Forms.Label lblSach;
+        private System.Windows.Forms.Label lblNgayMuon;
+        private System.Windows.Forms.Label lblHanTra;
+        private System.Windows.Forms.Label lblNgayTra;
+        private System.Windows.Forms.TextBox txtMaPhieu;
+        private System.Windows.Forms.ComboBox cboDocGia;
+        private System.Windows.Forms.ComboBox cboSach;
+        private System.Windows.Forms.DateTimePicker dtpNgayMuon;
+        private System.Windows.Forms.DateTimePicker dtpHanTra;
+        private System.Windows.Forms.DateTimePicker dtpNgayTra;
+        private System.Windows.Forms.Button btnTimKiem;
+        private System.Windows.Forms.Button btnTraSach;
+        private System.Windows.Forms.Button btnLamMoi;
+        private System.Windows.Forms.DataGridView dgvTraSach;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colMaPhieu;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colDocGia;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colSach;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colNgayMuon;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colHanTra;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colNgayTra;
+    }
+}
