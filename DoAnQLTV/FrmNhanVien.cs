@@ -117,47 +117,71 @@ namespace DoAnQLTV
                 return;
             }
 
-            foreach (DataGridViewRow row in dgvNhanVien.Rows)
+            try
             {
-                if (row.IsNewRow)
-                    continue;
+                using (SqlConnection conn = DbConnection.GetConnection())
+                {
+                    conn.Open();
 
-                string maCu =
-                    row.Cells["colMaNhanVien"].Value?.ToString() ?? "";
+                    string sql = @"
+                INSERT INTO NhanVien
+                    (MaNhanVien, TenNhanVien, SoDienThoai, DiaChi)
+                VALUES
+                    (@MaNhanVien, @TenNhanVien, @SoDienThoai, @DiaChi)";
 
-                if (maCu.Equals(
-                    maNhanVien,
-                    StringComparison.OrdinalIgnoreCase))
+                    using (SqlCommand cmd = new SqlCommand(sql, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@MaNhanVien", maNhanVien);
+                        cmd.Parameters.AddWithValue("@TenNhanVien", tenNhanVien);
+                        cmd.Parameters.AddWithValue("@SoDienThoai", soDienThoai);
+                        cmd.Parameters.AddWithValue("@DiaChi", diaChi);
+
+                        cmd.ExecuteNonQuery();
+                    }
+                }
+
+                MessageBox.Show(
+                    "Thêm nhân viên thành công.",
+                    "Thông báo",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information);
+
+                LoadNhanVien();
+
+                txtMaNhanVien.Clear();
+                txtTenNhanVien.Clear();
+                txtSoDienThoai.Clear();
+                txtDiaChi.Clear();
+
+                txtMaNhanVien.Focus();
+            }
+            catch (SqlException ex)
+            {
+                if (ex.Number == 2627 || ex.Number == 2601)
                 {
                     MessageBox.Show(
                         "Mã nhân viên đã tồn tại.",
                         "Thông báo",
                         MessageBoxButtons.OK,
                         MessageBoxIcon.Warning);
-
-                    txtMaNhanVien.Focus();
-                    return;
+                }
+                else
+                {
+                    MessageBox.Show(
+                        "Không thể thêm nhân viên.\n\n" + ex.Message,
+                        "Lỗi",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Error);
                 }
             }
-
-            dgvNhanVien.Rows.Add(
-                maNhanVien,
-                tenNhanVien,
-                soDienThoai,
-                diaChi);
-
-            MessageBox.Show(
-                "Thêm nhân viên thành công.",
-                "Thông báo",
-                MessageBoxButtons.OK,
-                MessageBoxIcon.Information);
-
-            txtMaNhanVien.Clear();
-            txtTenNhanVien.Clear();
-            txtSoDienThoai.Clear();
-            txtDiaChi.Clear();
-
-            txtMaNhanVien.Focus();
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    "Đã xảy ra lỗi.\n\n" + ex.Message,
+                    "Lỗi",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+            }
         }
 
         private void dgvNhanVien_CellClick(object sender, DataGridViewCellEventArgs e)
@@ -248,25 +272,87 @@ namespace DoAnQLTV
                 return;
             }
 
-            DataGridViewRow row = dgvNhanVien.Rows[dongDangChon];
+            try
+            {
+                using (SqlConnection conn = DbConnection.GetConnection())
+                {
+                    conn.Open();
 
-            row.Cells["colMaNhanVien"].Value = maNhanVien;
-            row.Cells["colTenNhanVien"].Value = tenNhanVien;
-            row.Cells["colSoDienThoai"].Value = soDienThoai;
-            row.Cells["colDiaChi"].Value = diaChi;
+                    string sql = @"
+                UPDATE NhanVien
+                SET
+                    TenNhanVien = @TenNhanVien,
+                    SoDienThoai = @SoDienThoai,
+                    DiaChi = @DiaChi
+                WHERE MaNhanVien = @MaNhanVien";
 
-            MessageBox.Show(
-                "Sửa thông tin nhân viên thành công.",
-                "Thông báo",
-                MessageBoxButtons.OK,
-                MessageBoxIcon.Information);
+                    using (SqlCommand cmd = new SqlCommand(sql, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@TenNhanVien", tenNhanVien);
+                        cmd.Parameters.AddWithValue("@SoDienThoai", soDienThoai);
+                        cmd.Parameters.AddWithValue("@DiaChi", diaChi);
+                        cmd.Parameters.AddWithValue("@MaNhanVien", maNhanVien);
 
-            dongDangChon = -1;
+                        int soDong = cmd.ExecuteNonQuery();
+
+                        if (soDong == 0)
+                        {
+                            MessageBox.Show(
+                                "Không tìm thấy mã nhân viên cần sửa.",
+                                "Thông báo",
+                                MessageBoxButtons.OK,
+                                MessageBoxIcon.Warning);
+
+                            return;
+                        }
+                    }
+                }
+
+                MessageBox.Show(
+                    "Sửa thông tin nhân viên thành công.",
+                    "Thông báo",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information);
+
+                LoadNhanVien();
+
+                txtMaNhanVien.Clear();
+                txtTenNhanVien.Clear();
+                txtSoDienThoai.Clear();
+                txtDiaChi.Clear();
+
+                dongDangChon = -1;
+
+                dgvNhanVien.ClearSelection();
+
+                txtMaNhanVien.Focus();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    "Không thể cập nhật nhân viên.\n\n" + ex.Message,
+                    "Lỗi",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+            }
         }
 
         private void btnXoa_Click(object sender, EventArgs e)
         {
             if (dongDangChon == -1)
+            {
+                MessageBox.Show(
+                    "Vui lòng chọn nhân viên cần xóa.",
+                    "Thông báo",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+
+                return;
+            }
+
+            string maNhanVien = txtMaNhanVien.Text.Trim();
+
+            if (maNhanVien == "")
             {
                 MessageBox.Show(
                     "Vui lòng chọn nhân viên cần xóa.",
@@ -283,20 +369,88 @@ namespace DoAnQLTV
                 MessageBoxButtons.YesNo,
                 MessageBoxIcon.Question);
 
-            if (result == DialogResult.No)
+            if (result != DialogResult.Yes)
             {
                 return;
             }
 
-            dgvNhanVien.Rows.RemoveAt(dongDangChon);
+            try
+            {
+                using (SqlConnection conn = DbConnection.GetConnection())
+                {
+                    conn.Open();
 
-            dongDangChon = -1;
+                    string sql = @"
+                DELETE FROM NhanVien
+                WHERE MaNhanVien = @MaNhanVien";
 
-            MessageBox.Show(
-                "Xóa nhân viên thành công.",
-                "Thông báo",
-                MessageBoxButtons.OK,
-                MessageBoxIcon.Information);
+                    using (SqlCommand cmd = new SqlCommand(sql, conn))
+                    {
+                        cmd.Parameters.AddWithValue(
+                            "@MaNhanVien",
+                            maNhanVien);
+
+                        int soDong = cmd.ExecuteNonQuery();
+
+                        if (soDong == 0)
+                        {
+                            MessageBox.Show(
+                                "Không tìm thấy nhân viên cần xóa.",
+                                "Thông báo",
+                                MessageBoxButtons.OK,
+                                MessageBoxIcon.Warning);
+
+                            return;
+                        }
+                    }
+                }
+
+                MessageBox.Show(
+                    "Xóa nhân viên thành công.",
+                    "Thông báo",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information);
+
+                LoadNhanVien();
+
+                txtMaNhanVien.Clear();
+                txtTenNhanVien.Clear();
+                txtSoDienThoai.Clear();
+                txtDiaChi.Clear();
+
+                dongDangChon = -1;
+
+                dgvNhanVien.ClearSelection();
+
+                txtMaNhanVien.Focus();
+            }
+            catch (SqlException ex)
+            {
+                if (ex.Number == 547)
+                {
+                    MessageBox.Show(
+                        "Không thể xóa nhân viên này vì đang được sử dụng trong phiếu mượn.",
+                        "Thông báo",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Warning);
+                }
+                else
+                {
+                    MessageBox.Show(
+                        "Không thể xóa nhân viên.\n\n" + ex.Message,
+                        "Lỗi",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Error);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    "Đã xảy ra lỗi.\n\n" + ex.Message,
+                    "Lỗi",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+            }
         }
 
         private void btnTimKiem_Click(object sender, EventArgs e)
@@ -315,59 +469,90 @@ namespace DoAnQLTV
                 return;
             }
 
-            bool timThay = false;
-
-            foreach (DataGridViewRow row in dgvNhanVien.Rows)
+            try
             {
-                if (row.IsNewRow)
-                    continue;
-
-                string maNhanVien =
-                    row.Cells["colMaNhanVien"].Value?.ToString() ?? "";
-
-                string tenNhanVien =
-                    row.Cells["colTenNhanVien"].Value?.ToString() ?? "";
-
-                string soDienThoai =
-                    row.Cells["colSoDienThoai"].Value?.ToString() ?? "";
-
-                if (maNhanVien.IndexOf(
-                        tuKhoa,
-                        StringComparison.OrdinalIgnoreCase) >= 0 ||
-                    tenNhanVien.IndexOf(
-                        tuKhoa,
-                        StringComparison.OrdinalIgnoreCase) >= 0 ||
-                    soDienThoai.IndexOf(
-                        tuKhoa,
-                        StringComparison.OrdinalIgnoreCase) >= 0)
+                using (SqlConnection conn = DbConnection.GetConnection())
                 {
-                    row.Selected = true;
+                    conn.Open();
 
-                    dgvNhanVien.CurrentCell =
-                        row.Cells["colMaNhanVien"];
+                    string sql = @"
+                SELECT
+                    MaNhanVien,
+                    TenNhanVien,
+                    SoDienThoai,
+                    DiaChi
+                FROM NhanVien
+                WHERE MaNhanVien LIKE @TuKhoa
+                   OR TenNhanVien LIKE @TuKhoa
+                   OR SoDienThoai LIKE @TuKhoa
+                ORDER BY MaNhanVien";
 
-                    txtMaNhanVien.Text = maNhanVien;
-                    txtTenNhanVien.Text = tenNhanVien;
-                    txtSoDienThoai.Text = soDienThoai;
+                    using (SqlCommand cmd = new SqlCommand(sql, conn))
+                    {
+                        cmd.Parameters.AddWithValue(
+                            "@TuKhoa",
+                            "%" + tuKhoa + "%");
 
-                    txtDiaChi.Text =
-                        row.Cells["colDiaChi"].Value?.ToString();
+                        using (SqlDataAdapter adapter = new SqlDataAdapter(cmd))
+                        {
+                            DataTable dt = new DataTable();
+                            adapter.Fill(dt);
 
-                    dongDangChon = row.Index;
+                            dgvNhanVien.Rows.Clear();
 
-                    timThay = true;
+                            foreach (DataRow row in dt.Rows)
+                            {
+                                dgvNhanVien.Rows.Add(
+                                    row["MaNhanVien"].ToString(),
+                                    row["TenNhanVien"].ToString(),
+                                    row["SoDienThoai"].ToString(),
+                                    row["DiaChi"].ToString());
+                            }
 
-                    break;
+                            if (dt.Rows.Count == 0)
+                            {
+                                MessageBox.Show(
+                                    "Không tìm thấy nhân viên phù hợp.",
+                                    "Thông báo",
+                                    MessageBoxButtons.OK,
+                                    MessageBoxIcon.Information);
+
+                                return;
+                            }
+
+                            if (dt.Rows.Count == 1)
+                            {
+                                txtMaNhanVien.Text =
+                                    dt.Rows[0]["MaNhanVien"].ToString();
+
+                                txtTenNhanVien.Text =
+                                    dt.Rows[0]["TenNhanVien"].ToString();
+
+                                txtSoDienThoai.Text =
+                                    dt.Rows[0]["SoDienThoai"].ToString();
+
+                                txtDiaChi.Text =
+                                    dt.Rows[0]["DiaChi"].ToString();
+
+                                dgvNhanVien.Rows[0].Selected = true;
+
+                                dgvNhanVien.CurrentCell =
+                                    dgvNhanVien.Rows[0]
+                                        .Cells["colMaNhanVien"];
+
+                                dongDangChon = 0;
+                            }
+                        }
+                    }
                 }
             }
-
-            if (!timThay)
+            catch (Exception ex)
             {
                 MessageBox.Show(
-                    "Không tìm thấy nhân viên phù hợp.",
-                    "Thông báo",
+                    "Không thể tìm kiếm nhân viên.\n\n" + ex.Message,
+                    "Lỗi",
                     MessageBoxButtons.OK,
-                    MessageBoxIcon.Information);
+                    MessageBoxIcon.Error);
             }
         }
 
@@ -379,6 +564,8 @@ namespace DoAnQLTV
             txtDiaChi.Clear();
 
             dongDangChon = -1;
+
+            LoadNhanVien();
 
             dgvNhanVien.ClearSelection();
 

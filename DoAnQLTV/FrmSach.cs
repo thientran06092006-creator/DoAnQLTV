@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Data;
+using System.Data.SqlClient;
 using System.Windows.Forms;
 
 namespace DoAnQLTV
@@ -10,146 +12,143 @@ namespace DoAnQLTV
         {
             InitializeComponent();
 
-            KhoiTaoTheLoai();
-            KhoiTaoTacGia();
-            HienThiDuLieuMau();
+            LoadTheLoai();
+            LoadTacGia();
+            LoadSach();
         }
 
-        private void KhoiTaoTheLoai()
+        private void LoadTheLoai()
         {
-            cboTheLoai.Items.Clear();
+            try
+            {
+                using (SqlConnection conn = DbConnection.GetConnection())
+                {
+                    conn.Open();
 
-            cboTheLoai.Items.Add("Công nghệ thông tin");
-            cboTheLoai.Items.Add("Giáo dục");
-            cboTheLoai.Items.Add("Toán học");
-            cboTheLoai.Items.Add("Kỹ năng");
-            cboTheLoai.Items.Add("Ngoại ngữ");
+                    string sql = @"
+                SELECT MaTheLoai, TenTheLoai
+                FROM TheLoai
+                ORDER BY MaTheLoai";
+
+                    using (SqlDataAdapter adapter = new SqlDataAdapter(sql, conn))
+                    {
+                        DataTable dt = new DataTable();
+                        adapter.Fill(dt);
+
+                        cboTheLoai.Items.Clear();
+
+                        foreach (DataRow row in dt.Rows)
+                        {
+                            cboTheLoai.Items.Add(
+                                row["TenTheLoai"].ToString());
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    "Không thể tải danh sách thể loại.\n\n" + ex.Message,
+                    "Lỗi",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+            }
         }
 
-        private void KhoiTaoTacGia()
+        private void LoadTacGia()
         {
-            cboTacGia.Items.Clear();
+            try
+            {
+                using (SqlConnection conn = DbConnection.GetConnection())
+                {
+                    conn.Open();
 
-            cboTacGia.Items.Add("Nguyễn Văn A");
-            cboTacGia.Items.Add("Trần Văn B");
-            cboTacGia.Items.Add("Lê Văn C");
-            cboTacGia.Items.Add("Phạm Văn D");
-            cboTacGia.Items.Add("Nguyễn Văn E");
-            cboTacGia.Items.Add("Trần Văn F");
-            cboTacGia.Items.Add("Lê Văn G");
-            cboTacGia.Items.Add("Phạm Văn H");
-            cboTacGia.Items.Add("Nguyễn Văn I");
-            cboTacGia.Items.Add("Trần Văn K");
-            cboTacGia.Items.Add("Lê Văn L");
-            cboTacGia.Items.Add("Phạm Văn M");
-            cboTacGia.Items.Add("Nguyễn Văn N");
-            cboTacGia.Items.Add("Trần Văn P");
-            cboTacGia.Items.Add("Lê Văn Q");
+                    string sql = @"
+                SELECT MaTacGia, TenTacGia
+                FROM TacGia
+                ORDER BY MaTacGia";
+
+                    using (SqlDataAdapter adapter = new SqlDataAdapter(sql, conn))
+                    {
+                        DataTable dt = new DataTable();
+                        adapter.Fill(dt);
+
+                        cboTacGia.Items.Clear();
+
+                        foreach (DataRow row in dt.Rows)
+                        {
+                            cboTacGia.Items.Add(
+                                row["TenTacGia"].ToString());
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    "Không thể tải danh sách tác giả.\n\n" + ex.Message,
+                    "Lỗi",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+            }
         }
 
-        private void HienThiDuLieuMau()
+        private void LoadSach()
         {
-            dgvSach.Rows.Clear();
+            try
+            {
+                using (SqlConnection conn = DbConnection.GetConnection())
+                {
+                    conn.Open();
 
-            dgvSach.Rows.Add(
-                "S001",
-                "Lập trình C#",
-                "Công nghệ thông tin",
-                "Nguyễn Văn A");
+                    string sql = @"
+                SELECT
+                    s.MaSach,
+                    s.TenSach,
+                    tl.TenTheLoai,
+                    tg.TenTacGia
+                FROM Sach s
+                INNER JOIN TheLoai tl
+                    ON s.MaTheLoai = tl.MaTheLoai
+                INNER JOIN TacGia tg
+                    ON s.MaTacGia = tg.MaTacGia
+                ORDER BY s.MaSach";
 
-            dgvSach.Rows.Add(
-                "S002",
-                "Cơ sở dữ liệu",
-                "Công nghệ thông tin",
-                "Trần Văn B");
+                    using (SqlDataAdapter adapter = new SqlDataAdapter(sql, conn))
+                    {
+                        DataTable dt = new DataTable();
+                        adapter.Fill(dt);
 
-            dgvSach.Rows.Add(
-                "S003",
-                "Kỹ năng học tập",
-                "Giáo dục",
-                "Lê Văn C");
+                        dgvSach.Rows.Clear();
 
-            dgvSach.Rows.Add(
-                "S004",
-                "Lập trình hướng đối tượng",
-                "Công nghệ thông tin",
-                "Phạm Văn D");
-
-            dgvSach.Rows.Add(
-                "S005",
-                "Cấu trúc dữ liệu và giải thuật",
-                "Công nghệ thông tin",
-                "Nguyễn Văn E");
-
-            dgvSach.Rows.Add(
-                "S006",
-                "Hệ điều hành",
-                "Công nghệ thông tin",
-                "Trần Văn F");
-
-            dgvSach.Rows.Add(
-                "S007",
-                "Mạng máy tính",
-                "Công nghệ thông tin",
-                "Lê Văn G");
-
-            dgvSach.Rows.Add(
-                "S008",
-                "Phân tích và thiết kế hệ thống",
-                "Công nghệ thông tin",
-                "Phạm Văn H");
-
-            dgvSach.Rows.Add(
-                "S009",
-                "Toán cao cấp",
-                "Toán học",
-                "Nguyễn Văn I");
-
-            dgvSach.Rows.Add(
-                "S010",
-                "Xác suất thống kê",
-                "Toán học",
-                "Trần Văn K");
-
-            dgvSach.Rows.Add(
-                "S011",
-                "Kỹ năng giao tiếp",
-                "Kỹ năng",
-                "Lê Văn L");
-
-            dgvSach.Rows.Add(
-                "S012",
-                "Tiếng Anh chuyên ngành CNTT",
-                "Ngoại ngữ",
-                "Phạm Văn M");
-
-            dgvSach.Rows.Add(
-                "S013",
-                "Lập trình Windows Forms",
-                "Công nghệ thông tin",
-                "Nguyễn Văn N");
-
-            dgvSach.Rows.Add(
-                "S014",
-                "Phát triển ứng dụng C#",
-                "Công nghệ thông tin",
-                "Trần Văn P");
-
-            dgvSach.Rows.Add(
-                "S015",
-                "Nhập môn lập trình",
-                "Công nghệ thông tin",
-                "Lê Văn Q");
+                        foreach (DataRow row in dt.Rows)
+                        {
+                            dgvSach.Rows.Add(
+                                row["MaSach"].ToString(),
+                                row["TenSach"].ToString(),
+                                row["TenTheLoai"].ToString(),
+                                row["TenTacGia"].ToString());
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    "Không thể tải dữ liệu sách.\n\n" + ex.Message,
+                    "Lỗi",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+            }
         }
 
         private void btnThem_Click(object sender, EventArgs e)
         {
             string maSach = txtMaSach.Text.Trim();
             string tenSach = txtTenSach.Text.Trim();
-            string theLoai = cboTheLoai.Text.Trim();
-            string tacGia = cboTacGia.Text.Trim();
+            string tenTheLoai = cboTheLoai.Text.Trim();
+            string tenTacGia = cboTacGia.Text.Trim();
 
-            // Kiểm tra mã sách
             if (maSach == "")
             {
                 MessageBox.Show(
@@ -162,7 +161,6 @@ namespace DoAnQLTV
                 return;
             }
 
-            // Kiểm tra tên sách
             if (tenSach == "")
             {
                 MessageBox.Show(
@@ -175,8 +173,7 @@ namespace DoAnQLTV
                 return;
             }
 
-            // Kiểm tra thể loại
-            if (theLoai == "")
+            if (tenTheLoai == "")
             {
                 MessageBox.Show(
                     "Vui lòng chọn thể loại.",
@@ -188,8 +185,7 @@ namespace DoAnQLTV
                 return;
             }
 
-            // Kiểm tra tác giả
-            if (tacGia == "")
+            if (tenTacGia == "")
             {
                 MessageBox.Show(
                     "Vui lòng chọn tác giả.",
@@ -201,47 +197,89 @@ namespace DoAnQLTV
                 return;
             }
 
-            // Kiểm tra mã sách trùng
-            foreach (DataGridViewRow row in dgvSach.Rows)
+            try
             {
-                if (row.IsNewRow)
-                    continue;
+                using (SqlConnection conn = DbConnection.GetConnection())
+                {
+                    conn.Open();
 
-                if (row.Cells["colMaSach"].Value != null &&
-                    row.Cells["colMaSach"].Value.ToString()
-                    .Equals(maSach, StringComparison.OrdinalIgnoreCase))
+                    string sql = @"
+                INSERT INTO Sach
+                    (MaSach, TenSach, MaTheLoai, MaTacGia)
+                SELECT
+                    @MaSach,
+                    @TenSach,
+                    tl.MaTheLoai,
+                    tg.MaTacGia
+                FROM TheLoai tl
+                CROSS JOIN TacGia tg
+                WHERE tl.TenTheLoai = @TenTheLoai
+                  AND tg.TenTacGia = @TenTacGia";
+
+                    using (SqlCommand cmd = new SqlCommand(sql, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@MaSach", maSach);
+                        cmd.Parameters.AddWithValue("@TenSach", tenSach);
+                        cmd.Parameters.AddWithValue("@TenTheLoai", tenTheLoai);
+                        cmd.Parameters.AddWithValue("@TenTacGia", tenTacGia);
+
+                        int soDong = cmd.ExecuteNonQuery();
+
+                        if (soDong == 0)
+                        {
+                            MessageBox.Show(
+                                "Không tìm thấy thể loại hoặc tác giả tương ứng.",
+                                "Thông báo",
+                                MessageBoxButtons.OK,
+                                MessageBoxIcon.Warning);
+
+                            return;
+                        }
+                    }
+                }
+
+                MessageBox.Show(
+                    "Thêm sách thành công.",
+                    "Thông báo",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information);
+
+                LoadSach();
+
+                txtMaSach.Clear();
+                txtTenSach.Clear();
+                cboTheLoai.SelectedIndex = -1;
+                cboTacGia.SelectedIndex = -1;
+
+                txtMaSach.Focus();
+            }
+            catch (SqlException ex)
+            {
+                if (ex.Number == 2627 || ex.Number == 2601)
                 {
                     MessageBox.Show(
                         "Mã sách đã tồn tại. Vui lòng nhập mã khác.",
                         "Thông báo",
                         MessageBoxButtons.OK,
                         MessageBoxIcon.Warning);
-
-                    txtMaSach.Focus();
-                    return;
+                }
+                else
+                {
+                    MessageBox.Show(
+                        "Không thể thêm sách.\n\n" + ex.Message,
+                        "Lỗi",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Error);
                 }
             }
-
-            // Thêm sách vào DataGridView
-            dgvSach.Rows.Add(
-                maSach,
-                tenSach,
-                theLoai,
-                tacGia);
-
-            MessageBox.Show(
-                "Thêm sách thành công.",
-                "Thông báo",
-                MessageBoxButtons.OK,
-                MessageBoxIcon.Information);
-
-            // Xóa dữ liệu nhập
-            txtMaSach.Clear();
-            txtTenSach.Clear();
-            cboTheLoai.SelectedIndex = -1;
-            cboTacGia.SelectedIndex = -1;
-
-            txtMaSach.Focus();
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    "Đã xảy ra lỗi.\n\n" + ex.Message,
+                    "Lỗi",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+            }
         }
 
         private void dgvSach_CellClick(object sender, DataGridViewCellEventArgs e)
@@ -274,8 +312,8 @@ namespace DoAnQLTV
 
             string maSach = txtMaSach.Text.Trim();
             string tenSach = txtTenSach.Text.Trim();
-            string theLoai = cboTheLoai.Text.Trim();
-            string tacGia = cboTacGia.Text.Trim();
+            string tenTheLoai = cboTheLoai.Text.Trim();
+            string tenTacGia = cboTacGia.Text.Trim();
 
             if (maSach == "")
             {
@@ -301,7 +339,7 @@ namespace DoAnQLTV
                 return;
             }
 
-            if (theLoai == "")
+            if (tenTheLoai == "")
             {
                 MessageBox.Show(
                     "Vui lòng chọn thể loại.",
@@ -313,7 +351,7 @@ namespace DoAnQLTV
                 return;
             }
 
-            if (tacGia == "")
+            if (tenTacGia == "")
             {
                 MessageBox.Show(
                     "Vui lòng chọn tác giả.",
@@ -327,18 +365,112 @@ namespace DoAnQLTV
 
             DataGridViewRow row = dgvSach.Rows[dongDangChon];
 
-            row.Cells["colMaSach"].Value = maSach;
-            row.Cells["colTenSach"].Value = tenSach;
-            row.Cells["colTheLoai"].Value = theLoai;
-            row.Cells["colTacGia"].Value = tacGia;
+            string maSachCu =
+                row.Cells["colMaSach"].Value?.ToString() ?? "";
 
-            MessageBox.Show(
-                "Sửa thông tin sách thành công.",
-                "Thông báo",
-                MessageBoxButtons.OK,
-                MessageBoxIcon.Information);
+            if (maSachCu == "")
+            {
+                MessageBox.Show(
+                    "Không xác định được mã sách cần sửa.",
+                    "Thông báo",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
 
-            dongDangChon = -1;
+                return;
+            }
+
+            try
+            {
+                using (SqlConnection conn = DbConnection.GetConnection())
+                {
+                    conn.Open();
+
+                    string sql = @"
+                UPDATE Sach
+                SET
+                    MaSach = @MaSachMoi,
+                    TenSach = @TenSach,
+                    MaTheLoai = (
+                        SELECT MaTheLoai
+                        FROM TheLoai
+                        WHERE TenTheLoai = @TenTheLoai
+                    ),
+                    MaTacGia = (
+                        SELECT MaTacGia
+                        FROM TacGia
+                        WHERE TenTacGia = @TenTacGia
+                    )
+                WHERE MaSach = @MaSachCu";
+
+                    using (SqlCommand cmd = new SqlCommand(sql, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@MaSachMoi", maSach);
+                        cmd.Parameters.AddWithValue("@TenSach", tenSach);
+                        cmd.Parameters.AddWithValue("@TenTheLoai", tenTheLoai);
+                        cmd.Parameters.AddWithValue("@TenTacGia", tenTacGia);
+                        cmd.Parameters.AddWithValue("@MaSachCu", maSachCu);
+
+                        int soDong = cmd.ExecuteNonQuery();
+
+                        if (soDong == 0)
+                        {
+                            MessageBox.Show(
+                                "Không tìm thấy sách cần sửa hoặc dữ liệu không thay đổi.",
+                                "Thông báo",
+                                MessageBoxButtons.OK,
+                                MessageBoxIcon.Warning);
+
+                            return;
+                        }
+                    }
+                }
+
+                MessageBox.Show(
+                    "Sửa thông tin sách thành công.",
+                    "Thông báo",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information);
+
+                LoadSach();
+
+                txtMaSach.Clear();
+                txtTenSach.Clear();
+                cboTheLoai.SelectedIndex = -1;
+                cboTacGia.SelectedIndex = -1;
+
+                dongDangChon = -1;
+
+                dgvSach.ClearSelection();
+
+                txtMaSach.Focus();
+            }
+            catch (SqlException ex)
+            {
+                if (ex.Number == 2627 || ex.Number == 2601)
+                {
+                    MessageBox.Show(
+                        "Mã sách mới đã tồn tại. Vui lòng nhập mã khác.",
+                        "Thông báo",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Warning);
+                }
+                else
+                {
+                    MessageBox.Show(
+                        "Không thể sửa sách.\n\n" + ex.Message,
+                        "Lỗi",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Error);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    "Đã xảy ra lỗi.\n\n" + ex.Message,
+                    "Lỗi",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+            }
         }
 
         private void btnXoa_Click(object sender, EventArgs e)
@@ -347,6 +479,22 @@ namespace DoAnQLTV
             {
                 MessageBox.Show(
                     "Vui lòng chọn sách cần xóa.",
+                    "Thông báo",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+
+                return;
+            }
+
+            DataGridViewRow row = dgvSach.Rows[dongDangChon];
+
+            string maSach =
+                row.Cells["colMaSach"].Value?.ToString() ?? "";
+
+            if (maSach == "")
+            {
+                MessageBox.Show(
+                    "Không xác định được mã sách cần xóa.",
                     "Thông báo",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Warning);
@@ -365,48 +513,173 @@ namespace DoAnQLTV
                 return;
             }
 
-            dgvSach.Rows.RemoveAt(dongDangChon);
+            try
+            {
+                using (SqlConnection conn = DbConnection.GetConnection())
+                {
+                    conn.Open();
 
-            dongDangChon = -1;
+                    string sql = @"
+                DELETE FROM Sach
+                WHERE MaSach = @MaSach";
 
-            MessageBox.Show(
-                "Xóa sách thành công.",
-                "Thông báo",
-                MessageBoxButtons.OK,
-                MessageBoxIcon.Information);
+                    using (SqlCommand cmd = new SqlCommand(sql, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@MaSach", maSach);
+
+                        int soDong = cmd.ExecuteNonQuery();
+
+                        if (soDong == 0)
+                        {
+                            MessageBox.Show(
+                                "Không tìm thấy sách cần xóa.",
+                                "Thông báo",
+                                MessageBoxButtons.OK,
+                                MessageBoxIcon.Warning);
+
+                            return;
+                        }
+                    }
+                }
+
+                MessageBox.Show(
+                    "Xóa sách thành công.",
+                    "Thông báo",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information);
+
+                LoadSach();
+
+                txtMaSach.Clear();
+                txtTenSach.Clear();
+                cboTheLoai.SelectedIndex = -1;
+                cboTacGia.SelectedIndex = -1;
+
+                dongDangChon = -1;
+
+                dgvSach.ClearSelection();
+
+                txtMaSach.Focus();
+            }
+            catch (SqlException ex)
+            {
+                if (ex.Number == 547)
+                {
+                    MessageBox.Show(
+                        "Không thể xóa sách này vì sách đang được sử dụng trong phiếu mượn.",
+                        "Không thể xóa",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Warning);
+                }
+                else
+                {
+                    MessageBox.Show(
+                        "Không thể xóa sách.\n\n" + ex.Message,
+                        "Lỗi",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Error);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    "Đã xảy ra lỗi.\n\n" + ex.Message,
+                    "Lỗi",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+            }
         }
 
         private void btnTimKiem_Click(object sender, EventArgs e)
         {
             string tuKhoa = txtTenSach.Text.Trim();
-            bool timThay = false;
 
-            foreach (DataGridViewRow row in dgvSach.Rows)
-            {
-                if (row.IsNewRow)
-                    continue;
-
-                string maSach = row.Cells["colMaSach"].Value?.ToString() ?? "";
-                string tenSach = row.Cells["colTenSach"].Value?.ToString() ?? "";
-
-                if (maSach.IndexOf(tuKhoa, StringComparison.OrdinalIgnoreCase) >= 0 ||
-                    tenSach.IndexOf(tuKhoa, StringComparison.OrdinalIgnoreCase) >= 0)
-                {
-                    timThay = true;
-
-                    row.Selected = true;
-                    dgvSach.CurrentCell = row.Cells["colMaSach"];
-                    return;
-                }
-            }
-
-            if (!timThay)
+            if (tuKhoa == "")
             {
                 MessageBox.Show(
-                    "Không tìm thấy sách phù hợp.",
+                    "Vui lòng nhập từ khóa cần tìm.",
                     "Thông báo",
                     MessageBoxButtons.OK,
-                    MessageBoxIcon.Information);
+                    MessageBoxIcon.Warning);
+
+                txtTenSach.Focus();
+                return;
+            }
+
+            try
+            {
+                using (SqlConnection conn = DbConnection.GetConnection())
+                {
+                    conn.Open();
+
+                    string sql = @"
+                SELECT
+                    s.MaSach,
+                    s.TenSach,
+                    tl.TenTheLoai,
+                    tg.TenTacGia
+                FROM Sach s
+                INNER JOIN TheLoai tl
+                    ON s.MaTheLoai = tl.MaTheLoai
+                INNER JOIN TacGia tg
+                    ON s.MaTacGia = tg.MaTacGia
+                WHERE s.MaSach LIKE @TuKhoa
+                   OR s.TenSach LIKE @TuKhoa
+                ORDER BY s.MaSach";
+
+                    using (SqlCommand cmd = new SqlCommand(sql, conn))
+                    {
+                        cmd.Parameters.AddWithValue(
+                            "@TuKhoa",
+                            "%" + tuKhoa + "%");
+
+                        using (SqlDataAdapter adapter =
+                            new SqlDataAdapter(cmd))
+                        {
+                            DataTable dt = new DataTable();
+                            adapter.Fill(dt);
+
+                            dgvSach.Rows.Clear();
+
+                            foreach (DataRow row in dt.Rows)
+                            {
+                                dgvSach.Rows.Add(
+                                    row["MaSach"].ToString(),
+                                    row["TenSach"].ToString(),
+                                    row["TenTheLoai"].ToString(),
+                                    row["TenTacGia"].ToString());
+                            }
+
+                            if (dt.Rows.Count == 0)
+                            {
+                                MessageBox.Show(
+                                    "Không tìm thấy sách phù hợp.",
+                                    "Thông báo",
+                                    MessageBoxButtons.OK,
+                                    MessageBoxIcon.Information);
+
+                                return;
+                            }
+
+                            dgvSach.ClearSelection();
+
+                            if (dgvSach.Rows.Count > 0)
+                            {
+                                dgvSach.Rows[0].Selected = true;
+                                dgvSach.CurrentCell =
+                                    dgvSach.Rows[0].Cells["colMaSach"];
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    "Không thể tìm kiếm sách.\n\n" + ex.Message,
+                    "Lỗi",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
             }
         }
 
@@ -414,11 +687,17 @@ namespace DoAnQLTV
         {
             txtMaSach.Clear();
             txtTenSach.Clear();
+
             cboTheLoai.SelectedIndex = -1;
             cboTacGia.SelectedIndex = -1;
 
             dongDangChon = -1;
+
+            LoadSach();
+
             dgvSach.ClearSelection();
+
+            txtMaSach.Focus();
         }
     }
 }

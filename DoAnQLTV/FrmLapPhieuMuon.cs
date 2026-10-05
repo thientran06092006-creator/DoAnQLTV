@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Data.SqlClient;
 
 namespace DoAnQLTV
 {
@@ -17,70 +18,159 @@ namespace DoAnQLTV
         {
             InitializeComponent();
 
-            KhoiTaoDocGia();
-            KhoiTaoNhanVien();
-            HienThiDuLieuMau();
+            LoadDocGia();
+            LoadNhanVien();
+            LoadPhieuMuon();
         }
 
-        private void KhoiTaoDocGia()
+        private void LoadDocGia()
         {
-            cboDocGia.Items.Clear();
-
-            cboDocGia.Items.Add("DG001 - Nguyễn Văn An");
-            cboDocGia.Items.Add("DG002 - Trần Thị Bình");
-            cboDocGia.Items.Add("DG003 - Lê Văn Cường");
-            cboDocGia.Items.Add("DG004 - Phạm Thị Dung");
-            cboDocGia.Items.Add("DG005 - Hoàng Văn Em");
-
-            if (cboDocGia.Items.Count > 0)
+            try
             {
-                cboDocGia.SelectedIndex = 0;
+                using (SqlConnection conn = DbConnection.GetConnection())
+                {
+                    conn.Open();
+
+                    string sql = @"
+                SELECT MaDocGia, TenDocGia
+                FROM DocGia
+                ORDER BY MaDocGia";
+
+                    using (SqlDataAdapter adapter =
+                        new SqlDataAdapter(sql, conn))
+                    {
+                        DataTable dt = new DataTable();
+                        adapter.Fill(dt);
+
+                        cboDocGia.Items.Clear();
+
+                        foreach (DataRow row in dt.Rows)
+                        {
+                            cboDocGia.Items.Add(
+                                row["MaDocGia"].ToString()
+                                + " - "
+                                + row["TenDocGia"].ToString());
+                        }
+
+                        if (cboDocGia.Items.Count > 0)
+                        {
+                            cboDocGia.SelectedIndex = 0;
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    "Không thể tải danh sách độc giả.\n\n" + ex.Message,
+                    "Lỗi",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
             }
         }
 
-        private void KhoiTaoNhanVien()
+        private void LoadNhanVien()
         {
-            cboNhanVien.Items.Clear();
-
-            cboNhanVien.Items.Add("NV001 - Nguyễn Văn Minh");
-            cboNhanVien.Items.Add("NV002 - Trần Thị Lan");
-            cboNhanVien.Items.Add("NV003 - Lê Văn Hùng");
-            cboNhanVien.Items.Add("NV004 - Phạm Thị Mai");
-            cboNhanVien.Items.Add("NV005 - Hoàng Văn Nam");
-
-            if (cboNhanVien.Items.Count > 0)
+            try
             {
-                cboNhanVien.SelectedIndex = 0;
+                using (SqlConnection conn = DbConnection.GetConnection())
+                {
+                    conn.Open();
+
+                    string sql = @"
+                SELECT MaNhanVien, TenNhanVien
+                FROM NhanVien
+                ORDER BY MaNhanVien";
+
+                    using (SqlDataAdapter adapter =
+                        new SqlDataAdapter(sql, conn))
+                    {
+                        DataTable dt = new DataTable();
+                        adapter.Fill(dt);
+
+                        cboNhanVien.Items.Clear();
+
+                        foreach (DataRow row in dt.Rows)
+                        {
+                            cboNhanVien.Items.Add(
+                                row["MaNhanVien"].ToString()
+                                + " - "
+                                + row["TenNhanVien"].ToString());
+                        }
+
+                        if (cboNhanVien.Items.Count > 0)
+                        {
+                            cboNhanVien.SelectedIndex = 0;
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    "Không thể tải danh sách nhân viên.\n\n" + ex.Message,
+                    "Lỗi",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
             }
         }
 
-        private void HienThiDuLieuMau()
+        private void LoadPhieuMuon()
         {
-            dgvPhieuMuon.Rows.Clear();
+            try
+            {
+                using (SqlConnection conn = DbConnection.GetConnection())
+                {
+                    conn.Open();
 
-            dgvPhieuMuon.Rows.Add(
-                "PM001",
-                "DG001 - Nguyễn Văn An",
-                "NV001 - Nguyễn Văn Minh",
-                "05/10/2026",
-                "12/10/2026",
-                "Lập trình C#");
+                    string sql = @"
+                SELECT
+                    pm.MaPhieu,
+                    pm.MaDocGia + ' - ' + dg.TenDocGia AS DocGia,
+                    pm.MaNhanVien + ' - ' + nv.TenNhanVien AS NhanVien,
+                    pm.NgayMuon,
+                    pm.HanTra,
+                    s.TenSach
+                FROM PhieuMuon pm
+                INNER JOIN DocGia dg
+                    ON pm.MaDocGia = dg.MaDocGia
+                INNER JOIN NhanVien nv
+                    ON pm.MaNhanVien = nv.MaNhanVien
+                INNER JOIN Sach s
+                    ON pm.MaSach = s.MaSach
+                ORDER BY pm.MaPhieu";
 
-            dgvPhieuMuon.Rows.Add(
-                "PM002",
-                "DG002 - Trần Thị Bình",
-                "NV002 - Trần Thị Lan",
-                "05/10/2026",
-                "12/10/2026",
-                "Cơ sở dữ liệu");
+                    using (SqlDataAdapter adapter =
+                        new SqlDataAdapter(sql, conn))
+                    {
+                        DataTable dt = new DataTable();
+                        adapter.Fill(dt);
 
-            dgvPhieuMuon.Rows.Add(
-                "PM003",
-                "DG003 - Lê Văn Cường",
-                "NV003 - Lê Văn Hùng",
-                "04/10/2026",
-                "11/10/2026",
-                "Kỹ năng học tập");
+                        dgvPhieuMuon.Rows.Clear();
+
+                        foreach (DataRow row in dt.Rows)
+                        {
+                            dgvPhieuMuon.Rows.Add(
+                                row["MaPhieu"].ToString(),
+                                row["DocGia"].ToString(),
+                                row["NhanVien"].ToString(),
+                                Convert.ToDateTime(
+                                    row["NgayMuon"]).ToString("dd/MM/yyyy"),
+                                Convert.ToDateTime(
+                                    row["HanTra"]).ToString("dd/MM/yyyy"),
+                                row["TenSach"].ToString());
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    "Không thể tải dữ liệu phiếu mượn.\n\n" + ex.Message,
+                    "Lỗi",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+            }
         }
 
         private void btnThem_Click(object sender, EventArgs e)
@@ -88,8 +178,6 @@ namespace DoAnQLTV
             string maPhieu = txtMaPhieu.Text.Trim();
             string docGia = cboDocGia.Text.Trim();
             string nhanVien = cboNhanVien.Text.Trim();
-            string ngayMuon = dtpNgayMuon.Value.ToString("dd/MM/yyyy");
-            string hanTra = dtpHanTra.Value.ToString("dd/MM/yyyy");
             string sach = txtSach.Text.Trim();
 
             if (maPhieu == "")
@@ -101,6 +189,30 @@ namespace DoAnQLTV
                     MessageBoxIcon.Warning);
 
                 txtMaPhieu.Focus();
+                return;
+            }
+
+            if (docGia == "")
+            {
+                MessageBox.Show(
+                    "Vui lòng chọn độc giả.",
+                    "Thông báo",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+
+                cboDocGia.Focus();
+                return;
+            }
+
+            if (nhanVien == "")
+            {
+                MessageBox.Show(
+                    "Vui lòng chọn nhân viên.",
+                    "Thông báo",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+
+                cboNhanVien.Focus();
                 return;
             }
 
@@ -116,42 +228,127 @@ namespace DoAnQLTV
                 return;
             }
 
-            foreach (DataGridViewRow row in dgvPhieuMuon.Rows)
+            if (dtpHanTra.Value.Date < dtpNgayMuon.Value.Date)
             {
-                if (row.Cells["colMaPhieu"].Value != null &&
-                    row.Cells["colMaPhieu"].Value.ToString()
-                    .Equals(maPhieu, StringComparison.OrdinalIgnoreCase))
+                MessageBox.Show(
+                    "Hạn trả không được trước ngày mượn.",
+                    "Thông báo",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+
+                return;
+            }
+
+            string maDocGia = docGia.Split('-')[0].Trim();
+            string maNhanVien = nhanVien.Split('-')[0].Trim();
+
+            try
+            {
+                using (SqlConnection conn = DbConnection.GetConnection())
+                {
+                    conn.Open();
+
+                    string sql = @"
+                INSERT INTO PhieuMuon
+                    (MaPhieu, MaDocGia, MaNhanVien, MaSach, NgayMuon, HanTra)
+                SELECT
+                    @MaPhieu,
+                    @MaDocGia,
+                    @MaNhanVien,
+                    s.MaSach,
+                    @NgayMuon,
+                    @HanTra
+                FROM Sach s
+                WHERE s.TenSach = @TenSach";
+
+                    using (SqlCommand cmd = new SqlCommand(sql, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@MaPhieu", maPhieu);
+                        cmd.Parameters.AddWithValue("@MaDocGia", maDocGia);
+                        cmd.Parameters.AddWithValue("@MaNhanVien", maNhanVien);
+                        cmd.Parameters.AddWithValue("@TenSach", sach);
+                        cmd.Parameters.AddWithValue(
+                            "@NgayMuon",
+                            dtpNgayMuon.Value.Date);
+                        cmd.Parameters.AddWithValue(
+                            "@HanTra",
+                            dtpHanTra.Value.Date);
+
+                        int soDong = cmd.ExecuteNonQuery();
+
+                        if (soDong == 0)
+                        {
+                            MessageBox.Show(
+                                "Không tìm thấy sách có tên tương ứng.",
+                                "Thông báo",
+                                MessageBoxButtons.OK,
+                                MessageBoxIcon.Warning);
+
+                            return;
+                        }
+                    }
+                }
+
+                MessageBox.Show(
+                    "Thêm phiếu mượn thành công.",
+                    "Thông báo",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information);
+
+                LoadPhieuMuon();
+
+                txtMaPhieu.Clear();
+                txtSach.Clear();
+
+                if (cboDocGia.Items.Count > 0)
+                    cboDocGia.SelectedIndex = 0;
+
+                if (cboNhanVien.Items.Count > 0)
+                    cboNhanVien.SelectedIndex = 0;
+
+                dtpNgayMuon.Value = DateTime.Now;
+                dtpHanTra.Value = DateTime.Now.AddDays(7);
+
+                dongDangChon = -1;
+                dgvPhieuMuon.ClearSelection();
+
+                txtMaPhieu.Focus();
+            }
+            catch (SqlException ex)
+            {
+                if (ex.Number == 2627 || ex.Number == 2601)
                 {
                     MessageBox.Show(
-                        "Mã phiếu đã tồn tại.",
+                        "Mã phiếu đã tồn tại. Vui lòng nhập mã khác.",
                         "Thông báo",
                         MessageBoxButtons.OK,
                         MessageBoxIcon.Warning);
-
-                    txtMaPhieu.Focus();
-                    return;
+                }
+                else if (ex.Number == 547)
+                {
+                    MessageBox.Show(
+                        "Dữ liệu độc giả, nhân viên hoặc sách không hợp lệ.",
+                        "Thông báo",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Warning);
+                }
+                else
+                {
+                    MessageBox.Show(
+                        "Không thể thêm phiếu mượn.\n\n" + ex.Message,
+                        "Lỗi",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Error);
                 }
             }
-
-            dgvPhieuMuon.Rows.Add(
-                maPhieu,
-                docGia,
-                nhanVien,
-                ngayMuon,
-                hanTra,
-                sach);
-
-            MessageBox.Show(
-                "Thêm phiếu mượn thành công.",
-                "Thông báo",
-                MessageBoxButtons.OK,
-                MessageBoxIcon.Information);
-
-            txtMaPhieu.Clear();
-            txtSach.Clear();
-            dongDangChon = -1;
-            dgvPhieuMuon.ClearSelection();
-            txtMaPhieu.Focus();
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    "Đã xảy ra lỗi.\n\n" + ex.Message,
+                    "Lỗi",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+            }
         }
 
         private void dgvPhieuMuon_CellClick(object sender, DataGridViewCellEventArgs e)
@@ -210,8 +407,6 @@ namespace DoAnQLTV
             string maPhieu = txtMaPhieu.Text.Trim();
             string docGia = cboDocGia.Text.Trim();
             string nhanVien = cboNhanVien.Text.Trim();
-            string ngayMuon = dtpNgayMuon.Value.ToString("dd/MM/yyyy");
-            string hanTra = dtpHanTra.Value.ToString("dd/MM/yyyy");
             string sach = txtSach.Text.Trim();
 
             if (maPhieu == "")
@@ -223,6 +418,30 @@ namespace DoAnQLTV
                     MessageBoxIcon.Warning);
 
                 txtMaPhieu.Focus();
+                return;
+            }
+
+            if (docGia == "")
+            {
+                MessageBox.Show(
+                    "Vui lòng chọn độc giả.",
+                    "Thông báo",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+
+                cboDocGia.Focus();
+                return;
+            }
+
+            if (nhanVien == "")
+            {
+                MessageBox.Show(
+                    "Vui lòng chọn nhân viên.",
+                    "Thông báo",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+
+                cboNhanVien.Focus();
                 return;
             }
 
@@ -238,46 +457,155 @@ namespace DoAnQLTV
                 return;
             }
 
-            for (int i = 0; i < dgvPhieuMuon.Rows.Count; i++)
+            if (dtpHanTra.Value.Date < dtpNgayMuon.Value.Date)
             {
-                if (i == dongDangChon)
-                    continue;
+                MessageBox.Show(
+                    "Hạn trả không được trước ngày mượn.",
+                    "Thông báo",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
 
-                if (dgvPhieuMuon.Rows[i].Cells["colMaPhieu"].Value != null &&
-                    dgvPhieuMuon.Rows[i].Cells["colMaPhieu"].Value.ToString()
-                    .Equals(maPhieu, StringComparison.OrdinalIgnoreCase))
-                {
-                    MessageBox.Show(
-                        "Mã phiếu đã tồn tại.",
-                        "Thông báo",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Warning);
-
-                    txtMaPhieu.Focus();
-                    return;
-                }
+                return;
             }
 
             DataGridViewRow row = dgvPhieuMuon.Rows[dongDangChon];
 
-            row.Cells["colMaPhieu"].Value = maPhieu;
-            row.Cells["colDocGia"].Value = docGia;
-            row.Cells["colNhanVien"].Value = nhanVien;
-            row.Cells["colNgayMuon"].Value = ngayMuon;
-            row.Cells["colHanTra"].Value = hanTra;
-            row.Cells["colSach"].Value = sach;
+            string maPhieuCu =
+                row.Cells["colMaPhieu"].Value?.ToString() ?? "";
 
-            MessageBox.Show(
-                "Sửa phiếu mượn thành công.",
-                "Thông báo",
-                MessageBoxButtons.OK,
-                MessageBoxIcon.Information);
+            if (maPhieuCu == "")
+            {
+                MessageBox.Show(
+                    "Không xác định được mã phiếu cần sửa.",
+                    "Thông báo",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
 
-            dongDangChon = -1;
-            dgvPhieuMuon.ClearSelection();
+                return;
+            }
 
-            txtMaPhieu.Clear();
-            txtSach.Clear();
+            string maDocGia = docGia.Split('-')[0].Trim();
+            string maNhanVien = nhanVien.Split('-')[0].Trim();
+
+            try
+            {
+                using (SqlConnection conn = DbConnection.GetConnection())
+                {
+                    conn.Open();
+
+                    string sql = @"
+                UPDATE PhieuMuon
+                SET
+                    MaPhieu = @MaPhieuMoi,
+                    MaDocGia = @MaDocGia,
+                    MaNhanVien = @MaNhanVien,
+                    MaSach = (
+                        SELECT MaSach
+                        FROM Sach
+                        WHERE TenSach = @TenSach
+                    ),
+                    NgayMuon = @NgayMuon,
+                    HanTra = @HanTra
+                WHERE MaPhieu = @MaPhieuCu";
+
+                    using (SqlCommand cmd = new SqlCommand(sql, conn))
+                    {
+                        cmd.Parameters.AddWithValue(
+                            "@MaPhieuMoi", maPhieu);
+
+                        cmd.Parameters.AddWithValue(
+                            "@MaDocGia", maDocGia);
+
+                        cmd.Parameters.AddWithValue(
+                            "@MaNhanVien", maNhanVien);
+
+                        cmd.Parameters.AddWithValue(
+                            "@TenSach", sach);
+
+                        cmd.Parameters.AddWithValue(
+                            "@NgayMuon", dtpNgayMuon.Value.Date);
+
+                        cmd.Parameters.AddWithValue(
+                            "@HanTra", dtpHanTra.Value.Date);
+
+                        cmd.Parameters.AddWithValue(
+                            "@MaPhieuCu", maPhieuCu);
+
+                        int soDong = cmd.ExecuteNonQuery();
+
+                        if (soDong == 0)
+                        {
+                            MessageBox.Show(
+                                "Không tìm thấy phiếu mượn cần sửa.",
+                                "Thông báo",
+                                MessageBoxButtons.OK,
+                                MessageBoxIcon.Warning);
+
+                            return;
+                        }
+                    }
+                }
+
+                MessageBox.Show(
+                    "Sửa phiếu mượn thành công.",
+                    "Thông báo",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information);
+
+                LoadPhieuMuon();
+
+                txtMaPhieu.Clear();
+                txtSach.Clear();
+
+                if (cboDocGia.Items.Count > 0)
+                    cboDocGia.SelectedIndex = 0;
+
+                if (cboNhanVien.Items.Count > 0)
+                    cboNhanVien.SelectedIndex = 0;
+
+                dtpNgayMuon.Value = DateTime.Now;
+                dtpHanTra.Value = DateTime.Now.AddDays(7);
+
+                dongDangChon = -1;
+                dgvPhieuMuon.ClearSelection();
+
+                txtMaPhieu.Focus();
+            }
+            catch (SqlException ex)
+            {
+                if (ex.Number == 2627 || ex.Number == 2601)
+                {
+                    MessageBox.Show(
+                        "Mã phiếu mới đã tồn tại. Vui lòng nhập mã khác.",
+                        "Thông báo",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Warning);
+                }
+                else if (ex.Number == 547)
+                {
+                    MessageBox.Show(
+                        "Dữ liệu độc giả, nhân viên hoặc sách không hợp lệ.",
+                        "Thông báo",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Warning);
+                }
+                else
+                {
+                    MessageBox.Show(
+                        "Không thể sửa phiếu mượn.\n\n" + ex.Message,
+                        "Lỗi",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Error);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    "Đã xảy ra lỗi.\n\n" + ex.Message,
+                    "Lỗi",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+            }
         }
 
         private void btnXoa_Click(object sender, EventArgs e)
@@ -293,15 +621,60 @@ namespace DoAnQLTV
                 return;
             }
 
-            DialogResult ketQua = MessageBox.Show(
+            DataGridViewRow row = dgvPhieuMuon.Rows[dongDangChon];
+
+            string maPhieu =
+                row.Cells["colMaPhieu"].Value?.ToString() ?? "";
+
+            if (maPhieu == "")
+            {
+                MessageBox.Show(
+                    "Không xác định được mã phiếu cần xóa.",
+                    "Thông báo",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+
+                return;
+            }
+
+            DialogResult result = MessageBox.Show(
                 "Bạn có chắc chắn muốn xóa phiếu mượn này không?",
                 "Xác nhận xóa",
                 MessageBoxButtons.YesNo,
                 MessageBoxIcon.Question);
 
-            if (ketQua == DialogResult.Yes)
+            if (result == DialogResult.No)
+                return;
+
+            try
             {
-                dgvPhieuMuon.Rows.RemoveAt(dongDangChon);
+                using (SqlConnection conn = DbConnection.GetConnection())
+                {
+                    conn.Open();
+
+                    string sql = @"
+                DELETE FROM PhieuMuon
+                WHERE MaPhieu = @MaPhieu";
+
+                    using (SqlCommand cmd = new SqlCommand(sql, conn))
+                    {
+                        cmd.Parameters.AddWithValue(
+                            "@MaPhieu", maPhieu);
+
+                        int soDong = cmd.ExecuteNonQuery();
+
+                        if (soDong == 0)
+                        {
+                            MessageBox.Show(
+                                "Không tìm thấy phiếu mượn cần xóa.",
+                                "Thông báo",
+                                MessageBoxButtons.OK,
+                                MessageBoxIcon.Warning);
+
+                            return;
+                        }
+                    }
+                }
 
                 MessageBox.Show(
                     "Xóa phiếu mượn thành công.",
@@ -309,12 +682,52 @@ namespace DoAnQLTV
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Information);
 
-                dongDangChon = -1;
+                LoadPhieuMuon();
 
                 txtMaPhieu.Clear();
                 txtSach.Clear();
 
+                if (cboDocGia.Items.Count > 0)
+                    cboDocGia.SelectedIndex = 0;
+
+                if (cboNhanVien.Items.Count > 0)
+                    cboNhanVien.SelectedIndex = 0;
+
+                dtpNgayMuon.Value = DateTime.Now;
+                dtpHanTra.Value = DateTime.Now.AddDays(7);
+
+                dongDangChon = -1;
+
                 dgvPhieuMuon.ClearSelection();
+
+                txtMaPhieu.Focus();
+            }
+            catch (SqlException ex)
+            {
+                if (ex.Number == 547)
+                {
+                    MessageBox.Show(
+                        "Không thể xóa phiếu mượn vì dữ liệu đang được tham chiếu.",
+                        "Không thể xóa",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Warning);
+                }
+                else
+                {
+                    MessageBox.Show(
+                        "Không thể xóa phiếu mượn.\n\n" + ex.Message,
+                        "Lỗi",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Error);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    "Đã xảy ra lỗi.\n\n" + ex.Message,
+                    "Lỗi",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
             }
         }
 
@@ -324,19 +737,18 @@ namespace DoAnQLTV
             txtSach.Clear();
 
             if (cboDocGia.Items.Count > 0)
-            {
                 cboDocGia.SelectedIndex = 0;
-            }
 
             if (cboNhanVien.Items.Count > 0)
-            {
                 cboNhanVien.SelectedIndex = 0;
-            }
 
             dtpNgayMuon.Value = DateTime.Now;
             dtpHanTra.Value = DateTime.Now.AddDays(7);
 
             dongDangChon = -1;
+
+            LoadPhieuMuon();
+
             dgvPhieuMuon.ClearSelection();
 
             txtMaPhieu.Focus();
@@ -408,11 +820,125 @@ namespace DoAnQLTV
                 return;
             }
 
-            MessageBox.Show(
-                "Lập phiếu mượn thành công.",
-                "Thông báo",
-                MessageBoxButtons.OK,
-                MessageBoxIcon.Information);
+            string maDocGia = docGia.Split('-')[0].Trim();
+            string maNhanVien = nhanVien.Split('-')[0].Trim();
+
+            try
+            {
+                using (SqlConnection conn = DbConnection.GetConnection())
+                {
+                    conn.Open();
+
+                    string sql = @"
+                INSERT INTO PhieuMuon
+                    (MaPhieu, MaDocGia, MaNhanVien, MaSach, NgayMuon, HanTra)
+                SELECT
+                    @MaPhieu,
+                    @MaDocGia,
+                    @MaNhanVien,
+                    s.MaSach,
+                    @NgayMuon,
+                    @HanTra
+                FROM Sach s
+                WHERE s.TenSach = @TenSach";
+
+                    using (SqlCommand cmd = new SqlCommand(sql, conn))
+                    {
+                        cmd.Parameters.AddWithValue(
+                            "@MaPhieu", maPhieu);
+
+                        cmd.Parameters.AddWithValue(
+                            "@MaDocGia", maDocGia);
+
+                        cmd.Parameters.AddWithValue(
+                            "@MaNhanVien", maNhanVien);
+
+                        cmd.Parameters.AddWithValue(
+                            "@TenSach", sach);
+
+                        cmd.Parameters.AddWithValue(
+                            "@NgayMuon",
+                            dtpNgayMuon.Value.Date);
+
+                        cmd.Parameters.AddWithValue(
+                            "@HanTra",
+                            dtpHanTra.Value.Date);
+
+                        int soDong = cmd.ExecuteNonQuery();
+
+                        if (soDong == 0)
+                        {
+                            MessageBox.Show(
+                                "Không tìm thấy sách có tên tương ứng.",
+                                "Thông báo",
+                                MessageBoxButtons.OK,
+                                MessageBoxIcon.Warning);
+
+                            return;
+                        }
+                    }
+                }
+
+                MessageBox.Show(
+                    "Lập phiếu mượn thành công.",
+                    "Thông báo",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information);
+
+                LoadPhieuMuon();
+
+                txtMaPhieu.Clear();
+                txtSach.Clear();
+
+                if (cboDocGia.Items.Count > 0)
+                    cboDocGia.SelectedIndex = 0;
+
+                if (cboNhanVien.Items.Count > 0)
+                    cboNhanVien.SelectedIndex = 0;
+
+                dtpNgayMuon.Value = DateTime.Now;
+                dtpHanTra.Value = DateTime.Now.AddDays(7);
+
+                dongDangChon = -1;
+                dgvPhieuMuon.ClearSelection();
+
+                txtMaPhieu.Focus();
+            }
+            catch (SqlException ex)
+            {
+                if (ex.Number == 2627 || ex.Number == 2601)
+                {
+                    MessageBox.Show(
+                        "Mã phiếu đã tồn tại. Vui lòng nhập mã khác.",
+                        "Thông báo",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Warning);
+                }
+                else if (ex.Number == 547)
+                {
+                    MessageBox.Show(
+                        "Dữ liệu độc giả, nhân viên hoặc sách không hợp lệ.",
+                        "Thông báo",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Warning);
+                }
+                else
+                {
+                    MessageBox.Show(
+                        "Không thể lập phiếu mượn.\n\n" + ex.Message,
+                        "Lỗi",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Error);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    "Đã xảy ra lỗi.\n\n" + ex.Message,
+                    "Lỗi",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+            }
         }
     }
 }

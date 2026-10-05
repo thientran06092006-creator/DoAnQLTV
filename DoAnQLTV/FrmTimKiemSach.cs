@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Data.SqlClient;
 
 namespace DoAnQLTV
 {
@@ -16,42 +17,57 @@ namespace DoAnQLTV
         {
             InitializeComponent();
 
-            HienThiDuLieuMau();
+            LoadSach();
         }
 
-        private void HienThiDuLieuMau()
+        private void LoadSach()
         {
-            dgvKetQua.Rows.Clear();
+            try
+            {
+                using (SqlConnection conn = DbConnection.GetConnection())
+                {
+                    conn.Open();
 
-            dgvKetQua.Rows.Add(
-                "S001",
-                "Lập trình C#",
-                "Công nghệ thông tin",
-                "Nguyễn Văn A");
+                    string sql = @"
+                SELECT
+                    s.MaSach,
+                    s.TenSach,
+                    tl.TenTheLoai,
+                    tg.TenTacGia
+                FROM Sach s
+                INNER JOIN TheLoai tl
+                    ON s.MaTheLoai = tl.MaTheLoai
+                INNER JOIN TacGia tg
+                    ON s.MaTacGia = tg.MaTacGia
+                ORDER BY s.MaSach";
 
-            dgvKetQua.Rows.Add(
-                "S002",
-                "Cơ sở dữ liệu",
-                "Công nghệ thông tin",
-                "Trần Văn B");
+                    using (SqlDataAdapter adapter =
+                        new SqlDataAdapter(sql, conn))
+                    {
+                        DataTable dt = new DataTable();
+                        adapter.Fill(dt);
 
-            dgvKetQua.Rows.Add(
-                "S003",
-                "Kỹ năng học tập",
-                "Giáo dục",
-                "Lê Văn C");
+                        dgvKetQua.Rows.Clear();
 
-            dgvKetQua.Rows.Add(
-                "S004",
-                "Lập trình hướng đối tượng",
-                "Công nghệ thông tin",
-                "Phạm Văn D");
-
-            dgvKetQua.Rows.Add(
-                "S005",
-                "Cấu trúc dữ liệu và giải thuật",
-                "Công nghệ thông tin",
-                "Nguyễn Văn E");
+                        foreach (DataRow row in dt.Rows)
+                        {
+                            dgvKetQua.Rows.Add(
+                                row["MaSach"].ToString(),
+                                row["TenSach"].ToString(),
+                                row["TenTheLoai"].ToString(),
+                                row["TenTacGia"].ToString());
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    "Không thể tải dữ liệu sách.\n\n" + ex.Message,
+                    "Lỗi",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+            }
         }
 
         private void btnTimKiem_Click(object sender, EventArgs e)
@@ -70,62 +86,91 @@ namespace DoAnQLTV
                 return;
             }
 
-            bool timThay = false;
-
-            foreach (DataGridViewRow row in dgvKetQua.Rows)
+            try
             {
-                if (row.IsNewRow)
-                    continue;
-
-                string maSach =
-                    row.Cells["colMaSach"].Value?.ToString() ?? "";
-
-                string tenSach =
-                    row.Cells["colTenSach"].Value?.ToString() ?? "";
-
-                string theLoai =
-                    row.Cells["colTheLoai"].Value?.ToString() ?? "";
-
-                string tacGia =
-                    row.Cells["colTacGia"].Value?.ToString() ?? "";
-
-                if (maSach.IndexOf(
-                        tuKhoa,
-                        StringComparison.OrdinalIgnoreCase) >= 0 ||
-                    tenSach.IndexOf(
-                        tuKhoa,
-                        StringComparison.OrdinalIgnoreCase) >= 0 ||
-                    theLoai.IndexOf(
-                        tuKhoa,
-                        StringComparison.OrdinalIgnoreCase) >= 0 ||
-                    tacGia.IndexOf(
-                        tuKhoa,
-                        StringComparison.OrdinalIgnoreCase) >= 0)
+                using (SqlConnection conn = DbConnection.GetConnection())
                 {
-                    row.Selected = true;
+                    conn.Open();
 
-                    dgvKetQua.CurrentCell =
-                        row.Cells["colMaSach"];
+                    string sql = @"
+                SELECT
+                    s.MaSach,
+                    s.TenSach,
+                    tl.TenTheLoai,
+                    tg.TenTacGia
+                FROM Sach s
+                INNER JOIN TheLoai tl
+                    ON s.MaTheLoai = tl.MaTheLoai
+                INNER JOIN TacGia tg
+                    ON s.MaTacGia = tg.MaTacGia
+                WHERE s.MaSach LIKE @TuKhoa
+                   OR s.TenSach LIKE @TuKhoa
+                   OR tl.TenTheLoai LIKE @TuKhoa
+                   OR tg.TenTacGia LIKE @TuKhoa
+                ORDER BY s.MaSach";
 
-                    timThay = true;
+                    using (SqlCommand cmd = new SqlCommand(sql, conn))
+                    {
+                        cmd.Parameters.AddWithValue(
+                            "@TuKhoa",
+                            "%" + tuKhoa + "%");
 
-                    break;
+                        using (SqlDataAdapter adapter =
+                            new SqlDataAdapter(cmd))
+                        {
+                            DataTable dt = new DataTable();
+                            adapter.Fill(dt);
+
+                            dgvKetQua.Rows.Clear();
+
+                            foreach (DataRow row in dt.Rows)
+                            {
+                                dgvKetQua.Rows.Add(
+                                    row["MaSach"].ToString(),
+                                    row["TenSach"].ToString(),
+                                    row["TenTheLoai"].ToString(),
+                                    row["TenTacGia"].ToString());
+                            }
+
+                            if (dt.Rows.Count == 0)
+                            {
+                                MessageBox.Show(
+                                    "Không tìm thấy sách phù hợp.",
+                                    "Thông báo",
+                                    MessageBoxButtons.OK,
+                                    MessageBoxIcon.Information);
+
+                                return;
+                            }
+
+                            dgvKetQua.ClearSelection();
+
+                            if (dgvKetQua.Rows.Count > 0)
+                            {
+                                dgvKetQua.Rows[0].Selected = true;
+
+                                dgvKetQua.CurrentCell =
+                                    dgvKetQua.Rows[0].Cells["colMaSach"];
+                            }
+                        }
+                    }
                 }
             }
-
-            if (!timThay)
+            catch (Exception ex)
             {
                 MessageBox.Show(
-                    "Không tìm thấy sách phù hợp.",
-                    "Thông báo",
+                    "Không thể tìm kiếm sách.\n\n" + ex.Message,
+                    "Lỗi",
                     MessageBoxButtons.OK,
-                    MessageBoxIcon.Information);
+                    MessageBoxIcon.Error);
             }
         }
 
         private void btnLamMoi_Click(object sender, EventArgs e)
         {
             txtTuKhoa.Clear();
+
+            LoadSach();
 
             dgvKetQua.ClearSelection();
 
