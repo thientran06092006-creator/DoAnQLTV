@@ -55,7 +55,7 @@
             // 
             // btnDong
             // 
-            this.btnDong.Location = new System.Drawing.Point(437, 13);
+            this.btnDong.Location = new System.Drawing.Point(12, 12);
             this.btnDong.Name = "btnDong";
             this.btnDong.Size = new System.Drawing.Size(75, 23);
             this.btnDong.TabIndex = 2;
