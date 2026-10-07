@@ -1,13 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 using System.Data.SqlClient;
+using System.Windows.Forms;
 
 namespace DoAnQLTV
 {
@@ -20,6 +14,9 @@ namespace DoAnQLTV
             LoadSach();
         }
 
+        // ==============================
+        // TẢI DANH SÁCH SÁCH
+        // ==============================
         private void LoadSach()
         {
             try
@@ -29,22 +26,23 @@ namespace DoAnQLTV
                     conn.Open();
 
                     string sql = @"
-                SELECT
-                    s.MaSach,
-                    s.TenSach,
-                    tl.TenTheLoai,
-                    tg.TenTacGia
-                FROM Sach s
-                INNER JOIN TheLoai tl
-                    ON s.MaTheLoai = tl.MaTheLoai
-                INNER JOIN TacGia tg
-                    ON s.MaTacGia = tg.MaTacGia
-                ORDER BY s.MaSach";
+                        SELECT
+                            s.MaSach,
+                            s.TenSach,
+                            tl.TenTheLoai,
+                            tg.TenTacGia
+                        FROM Sach s
+                        INNER JOIN TheLoai tl
+                            ON s.MaTheLoai = tl.MaTheLoai
+                        INNER JOIN TacGia tg
+                            ON s.MaTacGia = tg.MaTacGia
+                        ORDER BY s.MaSach";
 
                     using (SqlDataAdapter adapter =
                         new SqlDataAdapter(sql, conn))
                     {
                         DataTable dt = new DataTable();
+
                         adapter.Fill(dt);
 
                         dgvKetQua.Rows.Clear();
@@ -55,7 +53,8 @@ namespace DoAnQLTV
                                 row["MaSach"].ToString(),
                                 row["TenSach"].ToString(),
                                 row["TenTheLoai"].ToString(),
-                                row["TenTacGia"].ToString());
+                                row["TenTacGia"].ToString()
+                            );
                         }
                     }
                 }
@@ -66,10 +65,14 @@ namespace DoAnQLTV
                     "Không thể tải dữ liệu sách.\n\n" + ex.Message,
                     "Lỗi",
                     MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
+                    MessageBoxIcon.Error
+                );
             }
         }
 
+        // ==============================
+        // TÌM KIẾM SÁCH
+        // ==============================
         private void btnTimKiem_Click(object sender, EventArgs e)
         {
             string tuKhoa = txtTuKhoa.Text.Trim();
@@ -80,7 +83,8 @@ namespace DoAnQLTV
                     "Vui lòng nhập từ khóa cần tìm.",
                     "Thông báo",
                     MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning);
+                    MessageBoxIcon.Warning
+                );
 
                 txtTuKhoa.Focus();
                 return;
@@ -93,32 +97,35 @@ namespace DoAnQLTV
                     conn.Open();
 
                     string sql = @"
-                SELECT
-                    s.MaSach,
-                    s.TenSach,
-                    tl.TenTheLoai,
-                    tg.TenTacGia
-                FROM Sach s
-                INNER JOIN TheLoai tl
-                    ON s.MaTheLoai = tl.MaTheLoai
-                INNER JOIN TacGia tg
-                    ON s.MaTacGia = tg.MaTacGia
-                WHERE s.MaSach LIKE @TuKhoa
-                   OR s.TenSach LIKE @TuKhoa
-                   OR tl.TenTheLoai LIKE @TuKhoa
-                   OR tg.TenTacGia LIKE @TuKhoa
-                ORDER BY s.MaSach";
+                        SELECT
+                            s.MaSach,
+                            s.TenSach,
+                            tl.TenTheLoai,
+                            tg.TenTacGia
+                        FROM Sach s
+                        INNER JOIN TheLoai tl
+                            ON s.MaTheLoai = tl.MaTheLoai
+                        INNER JOIN TacGia tg
+                            ON s.MaTacGia = tg.MaTacGia
+                        WHERE s.MaSach LIKE @TuKhoa
+                           OR s.TenSach LIKE @TuKhoa
+                           OR tl.TenTheLoai LIKE @TuKhoa
+                           OR tg.TenTacGia LIKE @TuKhoa
+                        ORDER BY s.MaSach";
 
-                    using (SqlCommand cmd = new SqlCommand(sql, conn))
+                    using (SqlCommand cmd =
+                        new SqlCommand(sql, conn))
                     {
                         cmd.Parameters.AddWithValue(
                             "@TuKhoa",
-                            "%" + tuKhoa + "%");
+                            "%" + tuKhoa + "%"
+                        );
 
                         using (SqlDataAdapter adapter =
                             new SqlDataAdapter(cmd))
                         {
                             DataTable dt = new DataTable();
+
                             adapter.Fill(dt);
 
                             dgvKetQua.Rows.Clear();
@@ -129,20 +136,26 @@ namespace DoAnQLTV
                                     row["MaSach"].ToString(),
                                     row["TenSach"].ToString(),
                                     row["TenTheLoai"].ToString(),
-                                    row["TenTacGia"].ToString());
+                                    row["TenTacGia"].ToString()
+                                );
                             }
 
+                            // Không tìm thấy kết quả
                             if (dt.Rows.Count == 0)
                             {
                                 MessageBox.Show(
                                     "Không tìm thấy sách phù hợp.",
                                     "Thông báo",
                                     MessageBoxButtons.OK,
-                                    MessageBoxIcon.Information);
+                                    MessageBoxIcon.Information
+                                );
+
+                                txtTuKhoa.Focus();
 
                                 return;
                             }
 
+                            // Chọn dòng đầu tiên
                             dgvKetQua.ClearSelection();
 
                             if (dgvKetQua.Rows.Count > 0)
@@ -150,7 +163,8 @@ namespace DoAnQLTV
                                 dgvKetQua.Rows[0].Selected = true;
 
                                 dgvKetQua.CurrentCell =
-                                    dgvKetQua.Rows[0].Cells["colMaSach"];
+                                    dgvKetQua.Rows[0]
+                                    .Cells["colMaSach"];
                             }
                         }
                     }
@@ -162,10 +176,14 @@ namespace DoAnQLTV
                     "Không thể tìm kiếm sách.\n\n" + ex.Message,
                     "Lỗi",
                     MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
+                    MessageBoxIcon.Error
+                );
             }
         }
 
+        // ==============================
+        // LÀM MỚI
+        // ==============================
         private void btnLamMoi_Click(object sender, EventArgs e)
         {
             txtTuKhoa.Clear();
