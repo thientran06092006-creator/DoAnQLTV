@@ -61,7 +61,7 @@
             this.lblMaPhieu.AutoSize = true;
             this.lblMaPhieu.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblMaPhieu.ForeColor = System.Drawing.Color.DarkBlue;
-            this.lblMaPhieu.Location = new System.Drawing.Point(11, 9);
+            this.lblMaPhieu.Location = new System.Drawing.Point(40, 90);
             this.lblMaPhieu.Name = "lblMaPhieu";
             this.lblMaPhieu.Size = new System.Drawing.Size(58, 15);
             this.lblMaPhieu.TabIndex = 0;
@@ -72,7 +72,7 @@
             this.lblDocGia.AutoSize = true;
             this.lblDocGia.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblDocGia.ForeColor = System.Drawing.Color.DarkBlue;
-            this.lblDocGia.Location = new System.Drawing.Point(12, 44);
+            this.lblDocGia.Location = new System.Drawing.Point(500, 90);
             this.lblDocGia.Name = "lblDocGia";
             this.lblDocGia.Size = new System.Drawing.Size(48, 15);
             this.lblDocGia.TabIndex = 1;
@@ -83,7 +83,7 @@
             this.lblSach.AutoSize = true;
             this.lblSach.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblSach.ForeColor = System.Drawing.Color.DarkBlue;
-            this.lblSach.Location = new System.Drawing.Point(12, 79);
+            this.lblSach.Location = new System.Drawing.Point(40, 135);
             this.lblSach.Name = "lblSach";
             this.lblSach.Size = new System.Drawing.Size(33, 15);
             this.lblSach.TabIndex = 2;
@@ -94,7 +94,7 @@
             this.lblNgayMuon.AutoSize = true;
             this.lblNgayMuon.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblNgayMuon.ForeColor = System.Drawing.Color.DarkBlue;
-            this.lblNgayMuon.Location = new System.Drawing.Point(12, 114);
+            this.lblNgayMuon.Location = new System.Drawing.Point(500, 135);
             this.lblNgayMuon.Name = "lblNgayMuon";
             this.lblNgayMuon.Size = new System.Drawing.Size(72, 15);
             this.lblNgayMuon.TabIndex = 3;
@@ -105,7 +105,7 @@
             this.lblHanTra.AutoSize = true;
             this.lblHanTra.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblHanTra.ForeColor = System.Drawing.Color.DarkBlue;
-            this.lblHanTra.Location = new System.Drawing.Point(14, 146);
+            this.lblHanTra.Location = new System.Drawing.Point(40, 180);
             this.lblHanTra.Name = "lblHanTra";
             this.lblHanTra.Size = new System.Drawing.Size(48, 15);
             this.lblHanTra.TabIndex = 4;
@@ -116,7 +116,7 @@
             this.lblNgayTra.AutoSize = true;
             this.lblNgayTra.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblNgayTra.ForeColor = System.Drawing.Color.DarkBlue;
-            this.lblNgayTra.Location = new System.Drawing.Point(15, 180);
+            this.lblNgayTra.Location = new System.Drawing.Point(500, 180);
             this.lblNgayTra.Name = "lblNgayTra";
             this.lblNgayTra.Size = new System.Drawing.Size(54, 15);
             this.lblNgayTra.TabIndex = 5;
@@ -128,9 +128,9 @@
             this.txtMaPhieu.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtMaPhieu.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtMaPhieu.ForeColor = System.Drawing.Color.Black;
-            this.txtMaPhieu.Location = new System.Drawing.Point(88, 9);
+            this.txtMaPhieu.Location = new System.Drawing.Point(160, 88);
             this.txtMaPhieu.Name = "txtMaPhieu";
-            this.txtMaPhieu.Size = new System.Drawing.Size(100, 23);
+            this.txtMaPhieu.Size = new System.Drawing.Size(260, 23);
             this.txtMaPhieu.TabIndex = 6;
             // 
             // cboDocGia
@@ -140,9 +140,9 @@
             this.cboDocGia.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cboDocGia.ForeColor = System.Drawing.Color.Black;
             this.cboDocGia.FormattingEnabled = true;
-            this.cboDocGia.Location = new System.Drawing.Point(88, 41);
+            this.cboDocGia.Location = new System.Drawing.Point(620, 88);
             this.cboDocGia.Name = "cboDocGia";
-            this.cboDocGia.Size = new System.Drawing.Size(121, 23);
+            this.cboDocGia.Size = new System.Drawing.Size(300, 23);
             this.cboDocGia.TabIndex = 7;
             // 
             // cboSach
@@ -152,36 +152,36 @@
             this.cboSach.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cboSach.ForeColor = System.Drawing.Color.Black;
             this.cboSach.FormattingEnabled = true;
-            this.cboSach.Location = new System.Drawing.Point(88, 76);
+            this.cboSach.Location = new System.Drawing.Point(160, 133);
             this.cboSach.Name = "cboSach";
-            this.cboSach.Size = new System.Drawing.Size(121, 23);
+            this.cboSach.Size = new System.Drawing.Size(260, 23);
             this.cboSach.TabIndex = 8;
             // 
             // dtpNgayMuon
             // 
             this.dtpNgayMuon.CalendarFont = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.dtpNgayMuon.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-            this.dtpNgayMuon.Location = new System.Drawing.Point(88, 108);
+            this.dtpNgayMuon.Location = new System.Drawing.Point(620, 133);
             this.dtpNgayMuon.Name = "dtpNgayMuon";
-            this.dtpNgayMuon.Size = new System.Drawing.Size(200, 20);
+            this.dtpNgayMuon.Size = new System.Drawing.Size(300, 20);
             this.dtpNgayMuon.TabIndex = 9;
             // 
             // dtpHanTra
             // 
             this.dtpHanTra.CalendarFont = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.dtpHanTra.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-            this.dtpHanTra.Location = new System.Drawing.Point(88, 140);
+            this.dtpHanTra.Location = new System.Drawing.Point(160, 178);
             this.dtpHanTra.Name = "dtpHanTra";
-            this.dtpHanTra.Size = new System.Drawing.Size(200, 20);
+            this.dtpHanTra.Size = new System.Drawing.Size(260, 20);
             this.dtpHanTra.TabIndex = 10;
             // 
             // dtpNgayTra
             // 
             this.dtpNgayTra.CalendarFont = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.dtpNgayTra.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-            this.dtpNgayTra.Location = new System.Drawing.Point(88, 174);
+            this.dtpNgayTra.Location = new System.Drawing.Point(620, 178);
             this.dtpNgayTra.Name = "dtpNgayTra";
-            this.dtpNgayTra.Size = new System.Drawing.Size(200, 20);
+            this.dtpNgayTra.Size = new System.Drawing.Size(300, 20);
             this.dtpNgayTra.TabIndex = 11;
             // 
             // btnTimKiem
@@ -191,9 +191,9 @@
             this.btnTimKiem.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnTimKiem.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnTimKiem.ForeColor = System.Drawing.Color.White;
-            this.btnTimKiem.Location = new System.Drawing.Point(356, 127);
+            this.btnTimKiem.Location = new System.Drawing.Point(40, 225);
             this.btnTimKiem.Name = "btnTimKiem";
-            this.btnTimKiem.Size = new System.Drawing.Size(75, 23);
+            this.btnTimKiem.Size = new System.Drawing.Size(130, 35);
             this.btnTimKiem.TabIndex = 12;
             this.btnTimKiem.Text = "Tìm kiếm";
             this.btnTimKiem.UseVisualStyleBackColor = false;
@@ -206,9 +206,9 @@
             this.btnTraSach.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnTraSach.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnTraSach.ForeColor = System.Drawing.Color.White;
-            this.btnTraSach.Location = new System.Drawing.Point(453, 127);
+            this.btnTraSach.Location = new System.Drawing.Point(190, 225);
             this.btnTraSach.Name = "btnTraSach";
-            this.btnTraSach.Size = new System.Drawing.Size(75, 23);
+            this.btnTraSach.Size = new System.Drawing.Size(120, 35);
             this.btnTraSach.TabIndex = 13;
             this.btnTraSach.Text = "Trả sách";
             this.btnTraSach.UseVisualStyleBackColor = false;
@@ -221,9 +221,9 @@
             this.btnLamMoi.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnLamMoi.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnLamMoi.ForeColor = System.Drawing.Color.White;
-            this.btnLamMoi.Location = new System.Drawing.Point(555, 127);
+            this.btnLamMoi.Location = new System.Drawing.Point(330, 225);
             this.btnLamMoi.Name = "btnLamMoi";
-            this.btnLamMoi.Size = new System.Drawing.Size(75, 23);
+            this.btnLamMoi.Size = new System.Drawing.Size(120, 35);
             this.btnLamMoi.TabIndex = 14;
             this.btnLamMoi.Text = "Làm mới";
             this.btnLamMoi.UseVisualStyleBackColor = false;
@@ -259,14 +259,14 @@
             dataGridViewCellStyle2.SelectionForeColor = System.Drawing.Color.DarkBlue;
             dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
             this.dgvTraSach.DefaultCellStyle = dataGridViewCellStyle2;
-            this.dgvTraSach.Location = new System.Drawing.Point(14, 213);
+            this.dgvTraSach.Location = new System.Drawing.Point(40, 285);
             this.dgvTraSach.MultiSelect = false;
             this.dgvTraSach.Name = "dgvTraSach";
             this.dgvTraSach.ReadOnly = true;
             this.dgvTraSach.RowHeadersVisible = false;
             this.dgvTraSach.RowHeadersWidth = 51;
             this.dgvTraSach.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvTraSach.Size = new System.Drawing.Size(601, 225);
+            this.dgvTraSach.Size = new System.Drawing.Size(880, 340);
             this.dgvTraSach.TabIndex = 15;
             this.dgvTraSach.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvTraSach_CellClick);
             // 
@@ -316,9 +316,9 @@
             // 
             this.lblTieuDeTraSach.Font = new System.Drawing.Font("Segoe UI", 15F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblTieuDeTraSach.ForeColor = System.Drawing.Color.DarkBlue;
-            this.lblTieuDeTraSach.Location = new System.Drawing.Point(429, 26);
+            this.lblTieuDeTraSach.Location = new System.Drawing.Point(30, 25);
             this.lblTieuDeTraSach.Name = "lblTieuDeTraSach";
-            this.lblTieuDeTraSach.Size = new System.Drawing.Size(156, 31);
+            this.lblTieuDeTraSach.Size = new System.Drawing.Size(940, 35);
             this.lblTieuDeTraSach.TabIndex = 16;
             this.lblTieuDeTraSach.Text = "TRẢ SÁCH";
             this.lblTieuDeTraSach.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -328,7 +328,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ClientSize = new System.Drawing.Size(984, 661);
             this.Controls.Add(this.lblTieuDeTraSach);
             this.Controls.Add(this.dgvTraSach);
             this.Controls.Add(this.btnLamMoi);
