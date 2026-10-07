@@ -71,7 +71,7 @@
             this.txtMaSach.ForeColor = System.Drawing.Color.Black;
             this.txtMaSach.Location = new System.Drawing.Point(170, 95);
             this.txtMaSach.Name = "txtMaSach";
-            this.txtMaSach.Size = new System.Drawing.Size(300, 25);
+            this.txtMaSach.Size = new System.Drawing.Size(260, 25);
             this.txtMaSach.TabIndex = 1;
             // 
             // lblTenSach
@@ -93,7 +93,7 @@
             this.txtTenSach.ForeColor = System.Drawing.Color.Black;
             this.txtTenSach.Location = new System.Drawing.Point(170, 145);
             this.txtTenSach.Name = "txtTenSach";
-            this.txtTenSach.Size = new System.Drawing.Size(300, 25);
+            this.txtTenSach.Size = new System.Drawing.Size(260, 25);
             this.txtTenSach.TabIndex = 3;
             // 
             // lblTheLoai
@@ -116,7 +116,7 @@
             this.cboTheLoai.FormattingEnabled = true;
             this.cboTheLoai.Location = new System.Drawing.Point(170, 195);
             this.cboTheLoai.Name = "cboTheLoai";
-            this.cboTheLoai.Size = new System.Drawing.Size(300, 25);
+            this.cboTheLoai.Size = new System.Drawing.Size(260, 25);
             this.cboTheLoai.TabIndex = 5;
             // 
             // lblTacGia
@@ -139,7 +139,7 @@
             this.cboTacGia.FormattingEnabled = true;
             this.cboTacGia.Location = new System.Drawing.Point(170, 245);
             this.cboTacGia.Name = "cboTacGia";
-            this.cboTacGia.Size = new System.Drawing.Size(300, 25);
+            this.cboTacGia.Size = new System.Drawing.Size(260, 25);
             this.cboTacGia.TabIndex = 7;
             // 
             // btnThem
@@ -277,7 +277,7 @@
             // lblTieuDeSach
             // 
             this.lblTieuDeSach.BackColor = System.Drawing.Color.White;
-            this.lblTieuDeSach.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblTieuDeSach.Font = new System.Drawing.Font("Segoe UI", 15F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblTieuDeSach.ForeColor = System.Drawing.Color.DarkBlue;
             this.lblTieuDeSach.Location = new System.Drawing.Point(50, 45);
             this.lblTieuDeSach.Name = "lblTieuDeSach";
