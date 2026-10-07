@@ -310,7 +310,7 @@
             this.MaximizeBox = false;
             this.Name = "FrmSach";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Quản lý sách";
+            this.Text = "Quản Lý Sách";
             ((System.ComponentModel.ISupportInitialize)(this.dgvSach)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
