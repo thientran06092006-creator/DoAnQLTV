@@ -38,9 +38,9 @@
             // 
             this.lblTieuDe.Font = new System.Drawing.Font("Segoe UI", 15F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblTieuDe.ForeColor = System.Drawing.Color.DarkBlue;
-            this.lblTieuDe.Location = new System.Drawing.Point(155, 12);
+            this.lblTieuDe.Location = new System.Drawing.Point(30, 25);
             this.lblTieuDe.Name = "lblTieuDe";
-            this.lblTieuDe.Size = new System.Drawing.Size(327, 45);
+            this.lblTieuDe.Size = new System.Drawing.Size(840, 40);
             this.lblTieuDe.TabIndex = 0;
             this.lblTieuDe.Text = "HƯỚNG DẪN SỬ DỤNG";
             this.lblTieuDe.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -52,11 +52,11 @@
             this.rtbHuongDan.DetectUrls = false;
             this.rtbHuongDan.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.rtbHuongDan.ForeColor = System.Drawing.Color.Black;
-            this.rtbHuongDan.Location = new System.Drawing.Point(29, 62);
+            this.rtbHuongDan.Location = new System.Drawing.Point(40, 85);
             this.rtbHuongDan.Name = "rtbHuongDan";
             this.rtbHuongDan.ReadOnly = true;
             this.rtbHuongDan.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
-            this.rtbHuongDan.Size = new System.Drawing.Size(520, 387);
+            this.rtbHuongDan.Size = new System.Drawing.Size(820, 510);
             this.rtbHuongDan.TabIndex = 1;
             this.rtbHuongDan.Text = resources.GetString("rtbHuongDan.Text");
             // 
@@ -67,9 +67,9 @@
             this.btnDong.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnDong.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnDong.ForeColor = System.Drawing.Color.White;
-            this.btnDong.Location = new System.Drawing.Point(12, 12);
+            this.btnDong.Location = new System.Drawing.Point(390, 615);
             this.btnDong.Name = "btnDong";
-            this.btnDong.Size = new System.Drawing.Size(75, 23);
+            this.btnDong.Size = new System.Drawing.Size(120, 35);
             this.btnDong.TabIndex = 2;
             this.btnDong.Text = "Đóng";
             this.btnDong.UseVisualStyleBackColor = false;
@@ -80,7 +80,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(584, 461);
+            this.ClientSize = new System.Drawing.Size(884, 661);
             this.Controls.Add(this.btnDong);
             this.Controls.Add(this.rtbHuongDan);
             this.Controls.Add(this.lblTieuDe);
