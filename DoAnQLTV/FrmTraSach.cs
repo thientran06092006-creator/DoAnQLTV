@@ -269,14 +269,7 @@ namespace DoAnQLTV
                             }
 
                             dgvTraSach.ClearSelection();
-
-                            if (dgvTraSach.Rows.Count > 0)
-                            {
-                                dgvTraSach.Rows[0].Selected = true;
-
-                                dgvTraSach.CurrentCell =
-                                    dgvTraSach.Rows[0].Cells["colMaPhieu"];
-                            }
+                            dgvTraSach.CurrentCell = null;
                         }
                     }
                 }

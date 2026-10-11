@@ -520,6 +520,7 @@ namespace DoAnQLTV
                                 return;
                             }
 
+
                             if (dt.Rows.Count == 1)
                             {
                                 txtMaNhanVien.Text =
@@ -533,15 +534,12 @@ namespace DoAnQLTV
 
                                 txtDiaChi.Text =
                                     dt.Rows[0]["DiaChi"].ToString();
-
-                                dgvNhanVien.Rows[0].Selected = true;
-
-                                dgvNhanVien.CurrentCell =
-                                    dgvNhanVien.Rows[0]
-                                        .Cells["colMaNhanVien"];
-
-                                dongDangChon = 0;
                             }
+
+                            dgvNhanVien.ClearSelection();
+                            dgvNhanVien.CurrentCell = null;
+                            dongDangChon = -1;
+
                         }
                     }
                 }

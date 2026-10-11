@@ -184,6 +184,7 @@ namespace DoAnQLTV
         // ==============================
         // LÀM MỚI
         // ==============================
+
         private void btnLamMoi_Click(object sender, EventArgs e)
         {
             txtTuKhoa.Clear();
@@ -191,8 +192,10 @@ namespace DoAnQLTV
             LoadSach();
 
             dgvKetQua.ClearSelection();
+            dgvKetQua.CurrentCell = null;
 
             txtTuKhoa.Focus();
         }
+
     }
 }

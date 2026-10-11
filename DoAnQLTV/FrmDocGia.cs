@@ -538,14 +538,40 @@ namespace DoAnQLTV
                                     row["SoDienThoai"].ToString());
                             }
 
+                            dgvDocGia.ClearSelection();
+                            dgvDocGia.CurrentCell = null;
+                            dongDangChon = -1;
+
+                            txtMaDocGia.Clear();
+                            txtTenDocGia.Text = tuKhoa;
+                            txtDiaChi.Clear();
+                            txtSoDienThoai.Clear();
+                            dtpNgaySinh.Value = DateTime.Now;
+
+                            dgvDocGia.BeginInvoke(new Action(() =>
+                            {
+                                dgvDocGia.ClearSelection();
+                                dgvDocGia.CurrentCell = null;
+                            }));
+
                             if (dt.Rows.Count == 0)
                             {
+                                dongDangChon = -1;
+                                dgvDocGia.ClearSelection();
+                                dgvDocGia.CurrentCell = null;
+
+                                txtMaDocGia.Clear();
+                                txtDiaChi.Clear();
+                                txtSoDienThoai.Clear();
+                                dtpNgaySinh.Value = DateTime.Now;
+
                                 MessageBox.Show(
                                     "Không tìm thấy độc giả phù hợp.",
                                     "Thông báo",
                                     MessageBoxButtons.OK,
                                     MessageBoxIcon.Information);
 
+                                txtTenDocGia.Focus();
                                 return;
                             }
 

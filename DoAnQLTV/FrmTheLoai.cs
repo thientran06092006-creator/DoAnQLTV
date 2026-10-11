@@ -356,20 +356,17 @@ namespace DoAnQLTV
                                 return;
                             }
 
+
                             if (dt.Rows.Count == 1)
                             {
-                                txtMaTheLoai.Text =
-                                    dt.Rows[0]["MaTheLoai"].ToString();
-
-                                txtTenTheLoai.Text =
-                                    dt.Rows[0]["TenTheLoai"].ToString();
-
-                                dgvTheLoai.Rows[0].Selected = true;
-                                dgvTheLoai.CurrentCell =
-                                    dgvTheLoai.Rows[0].Cells["colMaTheLoai"];
-
-                                dongDangChon = 0;
+                                txtMaTheLoai.Text = dt.Rows[0]["MaTheLoai"].ToString();
+                                txtTenTheLoai.Text = dt.Rows[0]["TenTheLoai"].ToString();
                             }
+
+                            dgvTheLoai.ClearSelection();
+                            dgvTheLoai.CurrentCell = null;
+                            dongDangChon = -1;
+
                         }
                     }
                 }

@@ -141,14 +141,7 @@ namespace DoAnQLTV
                             }
 
                             dgvKetQua.ClearSelection();
-
-                            if (dgvKetQua.Rows.Count > 0)
-                            {
-                                dgvKetQua.Rows[0].Selected = true;
-
-                                dgvKetQua.CurrentCell =
-                                    dgvKetQua.Rows[0].Cells["colMaDocGia"];
-                            }
+                            dgvKetQua.CurrentCell = null;
                         }
                     }
                 }

@@ -23,6 +23,7 @@ namespace DoAnQLTV
             
         }
 
+
         public void TaiThongKe()
         {
             try
@@ -44,36 +45,34 @@ namespace DoAnQLTV
                     {
                         if (reader.Read())
                         {
-                            lblSoSach.Text =
-                                reader["SoSach"].ToString();
-
-                            lblSoDocGia.Text =
-                                reader["SoDocGia"].ToString();
-
-                            lblSoPhieuMuon.Text =
-                                reader["SoPhieuMuon"].ToString();
-
-                            lblSoPhieuChuaTra.Text =
-                                reader["SoPhieuChuaTra"].ToString();
+                            lblSoSach.Text = reader["SoSach"].ToString();
+                            lblSoDocGia.Text = reader["SoDocGia"].ToString();
+                            lblSoPhieuMuon.Text = reader["SoPhieuMuon"].ToString();
+                            lblSoPhieuChuaTra.Text = reader["SoPhieuChuaTra"].ToString();
                         }
                     }
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show(
-                    "Không thể tải số liệu thống kê.\n" + ex.Message,
-                    "Lỗi",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
+                System.Diagnostics.Debug.WriteLine(
+                    "Không thể tải số liệu thống kê: " + ex);
             }
         }
 
+
+
         private void DongTatCaFormChucNang()
         {
-            foreach (Form form in Application.OpenForms.Cast<Form>().ToList())
+            // Tạo danh sách riêng để tránh thay đổi tập hợp OpenForms khi đóng Form
+            List<Form> danhSachForm = Application.OpenForms
+                .Cast<Form>()
+                .Where(f => f != this && !(f is FrmLogin))
+                .ToList();
+
+            foreach (Form form in danhSachForm)
             {
-                if (form != this && !(form is FrmLogin))
+                if (!form.IsDisposed)
                 {
                     form.Close();
                 }
@@ -100,29 +99,37 @@ namespace DoAnQLTV
 
         private void MoFormChucNang(Form form)
         {
-            // Nếu Form cùng loại đã mở thì đưa lên trước
-            foreach (Form formDangMo in Application.OpenForms)
+            // Tìm Form cùng loại đang mở
+            Form formDangMo = Application.OpenForms
+                .Cast<Form>()
+                .FirstOrDefault(f =>
+                    f.GetType() == form.GetType() &&
+                    !f.IsDisposed);
+
+            // Nếu đã có Form cùng loại thì kích hoạt Form đó
+            if (formDangMo != null)
             {
-                if (formDangMo.GetType() == form.GetType())
+                form.Dispose();
+
+                if (formDangMo.WindowState == FormWindowState.Minimized)
                 {
-                    form.Dispose();
                     formDangMo.WindowState = FormWindowState.Normal;
-                    formDangMo.BringToFront();
-                    formDangMo.Activate();
-                    return;
                 }
+
+                formDangMo.BringToFront();
+                formDangMo.Activate();
+                return;
             }
 
+            // Nếu chưa mở thì hiển thị Form mới
             form.StartPosition = FormStartPosition.Manual;
 
             int buoc = 35;
-            int gioiHanX = Math.Max(
-                0,
-                Screen.PrimaryScreen.WorkingArea.Width - form.Width);
 
-            int gioiHanY = Math.Max(
-                0,
-                Screen.PrimaryScreen.WorkingArea.Height - form.Height);
+            Rectangle vungLamViec = Screen.PrimaryScreen.WorkingArea;
+
+            int gioiHanX = Math.Max(0, vungLamViec.Width - form.Width);
+            int gioiHanY = Math.Max(0, vungLamViec.Height - form.Height);
 
             form.Location = new Point(
                 Math.Min(250 + (soFormDaMo * buoc) % Math.Max(1, gioiHanX), gioiHanX),
@@ -136,8 +143,6 @@ namespace DoAnQLTV
 
             form.Show();
         }
-
-
 
         private void quảnLýSáchToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -266,6 +271,7 @@ namespace DoAnQLTV
                 e.Cancel = true;
             }
         }
+
 
 
         private void thôngTinChươngTrìnhToolStripMenuItem_Click(object sender, EventArgs e)
@@ -425,6 +431,7 @@ namespace DoAnQLTV
 
             y += chieuCaoNut;
 
+
             // 9. Nhóm chức năng Trợ giúp
             pnlNhomTroGiup.Size = new Size(chieuRong, chieuCaoNut * 2);
 
@@ -437,11 +444,14 @@ namespace DoAnQLTV
             if (pnlNhomTroGiup.Visible)
             {
                 pnlNhomTroGiup.Location = new Point(0, y);
-                pnlNhomTroGiup.Visible = true;
                 pnlNhomTroGiup.BringToFront();
             }
-
+            else
+            {
+                pnlNhomTroGiup.Location = new Point(0, y);
+            }
         }
+
 
 
         private void btnQLTheLoai_Click(object sender, EventArgs e)

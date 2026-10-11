@@ -699,6 +699,7 @@ namespace DoAnQLTV
             }
         }
 
+
         private void btnLamMoi_Click(object sender, EventArgs e)
         {
             txtMaSach.Clear();
@@ -712,8 +713,10 @@ namespace DoAnQLTV
             LoadSach();
 
             dgvSach.ClearSelection();
+            dgvSach.CurrentCell = null;
 
             txtMaSach.Focus();
         }
+
     }
 }

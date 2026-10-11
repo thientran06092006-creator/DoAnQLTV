@@ -160,14 +160,7 @@ namespace DoAnQLTV
                             }
 
                             dgvPhieuMuon.ClearSelection();
-
-                            if (dgvPhieuMuon.Rows.Count > 0)
-                            {
-                                dgvPhieuMuon.Rows[0].Selected = true;
-
-                                dgvPhieuMuon.CurrentCell =
-                                    dgvPhieuMuon.Rows[0].Cells["colMaPhieu"];
-                            }
+                            dgvPhieuMuon.CurrentCell = null;
                         }
                     }
                 }

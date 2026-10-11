@@ -359,16 +359,13 @@ namespace DoAnQLTV
 
                             if (dt.Rows.Count == 1)
                             {
-                                txtMaTacGia.Text =
-                                    dt.Rows[0]["MaTacGia"].ToString();
-
-                                txtTenTacGia.Text =
-                                    dt.Rows[0]["TenTacGia"].ToString();
-
-                                dgvTacGia.Rows[0].Selected = true;
-                                dgvTacGia.CurrentCell =
-                                    dgvTacGia.Rows[0].Cells["colMaTacGia"];
+                                txtMaTacGia.Text = dt.Rows[0]["MaTacGia"].ToString();
+                                txtTenTacGia.Text = dt.Rows[0]["TenTacGia"].ToString();
                             }
+
+                            dgvTacGia.ClearSelection();
+                            dgvTacGia.CurrentCell = null;
+                            dongDangChon = -1;
                         }
                     }
                 }
