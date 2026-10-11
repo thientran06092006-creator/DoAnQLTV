@@ -1,12 +1,25 @@
 ﻿using System;
 using System.Data;
 using System.Data.SqlClient;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace DoAnQLTV
 {
     public partial class FrmSach : Form
     {
+        private void CapNhatThongKeTrangChu()
+        {
+            FrmMain frmMain = Application.OpenForms
+                .OfType<FrmMain>()
+                .FirstOrDefault();
+
+            if (frmMain != null && !frmMain.IsDisposed)
+            {
+                frmMain.TaiThongKe();
+            }
+        }
+
         private int dongDangChon = -1;
         public FrmSach()
         {
@@ -245,6 +258,7 @@ namespace DoAnQLTV
                     MessageBoxIcon.Information);
 
                 LoadSach();
+                CapNhatThongKeTrangChu();
 
                 txtMaSach.Clear();
                 txtTenSach.Clear();
@@ -432,6 +446,7 @@ namespace DoAnQLTV
                     MessageBoxIcon.Information);
 
                 LoadSach();
+                CapNhatThongKeTrangChu();
 
                 txtMaSach.Clear();
                 txtTenSach.Clear();
@@ -549,6 +564,7 @@ namespace DoAnQLTV
                     MessageBoxIcon.Information);
 
                 LoadSach();
+                CapNhatThongKeTrangChu();
 
                 txtMaSach.Clear();
                 txtTenSach.Clear();

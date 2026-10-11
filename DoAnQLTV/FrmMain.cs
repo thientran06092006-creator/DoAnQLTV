@@ -7,17 +7,67 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Data.SqlClient;
 
 namespace DoAnQLTV
 {
     public partial class FrmMain : Form
     {
+
+        private bool dangDangXuat = false;
+        private bool dangXacNhanThoat = false;
+
         public FrmMain()
         {
             InitializeComponent();
             
         }
 
+        public void TaiThongKe()
+        {
+            try
+            {
+                using (SqlConnection conn = DbConnection.GetConnection())
+                {
+                    conn.Open();
+
+                    string sql = @"
+                SELECT
+                    (SELECT COUNT(*) FROM Sach) AS SoSach,
+                    (SELECT COUNT(*) FROM DocGia) AS SoDocGia,
+                    (SELECT COUNT(*) FROM PhieuMuon) AS SoPhieuMuon,
+                    (SELECT COUNT(*) FROM PhieuMuon
+                     WHERE NgayTra IS NULL) AS SoPhieuChuaTra;";
+
+                    using (SqlCommand cmd = new SqlCommand(sql, conn))
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            lblSoSach.Text =
+                                reader["SoSach"].ToString();
+
+                            lblSoDocGia.Text =
+                                reader["SoDocGia"].ToString();
+
+                            lblSoPhieuMuon.Text =
+                                reader["SoPhieuMuon"].ToString();
+
+                            lblSoPhieuChuaTra.Text =
+                                reader["SoPhieuChuaTra"].ToString();
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    "Không thể tải số liệu thống kê.\n" + ex.Message,
+                    "Lỗi",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+            }
+        }
 
         private void DongTatCaFormChucNang()
         {
@@ -30,7 +80,21 @@ namespace DoAnQLTV
             }
         }
 
+        private void CanGiuaNoiDung()
+        {
+            pnlNoiDungChinh.Left =
+                Math.Max(0, (pnlTrangChu.ClientSize.Width
+                - pnlNoiDungChinh.Width) / 2);
 
+            pnlNoiDungChinh.Top =
+                Math.Max(0, (pnlTrangChu.ClientSize.Height
+                - pnlNoiDungChinh.Height) / 2);
+        }
+
+        private void pnlTrangChu_Resize(object sender, EventArgs e)
+        {
+            CanGiuaNoiDung();
+        }
 
         private int soFormDaMo = 0;
 
@@ -148,8 +212,12 @@ namespace DoAnQLTV
                     frmLogin.Show();
                     frmLogin.Activate();
 
+                    // Đánh dấu đang đăng xuất để không hỏi thoát
+                    dangDangXuat = true;
+
                     // Đóng FrmMain hiện tại
                     this.Close();
+
                 }
                 else
                 {
@@ -166,15 +234,20 @@ namespace DoAnQLTV
 
         private void thoátToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            // Đánh dấu đang đăng xuất để không hỏi xác nhận thoát
+            dangDangXuat = true;
             this.Close();
         }
 
 
 
-        private bool dangXacNhanThoat = false;
-
         private void FrmMain_FormClosing(object sender, FormClosingEventArgs e)
         {
+            // Nếu đang đăng xuất thì không hỏi xác nhận thoát
+            if (dangDangXuat)
+                return;
+
+            // Nếu đã xác nhận thoát rồi thì không hỏi lại
             if (dangXacNhanThoat)
                 return;
 
@@ -184,14 +257,13 @@ namespace DoAnQLTV
                 MessageBoxButtons.YesNo,
                 MessageBoxIcon.Question);
 
-            if (ketQua == DialogResult.No)
+            if (ketQua == DialogResult.Yes)
             {
-                e.Cancel = true;
+                dangXacNhanThoat = true;
             }
             else
             {
-                dangXacNhanThoat = true;
-                Application.Exit();
+                e.Cancel = true;
             }
         }
 
@@ -210,8 +282,7 @@ namespace DoAnQLTV
 
         private void FrmMain_Load(object sender, EventArgs e)
         {
-            pnlNoiDungChinh.Left =
-                (pnlTrangChu.ClientSize.Width - pnlNoiDungChinh.Width) / 2;
+            CanGiuaNoiDung();
 
             pnlNhomQuanLy.Visible = false;
             pnlNhomTraCuu.Visible = false;
@@ -219,7 +290,15 @@ namespace DoAnQLTV
             pnlNhomTroGiup.Visible = false;
 
             SapXepMenuBenTrai();
+
+            pnlNoiDungChinh.Size = new Size(1190, 616);
+
+            CanGiuaNoiDung();
+
+            // Tải số liệu thống kê từ cơ sở dữ liệu
+            TaiThongKe();
         }
+
 
 
         private void btnTrangChu_Click(object sender, EventArgs e)
@@ -235,7 +314,11 @@ namespace DoAnQLTV
             pnlTrangChu.BringToFront();
 
             SapXepMenuBenTrai();
+
+            // Cập nhật lại 4 ô thống kê từ cơ sở dữ liệu
+            TaiThongKe();
         }
+
 
 
         private void btnQuanLy_Click(object sender, EventArgs e)
@@ -448,7 +531,6 @@ namespace DoAnQLTV
         {
             MoFormChucNang(new FrmLapPhieuMuon());
         }
-
 
     }
 

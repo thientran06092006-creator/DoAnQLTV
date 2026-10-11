@@ -23,6 +23,18 @@ namespace DoAnQLTV
             LoadPhieuMuon();
         }
 
+        private void CapNhatThongKeTrangChu()
+        {
+            FrmMain frmMain = Application.OpenForms
+                .OfType<FrmMain>()
+                .FirstOrDefault();
+
+            if (frmMain != null && !frmMain.IsDisposed)
+            {
+                frmMain.TaiThongKe();
+            }
+        }
+
         private void LoadDocGia()
         {
             try
@@ -296,6 +308,7 @@ namespace DoAnQLTV
                     MessageBoxIcon.Information);
 
                 LoadPhieuMuon();
+                CapNhatThongKeTrangChu();
 
                 txtMaPhieu.Clear();
                 txtSach.Clear();
@@ -553,6 +566,7 @@ namespace DoAnQLTV
                     MessageBoxIcon.Information);
 
                 LoadPhieuMuon();
+                CapNhatThongKeTrangChu();
 
                 txtMaPhieu.Clear();
                 txtSach.Clear();

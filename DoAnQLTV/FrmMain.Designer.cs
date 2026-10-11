@@ -292,19 +292,18 @@
             // 
             // pnlTrangChu
             // 
-            this.pnlTrangChu.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.pnlTrangChu.AutoScroll = true;
             this.pnlTrangChu.Controls.Add(this.pnlNoiDungChinh);
-            this.pnlTrangChu.Location = new System.Drawing.Point(190, 24);
+            this.pnlTrangChu.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pnlTrangChu.Location = new System.Drawing.Point(0, 24);
             this.pnlTrangChu.Name = "pnlTrangChu";
             this.pnlTrangChu.Size = new System.Drawing.Size(1084, 637);
             this.pnlTrangChu.TabIndex = 1;
+            this.pnlTrangChu.Resize += new System.EventHandler(this.pnlTrangChu_Resize);
             // 
             // pnlNoiDungChinh
             // 
-            this.pnlNoiDungChinh.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.pnlNoiDungChinh.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.pnlNoiDungChinh.AutoScroll = true;
             this.pnlNoiDungChinh.Controls.Add(this.pnlTruyCapMuonTra);
             this.pnlNoiDungChinh.Controls.Add(this.pnlTruyCapDocGia);

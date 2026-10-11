@@ -13,6 +13,18 @@ namespace DoAnQLTV
 {
     public partial class FrmDocGia : Form
     {
+        private void CapNhatThongKeTrangChu()
+        {
+            FrmMain frmMain = Application.OpenForms
+                .OfType<FrmMain>()
+                .FirstOrDefault();
+
+            if (frmMain != null && !frmMain.IsDisposed)
+            {
+                frmMain.TaiThongKe();
+            }
+        }
+
         private int dongDangChon = -1;
         public FrmDocGia()
         {
@@ -149,6 +161,7 @@ namespace DoAnQLTV
                     MessageBoxIcon.Information);
 
                 LoadDocGia();
+                CapNhatThongKeTrangChu();
 
                 txtMaDocGia.Clear();
                 txtTenDocGia.Clear();
@@ -324,6 +337,7 @@ namespace DoAnQLTV
                     MessageBoxIcon.Information);
 
                 LoadDocGia();
+                CapNhatThongKeTrangChu();
 
                 txtMaDocGia.Clear();
                 txtTenDocGia.Clear();
@@ -421,6 +435,7 @@ namespace DoAnQLTV
                     MessageBoxIcon.Information);
 
                 LoadDocGia();
+                CapNhatThongKeTrangChu();
 
                 txtMaDocGia.Clear();
                 txtTenDocGia.Clear();

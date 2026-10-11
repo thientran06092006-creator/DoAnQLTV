@@ -13,6 +13,18 @@ namespace DoAnQLTV
 {
     public partial class FrmTraSach : Form
     {
+        private void CapNhatThongKeTrangChu()
+        {
+            FrmMain frmMain = Application.OpenForms
+                .OfType<FrmMain>()
+                .FirstOrDefault();
+
+            if (frmMain != null && !frmMain.IsDisposed)
+            {
+                frmMain.TaiThongKe();
+            }
+        }
+
         public FrmTraSach()
         {
             InitializeComponent();
@@ -402,6 +414,7 @@ namespace DoAnQLTV
                     MessageBoxIcon.Information);
 
                 LoadTraSach();
+                CapNhatThongKeTrangChu();
 
                 txtMaPhieu.Clear();
 
