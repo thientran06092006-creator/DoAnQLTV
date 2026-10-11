@@ -15,14 +15,7 @@ namespace DoAnQLTV
     {
         private void CapNhatThongKeTrangChu()
         {
-            FrmMain frmMain = Application.OpenForms
-                .OfType<FrmMain>()
-                .FirstOrDefault();
-
-            if (frmMain != null && !frmMain.IsDisposed)
-            {
-                frmMain.TaiThongKe();
-            }
+            // Không còn cập nhật thống kê trên FrmMain.
         }
 
         private int dongDangChon = -1;
