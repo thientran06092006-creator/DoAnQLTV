@@ -49,24 +49,22 @@
             this.thôngTinChươngTrìnhToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.hướngDẫnSửDụngToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.pnlTrangChu = new System.Windows.Forms.Panel();
-            this.lblHuongDanMain = new System.Windows.Forms.Label();
-            this.pnlMuonTra = new System.Windows.Forms.Panel();
-            this.lblMuonTra = new System.Windows.Forms.Label();
-            this.lblIconMuonTra = new System.Windows.Forms.Label();
-            this.pnlDocGia = new System.Windows.Forms.Panel();
-            this.lblDocGia = new System.Windows.Forms.Label();
-            this.lblIconDocGia = new System.Windows.Forms.Label();
-            this.pnlSach = new System.Windows.Forms.Panel();
-            this.lblIconSach = new System.Windows.Forms.Label();
-            this.lblSach = new System.Windows.Forms.Label();
-            this.lblIconMain = new System.Windows.Forms.Label();
-            this.lblChaoMung = new System.Windows.Forms.Label();
-            this.lblTieuDeMain = new System.Windows.Forms.Label();
+            this.pnlBanner = new System.Windows.Forms.Panel();
+            this.lblBannerTieuDe = new System.Windows.Forms.Label();
+            this.lblBannerChaoMung = new System.Windows.Forms.Label();
+            this.lblBannerMoTa = new System.Windows.Forms.Label();
+            this.picBannerSach = new System.Windows.Forms.PictureBox();
+            this.pnlThongKeSach = new System.Windows.Forms.Panel();
+            this.pnlThongKeDocGia = new System.Windows.Forms.Panel();
+            this.pnlThongKePhieuMuon = new System.Windows.Forms.Panel();
+            this.pnlThongKeChuaTra = new System.Windows.Forms.Panel();
+            this.lblTieuDeThongKeSach = new System.Windows.Forms.Label();
+            this.lblSoSach = new System.Windows.Forms.Label();
             this.menuStrip1.SuspendLayout();
             this.pnlTrangChu.SuspendLayout();
-            this.pnlMuonTra.SuspendLayout();
-            this.pnlDocGia.SuspendLayout();
-            this.pnlSach.SuspendLayout();
+            this.pnlBanner.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.picBannerSach)).BeginInit();
+            this.pnlThongKeSach.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -81,7 +79,7 @@
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Padding = new System.Windows.Forms.Padding(4, 2, 0, 2);
-            this.menuStrip1.Size = new System.Drawing.Size(800, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(1084, 24);
             this.menuStrip1.TabIndex = 0;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -234,179 +232,161 @@
             // 
             // pnlTrangChu
             // 
-            this.pnlTrangChu.Controls.Add(this.lblHuongDanMain);
-            this.pnlTrangChu.Controls.Add(this.pnlMuonTra);
-            this.pnlTrangChu.Controls.Add(this.pnlDocGia);
-            this.pnlTrangChu.Controls.Add(this.pnlSach);
-            this.pnlTrangChu.Controls.Add(this.lblIconMain);
-            this.pnlTrangChu.Controls.Add(this.lblChaoMung);
-            this.pnlTrangChu.Controls.Add(this.lblTieuDeMain);
+            this.pnlTrangChu.Controls.Add(this.pnlThongKeChuaTra);
+            this.pnlTrangChu.Controls.Add(this.pnlThongKePhieuMuon);
+            this.pnlTrangChu.Controls.Add(this.pnlThongKeDocGia);
+            this.pnlTrangChu.Controls.Add(this.pnlThongKeSach);
+            this.pnlTrangChu.Controls.Add(this.pnlBanner);
             this.pnlTrangChu.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pnlTrangChu.Location = new System.Drawing.Point(0, 24);
             this.pnlTrangChu.Name = "pnlTrangChu";
-            this.pnlTrangChu.Size = new System.Drawing.Size(800, 426);
+            this.pnlTrangChu.Size = new System.Drawing.Size(1084, 637);
             this.pnlTrangChu.TabIndex = 1;
             // 
-            // lblHuongDanMain
+            // pnlBanner
             // 
-            this.lblHuongDanMain.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblHuongDanMain.ForeColor = System.Drawing.Color.Gray;
-            this.lblHuongDanMain.Location = new System.Drawing.Point(25, 373);
-            this.lblHuongDanMain.Name = "lblHuongDanMain";
-            this.lblHuongDanMain.Size = new System.Drawing.Size(800, 35);
-            this.lblHuongDanMain.TabIndex = 6;
-            this.lblHuongDanMain.Text = "Vui lòng sử dụng thanh menu để truy cập các chức năng của hệ thống.";
-            this.lblHuongDanMain.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.pnlBanner.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.pnlBanner.BackColor = System.Drawing.Color.AliceBlue;
+            this.pnlBanner.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.pnlBanner.Controls.Add(this.picBannerSach);
+            this.pnlBanner.Controls.Add(this.lblBannerTieuDe);
+            this.pnlBanner.Controls.Add(this.lblBannerChaoMung);
+            this.pnlBanner.Controls.Add(this.lblBannerMoTa);
+            this.pnlBanner.Location = new System.Drawing.Point(20, 20);
+            this.pnlBanner.Name = "pnlBanner";
+            this.pnlBanner.Size = new System.Drawing.Size(1044, 180);
+            this.pnlBanner.TabIndex = 0;
             // 
-            // pnlMuonTra
+            // lblBannerTieuDe
             // 
-            this.pnlMuonTra.BackColor = System.Drawing.Color.OldLace;
-            this.pnlMuonTra.Controls.Add(this.lblMuonTra);
-            this.pnlMuonTra.Controls.Add(this.lblIconMuonTra);
-            this.pnlMuonTra.Location = new System.Drawing.Point(555, 228);
-            this.pnlMuonTra.Name = "pnlMuonTra";
-            this.pnlMuonTra.Size = new System.Drawing.Size(220, 120);
-            this.pnlMuonTra.TabIndex = 5;
+            this.lblBannerTieuDe.BackColor = System.Drawing.Color.Transparent;
+            this.lblBannerTieuDe.Font = new System.Drawing.Font("Segoe UI", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblBannerTieuDe.ForeColor = System.Drawing.Color.MidnightBlue;
+            this.lblBannerTieuDe.Location = new System.Drawing.Point(35, 25);
+            this.lblBannerTieuDe.Name = "lblBannerTieuDe";
+            this.lblBannerTieuDe.Size = new System.Drawing.Size(850, 45);
+            this.lblBannerTieuDe.TabIndex = 0;
+            this.lblBannerTieuDe.Text = "HỆ THỐNG QUẢN LÝ THƯ VIỆN";
+            this.lblBannerTieuDe.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // lblMuonTra
+            // lblBannerChaoMung
             // 
-            this.lblMuonTra.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblMuonTra.ForeColor = System.Drawing.Color.DarkOrange;
-            this.lblMuonTra.Location = new System.Drawing.Point(3, 59);
-            this.lblMuonTra.Name = "lblMuonTra";
-            this.lblMuonTra.Size = new System.Drawing.Size(214, 40);
-            this.lblMuonTra.TabIndex = 1;
-            this.lblMuonTra.Text = "MƯỢN - TRẢ SÁCH";
-            this.lblMuonTra.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.lblBannerChaoMung.BackColor = System.Drawing.Color.Transparent;
+            this.lblBannerChaoMung.Font = new System.Drawing.Font("Segoe UI", 12.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblBannerChaoMung.ForeColor = System.Drawing.Color.DarkSlateBlue;
+            this.lblBannerChaoMung.Location = new System.Drawing.Point(35, 85);
+            this.lblBannerChaoMung.Name = "lblBannerChaoMung";
+            this.lblBannerChaoMung.Size = new System.Drawing.Size(850, 35);
+            this.lblBannerChaoMung.TabIndex = 1;
+            this.lblBannerChaoMung.Text = "Chào mừng bạn đến với hệ thống!";
+            this.lblBannerChaoMung.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // lblIconMuonTra
+            // lblBannerMoTa
             // 
-            this.lblIconMuonTra.Font = new System.Drawing.Font("Segoe UI Symbol", 27.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblIconMuonTra.ForeColor = System.Drawing.Color.DarkOrange;
-            this.lblIconMuonTra.Location = new System.Drawing.Point(4, 9);
-            this.lblIconMuonTra.Name = "lblIconMuonTra";
-            this.lblIconMuonTra.Size = new System.Drawing.Size(213, 50);
-            this.lblIconMuonTra.TabIndex = 0;
-            this.lblIconMuonTra.Text = " 🔄";
-            this.lblIconMuonTra.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.lblBannerMoTa.BackColor = System.Drawing.Color.Transparent;
+            this.lblBannerMoTa.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblBannerMoTa.ForeColor = System.Drawing.Color.SlateGray;
+            this.lblBannerMoTa.Location = new System.Drawing.Point(35, 125);
+            this.lblBannerMoTa.Name = "lblBannerMoTa";
+            this.lblBannerMoTa.Size = new System.Drawing.Size(900, 30);
+            this.lblBannerMoTa.TabIndex = 2;
+            this.lblBannerMoTa.Text = "Quản lý sách, độc giả và hoạt động mượn - trả sách một cách thuận tiện.";
+            this.lblBannerMoTa.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // pnlDocGia
+            // picBannerSach
             // 
-            this.pnlDocGia.BackColor = System.Drawing.Color.Honeydew;
-            this.pnlDocGia.Controls.Add(this.lblDocGia);
-            this.pnlDocGia.Controls.Add(this.lblIconDocGia);
-            this.pnlDocGia.Location = new System.Drawing.Point(290, 228);
-            this.pnlDocGia.Name = "pnlDocGia";
-            this.pnlDocGia.Size = new System.Drawing.Size(220, 120);
-            this.pnlDocGia.TabIndex = 4;
+            this.picBannerSach.BackColor = System.Drawing.Color.Transparent;
+            this.picBannerSach.Location = new System.Drawing.Point(850, 25);
+            this.picBannerSach.Name = "picBannerSach";
+            this.picBannerSach.Size = new System.Drawing.Size(160, 130);
+            this.picBannerSach.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.picBannerSach.TabIndex = 3;
+            this.picBannerSach.TabStop = false;
             // 
-            // lblDocGia
+            // pnlThongKeSach
             // 
-            this.lblDocGia.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblDocGia.ForeColor = System.Drawing.Color.ForestGreen;
-            this.lblDocGia.Location = new System.Drawing.Point(4, 59);
-            this.lblDocGia.Name = "lblDocGia";
-            this.lblDocGia.Size = new System.Drawing.Size(213, 40);
-            this.lblDocGia.TabIndex = 1;
-            this.lblDocGia.Text = "QUẢN LÝ ĐỘC GIẢ";
-            this.lblDocGia.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.pnlThongKeSach.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.pnlThongKeSach.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.pnlThongKeSach.Controls.Add(this.lblTieuDeThongKeSach);
+            this.pnlThongKeSach.Controls.Add(this.lblSoSach);
+            this.pnlThongKeSach.Location = new System.Drawing.Point(20, 220);
+            this.pnlThongKeSach.Name = "pnlThongKeSach";
+            this.pnlThongKeSach.Size = new System.Drawing.Size(245, 115);
+            this.pnlThongKeSach.TabIndex = 1;
             // 
-            // lblIconDocGia
+            // pnlThongKeDocGia
             // 
-            this.lblIconDocGia.Font = new System.Drawing.Font("Segoe UI Symbol", 27.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblIconDocGia.ForeColor = System.Drawing.Color.ForestGreen;
-            this.lblIconDocGia.Location = new System.Drawing.Point(3, 9);
-            this.lblIconDocGia.Name = "lblIconDocGia";
-            this.lblIconDocGia.Size = new System.Drawing.Size(214, 50);
-            this.lblIconDocGia.TabIndex = 0;
-            this.lblIconDocGia.Text = " 👥";
-            this.lblIconDocGia.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.pnlThongKeDocGia.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.pnlThongKeDocGia.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.pnlThongKeDocGia.Location = new System.Drawing.Point(285, 220);
+            this.pnlThongKeDocGia.Name = "pnlThongKeDocGia";
+            this.pnlThongKeDocGia.Size = new System.Drawing.Size(245, 115);
+            this.pnlThongKeDocGia.TabIndex = 2;
             // 
-            // pnlSach
+            // pnlThongKePhieuMuon
             // 
-            this.pnlSach.BackColor = System.Drawing.Color.AliceBlue;
-            this.pnlSach.Controls.Add(this.lblIconSach);
-            this.pnlSach.Controls.Add(this.lblSach);
-            this.pnlSach.Location = new System.Drawing.Point(24, 228);
-            this.pnlSach.Name = "pnlSach";
-            this.pnlSach.Size = new System.Drawing.Size(220, 120);
-            this.pnlSach.TabIndex = 3;
+            this.pnlThongKePhieuMuon.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.pnlThongKePhieuMuon.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.pnlThongKePhieuMuon.Location = new System.Drawing.Point(550, 220);
+            this.pnlThongKePhieuMuon.Name = "pnlThongKePhieuMuon";
+            this.pnlThongKePhieuMuon.Size = new System.Drawing.Size(245, 115);
+            this.pnlThongKePhieuMuon.TabIndex = 3;
             // 
-            // lblIconSach
+            // pnlThongKeChuaTra
             // 
-            this.lblIconSach.BackColor = System.Drawing.Color.AliceBlue;
-            this.lblIconSach.Font = new System.Drawing.Font("Segoe UI Symbol", 27.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblIconSach.ForeColor = System.Drawing.Color.RoyalBlue;
-            this.lblIconSach.Location = new System.Drawing.Point(3, 9);
-            this.lblIconSach.Name = "lblIconSach";
-            this.lblIconSach.Size = new System.Drawing.Size(213, 50);
-            this.lblIconSach.TabIndex = 0;
-            this.lblIconSach.Text = " 📖\n";
-            this.lblIconSach.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.pnlThongKeChuaTra.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.pnlThongKeChuaTra.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.pnlThongKeChuaTra.Location = new System.Drawing.Point(815, 220);
+            this.pnlThongKeChuaTra.Name = "pnlThongKeChuaTra";
+            this.pnlThongKeChuaTra.Size = new System.Drawing.Size(245, 115);
+            this.pnlThongKeChuaTra.TabIndex = 4;
             // 
-            // lblSach
+            // lblTieuDeThongKeSach
             // 
-            this.lblSach.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblSach.ForeColor = System.Drawing.Color.DarkBlue;
-            this.lblSach.Location = new System.Drawing.Point(4, 59);
-            this.lblSach.Name = "lblSach";
-            this.lblSach.Size = new System.Drawing.Size(213, 40);
-            this.lblSach.TabIndex = 0;
-            this.lblSach.Text = "QUẢN LÝ SÁCH";
-            this.lblSach.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.lblTieuDeThongKeSach.BackColor = System.Drawing.Color.Transparent;
+            this.lblTieuDeThongKeSach.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblTieuDeThongKeSach.ForeColor = System.Drawing.Color.DimGray;
+            this.lblTieuDeThongKeSach.Location = new System.Drawing.Point(0, 0);
+            this.lblTieuDeThongKeSach.Name = "lblTieuDeThongKeSach";
+            this.lblTieuDeThongKeSach.Size = new System.Drawing.Size(215, 28);
+            this.lblTieuDeThongKeSach.TabIndex = 0;
+            this.lblTieuDeThongKeSach.Text = "TỔNG SỐ SÁCH";
+            this.lblTieuDeThongKeSach.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // lblIconMain
+            // lblSoSach
             // 
-            this.lblIconMain.Font = new System.Drawing.Font("Segoe UI Symbol", 54.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblIconMain.ForeColor = System.Drawing.Color.RoyalBlue;
-            this.lblIconMain.Location = new System.Drawing.Point(332, 119);
-            this.lblIconMain.Name = "lblIconMain";
-            this.lblIconMain.Size = new System.Drawing.Size(150, 100);
-            this.lblIconMain.TabIndex = 2;
-            this.lblIconMain.Text = "📚";
-            this.lblIconMain.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // lblChaoMung
-            // 
-            this.lblChaoMung.Font = new System.Drawing.Font("Segoe UI", 12.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblChaoMung.ForeColor = System.Drawing.Color.DimGray;
-            this.lblChaoMung.Location = new System.Drawing.Point(45, 79);
-            this.lblChaoMung.Name = "lblChaoMung";
-            this.lblChaoMung.Size = new System.Drawing.Size(700, 40);
-            this.lblChaoMung.TabIndex = 1;
-            this.lblChaoMung.Text = "Chào mừng bạn đến với hệ thống quản lý thư viện";
-            this.lblChaoMung.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // lblTieuDeMain
-            // 
-            this.lblTieuDeMain.Font = new System.Drawing.Font("Segoe UI", 26.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblTieuDeMain.ForeColor = System.Drawing.Color.DarkBlue;
-            this.lblTieuDeMain.Location = new System.Drawing.Point(45, 10);
-            this.lblTieuDeMain.Name = "lblTieuDeMain";
-            this.lblTieuDeMain.Size = new System.Drawing.Size(700, 60);
-            this.lblTieuDeMain.TabIndex = 0;
-            this.lblTieuDeMain.Text = "HỆ THỐNG QUẢN LÝ THƯ VIỆN";
-            this.lblTieuDeMain.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.lblSoSach.BackColor = System.Drawing.Color.Transparent;
+            this.lblSoSach.Font = new System.Drawing.Font("Segoe UI", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblSoSach.ForeColor = System.Drawing.Color.MidnightBlue;
+            this.lblSoSach.Location = new System.Drawing.Point(15, 45);
+            this.lblSoSach.Name = "lblSoSach";
+            this.lblSoSach.Size = new System.Drawing.Size(215, 50);
+            this.lblSoSach.TabIndex = 1;
+            this.lblSoSach.Text = "0";
+            this.lblSoSach.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // FrmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ClientSize = new System.Drawing.Size(1084, 661);
             this.Controls.Add(this.pnlTrangChu);
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
+            this.MinimumSize = new System.Drawing.Size(1100, 700);
             this.Name = "FrmMain";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "QUẢN LÝ THƯ VIỆN - HUTECH";
+            this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.Click += new System.EventHandler(this.lậpPhiếuMượnToolStripMenuItem_Click);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.pnlTrangChu.ResumeLayout(false);
-            this.pnlMuonTra.ResumeLayout(false);
-            this.pnlDocGia.ResumeLayout(false);
-            this.pnlSach.ResumeLayout(false);
+            this.pnlBanner.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.picBannerSach)).EndInit();
+            this.pnlThongKeSach.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -435,18 +415,16 @@
         private System.Windows.Forms.ToolStripMenuItem thôngTinChươngTrìnhToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem hướngDẫnSửDụngToolStripMenuItem;
         private System.Windows.Forms.Panel pnlTrangChu;
-        private System.Windows.Forms.Label lblTieuDeMain;
-        private System.Windows.Forms.Label lblIconMain;
-        private System.Windows.Forms.Label lblChaoMung;
-        private System.Windows.Forms.Panel pnlSach;
-        private System.Windows.Forms.Label lblIconSach;
-        private System.Windows.Forms.Panel pnlMuonTra;
-        private System.Windows.Forms.Panel pnlDocGia;
-        private System.Windows.Forms.Label lblSach;
-        private System.Windows.Forms.Label lblIconDocGia;
-        private System.Windows.Forms.Label lblIconMuonTra;
-        private System.Windows.Forms.Label lblDocGia;
-        private System.Windows.Forms.Label lblMuonTra;
-        private System.Windows.Forms.Label lblHuongDanMain;
+        private System.Windows.Forms.Panel pnlBanner;
+        private System.Windows.Forms.Label lblBannerTieuDe;
+        private System.Windows.Forms.Label lblBannerChaoMung;
+        private System.Windows.Forms.Label lblBannerMoTa;
+        private System.Windows.Forms.PictureBox picBannerSach;
+        private System.Windows.Forms.Panel pnlThongKeSach;
+        private System.Windows.Forms.Panel pnlThongKeDocGia;
+        private System.Windows.Forms.Panel pnlThongKePhieuMuon;
+        private System.Windows.Forms.Panel pnlThongKeChuaTra;
+        private System.Windows.Forms.Label lblTieuDeThongKeSach;
+        private System.Windows.Forms.Label lblSoSach;
     }
 }

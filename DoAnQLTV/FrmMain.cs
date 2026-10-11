@@ -12,103 +12,14 @@ namespace DoAnQLTV
 {
     public partial class FrmMain : Form
     {
-
         public FrmMain()
         {
             InitializeComponent();
 
+
             this.StartPosition = FormStartPosition.CenterScreen;
             this.WindowState = FormWindowState.Maximized;
-
-            this.Load += FrmMain_Load;
-            this.pnlTrangChu.Resize += pnlTrangChu_Resize;
         }
-
-        private void FrmMain_Load(object sender, EventArgs e)
-        {
-            BoTriGiaoDienMain();
-        }
-
-        private void pnlTrangChu_Resize(object sender, EventArgs e)
-        {
-            BoTriGiaoDienMain();
-        }
-
-        private void BoTriGiaoDienMain()
-        {
-            if (pnlTrangChu == null ||
-                lblTieuDeMain == null ||
-                lblChaoMung == null ||
-                lblIconMain == null ||
-                pnlSach == null ||
-                pnlDocGia == null ||
-                pnlMuonTra == null ||
-                lblHuongDanMain == null)
-            {
-                return;
-            }
-
-            int w = pnlTrangChu.ClientSize.Width;
-            int h = pnlTrangChu.ClientSize.Height;
-
-            if (w <= 0 || h <= 0)
-                return;
-
-            // Tiêu đề và lời chào
-            lblTieuDeMain.SetBounds(
-                20, 15, w - 40, 55);
-
-            lblChaoMung.SetBounds(
-                20, 75, w - 40, 35);
-
-            // Biểu tượng thư viện
-            lblIconMain.SetBounds(
-                (w - 120) / 2, 115, 120, 85);
-
-            // Ba thẻ chức năng
-            int cardWidth = Math.Min(240, (w - 80) / 3);
-            int cardHeight = 120;
-            int gap = 24;
-            int totalWidth = cardWidth * 3 + gap * 2;
-            int startX = (w - totalWidth) / 2;
-
-            int cardY = Math.Max(215, (h - cardHeight) / 2);
-
-            pnlSach.SetBounds(
-                startX, cardY, cardWidth, cardHeight);
-
-            pnlDocGia.SetBounds(
-                startX + cardWidth + gap,
-                cardY, cardWidth, cardHeight);
-
-            pnlMuonTra.SetBounds(
-                startX + (cardWidth + gap) * 2,
-                cardY, cardWidth, cardHeight);
-
-            // Căn chỉnh nội dung bên trong các thẻ
-            lblIconSach.SetBounds(
-                3, 8, pnlSach.ClientSize.Width - 6, 50);
-
-            lblSach.SetBounds(
-                3, 59, pnlSach.ClientSize.Width - 6, 40);
-
-            lblIconDocGia.SetBounds(
-                3, 8, pnlDocGia.ClientSize.Width - 6, 50);
-
-            lblDocGia.SetBounds(
-                3, 59, pnlDocGia.ClientSize.Width - 6, 40);
-
-            lblIconMuonTra.SetBounds(
-                3, 8, pnlMuonTra.ClientSize.Width - 6, 50);
-
-            lblMuonTra.SetBounds(
-                3, 59, pnlMuonTra.ClientSize.Width - 6, 40);
-
-            // Dòng hướng dẫn ở cuối vùng nội dung
-            lblHuongDanMain.SetBounds(
-                20, h - 48, w - 40, 30);
-        }
-
 
         private void quảnLýSáchToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -217,5 +128,5 @@ namespace DoAnQLTV
             frmHuongDanSuDung.ShowDialog();
         }
     }
-    
+
 }
