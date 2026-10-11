@@ -49,13 +49,21 @@
             this.thôngTinChươngTrìnhToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.hướngDẫnSửDụngToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.pnlTrangChu = new System.Windows.Forms.Panel();
+            this.pnlNoiDungChinh = new System.Windows.Forms.Panel();
             this.pnlTruyCapMuonTra = new System.Windows.Forms.Panel();
+            this.btnMoQuanLyMuonTra = new System.Windows.Forms.Button();
+            this.lblMoTaTruyCapMuonTra = new System.Windows.Forms.Label();
+            this.picTruyCapMuonTra = new System.Windows.Forms.PictureBox();
             this.lblTruyCapMuonTra = new System.Windows.Forms.Label();
             this.pnlTruyCapDocGia = new System.Windows.Forms.Panel();
+            this.btnMoQuanLyDocGia = new System.Windows.Forms.Button();
+            this.lblMoTaTruyCapDocGia = new System.Windows.Forms.Label();
+            this.picTruyCapDocGia = new System.Windows.Forms.PictureBox();
             this.lblTruyCapDocGia = new System.Windows.Forms.Label();
             this.pnlTruyCapSach = new System.Windows.Forms.Panel();
             this.btnMoQuanLySach = new System.Windows.Forms.Button();
             this.lblMoTaTruyCapSach = new System.Windows.Forms.Label();
+            this.picTruyCapSach = new System.Windows.Forms.PictureBox();
             this.lblTruyCapSach = new System.Windows.Forms.Label();
             this.lblTieuDeTruyCapNhanh = new System.Windows.Forms.Label();
             this.pnlThongKeChuaTra = new System.Windows.Forms.Panel();
@@ -71,60 +79,52 @@
             this.lblTieuDeThongKeSach = new System.Windows.Forms.Label();
             this.lblSoSach = new System.Windows.Forms.Label();
             this.pnlBanner = new System.Windows.Forms.Panel();
+            this.picBannerSach = new System.Windows.Forms.PictureBox();
             this.lblBannerTieuDe = new System.Windows.Forms.Label();
             this.lblBannerChaoMung = new System.Windows.Forms.Label();
             this.lblBannerMoTa = new System.Windows.Forms.Label();
-            this.lblMoTaTruyCapDocGia = new System.Windows.Forms.Label();
-            this.btnMoQuanLyDocGia = new System.Windows.Forms.Button();
-            this.lblMoTaTruyCapMuonTra = new System.Windows.Forms.Label();
-            this.btnMoQuanLyMuonTra = new System.Windows.Forms.Button();
-            this.picTruyCapMuonTra = new System.Windows.Forms.PictureBox();
-            this.picTruyCapDocGia = new System.Windows.Forms.PictureBox();
-            this.picTruyCapSach = new System.Windows.Forms.PictureBox();
-            this.picBannerSach = new System.Windows.Forms.PictureBox();
-            this.pnlNoiDungChinh = new System.Windows.Forms.Panel();
             this.pnlThanhBen = new System.Windows.Forms.Panel();
+            this.pnlNhomTroGiup = new System.Windows.Forms.Panel();
+            this.btnHuongDanSuDung = new System.Windows.Forms.Button();
+            this.btnThongTinChuongTrinh = new System.Windows.Forms.Button();
+            this.pnlNhomMuonTra = new System.Windows.Forms.Panel();
+            this.btnDanhSachPhieuMuon = new System.Windows.Forms.Button();
+            this.btnTraSach = new System.Windows.Forms.Button();
+            this.btnLapPhieuMuon = new System.Windows.Forms.Button();
+            this.btnTroGiup = new System.Windows.Forms.Button();
+            this.btnMuonTra = new System.Windows.Forms.Button();
+            this.pnlNhomTraCuu = new System.Windows.Forms.Panel();
+            this.btnTraCuuDocGia = new System.Windows.Forms.Button();
+            this.btnTimKiemSach = new System.Windows.Forms.Button();
+            this.btnTraCuu = new System.Windows.Forms.Button();
             this.btnTrangChu = new System.Windows.Forms.Button();
             this.btnQuanLy = new System.Windows.Forms.Button();
-            this.btnTraCuu = new System.Windows.Forms.Button();
-            this.btnMuonTra = new System.Windows.Forms.Button();
-            this.btnTroGiup = new System.Windows.Forms.Button();
             this.pnlNhomQuanLy = new System.Windows.Forms.Panel();
-            this.btnQLSach = new System.Windows.Forms.Button();
-            this.btnQLTheLoai = new System.Windows.Forms.Button();
-            this.btnQLTacGia = new System.Windows.Forms.Button();
-            this.btnQLDocGia = new System.Windows.Forms.Button();
             this.btnQLNhanVien = new System.Windows.Forms.Button();
-            this.pnlNhomTraCuu = new System.Windows.Forms.Panel();
-            this.btnTimKiemSach = new System.Windows.Forms.Button();
-            this.btnTraCuuDocGia = new System.Windows.Forms.Button();
-            this.pnlNhomMuonTra = new System.Windows.Forms.Panel();
-            this.btnLapPhieuMuon = new System.Windows.Forms.Button();
-            this.btnTraSach = new System.Windows.Forms.Button();
-            this.btnDanhSachPhieuMuon = new System.Windows.Forms.Button();
-            this.pnlNhomTroGiup = new System.Windows.Forms.Panel();
-            this.btnThongTinChuongTrinh = new System.Windows.Forms.Button();
-            this.btnHuongDanSuDung = new System.Windows.Forms.Button();
+            this.btnQLDocGia = new System.Windows.Forms.Button();
+            this.btnQLTacGia = new System.Windows.Forms.Button();
+            this.btnQLTheLoai = new System.Windows.Forms.Button();
+            this.btnQLSach = new System.Windows.Forms.Button();
             this.menuStrip1.SuspendLayout();
             this.pnlTrangChu.SuspendLayout();
+            this.pnlNoiDungChinh.SuspendLayout();
             this.pnlTruyCapMuonTra.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.picTruyCapMuonTra)).BeginInit();
             this.pnlTruyCapDocGia.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.picTruyCapDocGia)).BeginInit();
             this.pnlTruyCapSach.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.picTruyCapSach)).BeginInit();
             this.pnlThongKeChuaTra.SuspendLayout();
             this.pnlThongKePhieuMuon.SuspendLayout();
             this.pnlThongKeDocGia.SuspendLayout();
             this.pnlThongKeSach.SuspendLayout();
             this.pnlBanner.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.picTruyCapMuonTra)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.picTruyCapDocGia)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.picTruyCapSach)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picBannerSach)).BeginInit();
-            this.pnlNoiDungChinh.SuspendLayout();
             this.pnlThanhBen.SuspendLayout();
-            this.pnlNhomQuanLy.SuspendLayout();
-            this.pnlNhomTraCuu.SuspendLayout();
-            this.pnlNhomMuonTra.SuspendLayout();
             this.pnlNhomTroGiup.SuspendLayout();
+            this.pnlNhomMuonTra.SuspendLayout();
+            this.pnlNhomTraCuu.SuspendLayout();
+            this.pnlNhomQuanLy.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -181,35 +181,35 @@
             // quảnLýSáchToolStripMenuItem
             // 
             this.quảnLýSáchToolStripMenuItem.Name = "quảnLýSáchToolStripMenuItem";
-            this.quảnLýSáchToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.quảnLýSáchToolStripMenuItem.Size = new System.Drawing.Size(170, 22);
             this.quảnLýSáchToolStripMenuItem.Text = "Quản lý sách";
             this.quảnLýSáchToolStripMenuItem.Click += new System.EventHandler(this.quảnLýSáchToolStripMenuItem_Click);
             // 
             // quảnLýThểLoạiToolStripMenuItem
             // 
             this.quảnLýThểLoạiToolStripMenuItem.Name = "quảnLýThểLoạiToolStripMenuItem";
-            this.quảnLýThểLoạiToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.quảnLýThểLoạiToolStripMenuItem.Size = new System.Drawing.Size(170, 22);
             this.quảnLýThểLoạiToolStripMenuItem.Text = "Quản lý thể loại";
             this.quảnLýThểLoạiToolStripMenuItem.Click += new System.EventHandler(this.quảnLýThểLoạiToolStripMenuItem_Click);
             // 
             // quảnLýTácGiảToolStripMenuItem
             // 
             this.quảnLýTácGiảToolStripMenuItem.Name = "quảnLýTácGiảToolStripMenuItem";
-            this.quảnLýTácGiảToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.quảnLýTácGiảToolStripMenuItem.Size = new System.Drawing.Size(170, 22);
             this.quảnLýTácGiảToolStripMenuItem.Text = "Quản lý tác giả";
             this.quảnLýTácGiảToolStripMenuItem.Click += new System.EventHandler(this.quảnLýTácGiảToolStripMenuItem_Click);
             // 
             // quảnLýĐộcGiảToolStripMenuItem
             // 
             this.quảnLýĐộcGiảToolStripMenuItem.Name = "quảnLýĐộcGiảToolStripMenuItem";
-            this.quảnLýĐộcGiảToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.quảnLýĐộcGiảToolStripMenuItem.Size = new System.Drawing.Size(170, 22);
             this.quảnLýĐộcGiảToolStripMenuItem.Text = "Quản lý độc giả";
             this.quảnLýĐộcGiảToolStripMenuItem.Click += new System.EventHandler(this.quảnLýĐộcGiảToolStripMenuItem_Click);
             // 
             // quảnLýNhânViênToolStripMenuItem
             // 
             this.quảnLýNhânViênToolStripMenuItem.Name = "quảnLýNhânViênToolStripMenuItem";
-            this.quảnLýNhânViênToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.quảnLýNhânViênToolStripMenuItem.Size = new System.Drawing.Size(170, 22);
             this.quảnLýNhânViênToolStripMenuItem.Text = "Quản lý nhân viên";
             this.quảnLýNhânViênToolStripMenuItem.Click += new System.EventHandler(this.quảnLýNhânViênToolStripMenuItem_Click);
             // 
@@ -302,6 +302,24 @@
             this.pnlTrangChu.Size = new System.Drawing.Size(1084, 637);
             this.pnlTrangChu.TabIndex = 1;
             // 
+            // pnlNoiDungChinh
+            // 
+            this.pnlNoiDungChinh.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.pnlNoiDungChinh.AutoScroll = true;
+            this.pnlNoiDungChinh.Controls.Add(this.pnlTruyCapMuonTra);
+            this.pnlNoiDungChinh.Controls.Add(this.pnlTruyCapDocGia);
+            this.pnlNoiDungChinh.Controls.Add(this.pnlTruyCapSach);
+            this.pnlNoiDungChinh.Controls.Add(this.lblTieuDeTruyCapNhanh);
+            this.pnlNoiDungChinh.Controls.Add(this.pnlThongKeChuaTra);
+            this.pnlNoiDungChinh.Controls.Add(this.pnlThongKePhieuMuon);
+            this.pnlNoiDungChinh.Controls.Add(this.pnlThongKeDocGia);
+            this.pnlNoiDungChinh.Controls.Add(this.pnlThongKeSach);
+            this.pnlNoiDungChinh.Controls.Add(this.pnlBanner);
+            this.pnlNoiDungChinh.Location = new System.Drawing.Point(9, 0);
+            this.pnlNoiDungChinh.Name = "pnlNoiDungChinh";
+            this.pnlNoiDungChinh.Size = new System.Drawing.Size(1084, 560);
+            this.pnlNoiDungChinh.TabIndex = 9;
+            // 
             // pnlTruyCapMuonTra
             // 
             this.pnlTruyCapMuonTra.BackColor = System.Drawing.Color.LemonChiffon;
@@ -314,6 +332,46 @@
             this.pnlTruyCapMuonTra.Name = "pnlTruyCapMuonTra";
             this.pnlTruyCapMuonTra.Size = new System.Drawing.Size(330, 110);
             this.pnlTruyCapMuonTra.TabIndex = 8;
+            // 
+            // btnMoQuanLyMuonTra
+            // 
+            this.btnMoQuanLyMuonTra.BackColor = System.Drawing.Color.Transparent;
+            this.btnMoQuanLyMuonTra.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnMoQuanLyMuonTra.FlatAppearance.BorderSize = 0;
+            this.btnMoQuanLyMuonTra.FlatAppearance.MouseOverBackColor = System.Drawing.Color.PaleGoldenrod;
+            this.btnMoQuanLyMuonTra.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnMoQuanLyMuonTra.Font = new System.Drawing.Font("Segoe UI", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnMoQuanLyMuonTra.ForeColor = System.Drawing.Color.DarkGoldenrod;
+            this.btnMoQuanLyMuonTra.Location = new System.Drawing.Point(275, 35);
+            this.btnMoQuanLyMuonTra.Name = "btnMoQuanLyMuonTra";
+            this.btnMoQuanLyMuonTra.Size = new System.Drawing.Size(40, 40);
+            this.btnMoQuanLyMuonTra.TabIndex = 3;
+            this.btnMoQuanLyMuonTra.Text = "➜";
+            this.btnMoQuanLyMuonTra.UseVisualStyleBackColor = false;
+            this.btnMoQuanLyMuonTra.Click += new System.EventHandler(this.btnMoMuonTraSach_Click);
+            // 
+            // lblMoTaTruyCapMuonTra
+            // 
+            this.lblMoTaTruyCapMuonTra.BackColor = System.Drawing.Color.Transparent;
+            this.lblMoTaTruyCapMuonTra.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblMoTaTruyCapMuonTra.ForeColor = System.Drawing.Color.DimGray;
+            this.lblMoTaTruyCapMuonTra.Location = new System.Drawing.Point(70, 45);
+            this.lblMoTaTruyCapMuonTra.Name = "lblMoTaTruyCapMuonTra";
+            this.lblMoTaTruyCapMuonTra.Size = new System.Drawing.Size(195, 48);
+            this.lblMoTaTruyCapMuonTra.TabIndex = 2;
+            this.lblMoTaTruyCapMuonTra.Text = "Lập phiếu mượn và cập nhật thông tin trả sách";
+            this.lblMoTaTruyCapMuonTra.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // picTruyCapMuonTra
+            // 
+            this.picTruyCapMuonTra.BackColor = System.Drawing.Color.Transparent;
+            this.picTruyCapMuonTra.Image = global::DoAnQLTV.Properties.Resources.đổi_ngược;
+            this.picTruyCapMuonTra.Location = new System.Drawing.Point(10, 25);
+            this.picTruyCapMuonTra.Name = "picTruyCapMuonTra";
+            this.picTruyCapMuonTra.Size = new System.Drawing.Size(55, 55);
+            this.picTruyCapMuonTra.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.picTruyCapMuonTra.TabIndex = 1;
+            this.picTruyCapMuonTra.TabStop = false;
             // 
             // lblTruyCapMuonTra
             // 
@@ -339,6 +397,46 @@
             this.pnlTruyCapDocGia.Name = "pnlTruyCapDocGia";
             this.pnlTruyCapDocGia.Size = new System.Drawing.Size(330, 110);
             this.pnlTruyCapDocGia.TabIndex = 7;
+            // 
+            // btnMoQuanLyDocGia
+            // 
+            this.btnMoQuanLyDocGia.BackColor = System.Drawing.Color.Transparent;
+            this.btnMoQuanLyDocGia.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnMoQuanLyDocGia.FlatAppearance.BorderSize = 0;
+            this.btnMoQuanLyDocGia.FlatAppearance.MouseOverBackColor = System.Drawing.Color.PaleGreen;
+            this.btnMoQuanLyDocGia.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnMoQuanLyDocGia.Font = new System.Drawing.Font("Segoe UI", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnMoQuanLyDocGia.ForeColor = System.Drawing.Color.DarkGreen;
+            this.btnMoQuanLyDocGia.Location = new System.Drawing.Point(275, 35);
+            this.btnMoQuanLyDocGia.Name = "btnMoQuanLyDocGia";
+            this.btnMoQuanLyDocGia.Size = new System.Drawing.Size(40, 40);
+            this.btnMoQuanLyDocGia.TabIndex = 3;
+            this.btnMoQuanLyDocGia.Text = "➜";
+            this.btnMoQuanLyDocGia.UseVisualStyleBackColor = false;
+            this.btnMoQuanLyDocGia.Click += new System.EventHandler(this.btnMoQuanLyDocGia_Click);
+            // 
+            // lblMoTaTruyCapDocGia
+            // 
+            this.lblMoTaTruyCapDocGia.BackColor = System.Drawing.Color.Transparent;
+            this.lblMoTaTruyCapDocGia.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblMoTaTruyCapDocGia.ForeColor = System.Drawing.Color.DimGray;
+            this.lblMoTaTruyCapDocGia.Location = new System.Drawing.Point(70, 45);
+            this.lblMoTaTruyCapDocGia.Name = "lblMoTaTruyCapDocGia";
+            this.lblMoTaTruyCapDocGia.Size = new System.Drawing.Size(195, 48);
+            this.lblMoTaTruyCapDocGia.TabIndex = 2;
+            this.lblMoTaTruyCapDocGia.Text = "Thêm, sửa, xóa và tra cứu thông tin độc giả";
+            this.lblMoTaTruyCapDocGia.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // picTruyCapDocGia
+            // 
+            this.picTruyCapDocGia.BackColor = System.Drawing.Color.Transparent;
+            this.picTruyCapDocGia.Image = global::DoAnQLTV.Properties.Resources.istockphoto_2022468311_612x612;
+            this.picTruyCapDocGia.Location = new System.Drawing.Point(10, 25);
+            this.picTruyCapDocGia.Name = "picTruyCapDocGia";
+            this.picTruyCapDocGia.Size = new System.Drawing.Size(55, 55);
+            this.picTruyCapDocGia.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.picTruyCapDocGia.TabIndex = 1;
+            this.picTruyCapDocGia.TabStop = false;
             // 
             // lblTruyCapDocGia
             // 
@@ -380,6 +478,7 @@
             this.btnMoQuanLySach.TabIndex = 3;
             this.btnMoQuanLySach.Text = "➜";
             this.btnMoQuanLySach.UseVisualStyleBackColor = false;
+            this.btnMoQuanLySach.Click += new System.EventHandler(this.btnMoQuanLySach_Click);
             // 
             // lblMoTaTruyCapSach
             // 
@@ -392,6 +491,17 @@
             this.lblMoTaTruyCapSach.TabIndex = 2;
             this.lblMoTaTruyCapSach.Text = "Thêm, sửa, xóa và tìm kiếm thông tin sách";
             this.lblMoTaTruyCapSach.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // picTruyCapSach
+            // 
+            this.picTruyCapSach.BackColor = System.Drawing.Color.Transparent;
+            this.picTruyCapSach.Image = global::DoAnQLTV.Properties.Resources.ách;
+            this.picTruyCapSach.Location = new System.Drawing.Point(10, 25);
+            this.picTruyCapSach.Name = "picTruyCapSach";
+            this.picTruyCapSach.Size = new System.Drawing.Size(55, 55);
+            this.picTruyCapSach.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.picTruyCapSach.TabIndex = 1;
+            this.picTruyCapSach.TabStop = false;
             // 
             // lblTruyCapSach
             // 
@@ -572,6 +682,16 @@
             this.pnlBanner.Size = new System.Drawing.Size(1044, 180);
             this.pnlBanner.TabIndex = 0;
             // 
+            // picBannerSach
+            // 
+            this.picBannerSach.BackColor = System.Drawing.Color.Transparent;
+            this.picBannerSach.Location = new System.Drawing.Point(850, 25);
+            this.picBannerSach.Name = "picBannerSach";
+            this.picBannerSach.Size = new System.Drawing.Size(160, 130);
+            this.picBannerSach.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.picBannerSach.TabIndex = 3;
+            this.picBannerSach.TabStop = false;
+            // 
             // lblBannerTieuDe
             // 
             this.lblBannerTieuDe.BackColor = System.Drawing.Color.Transparent;
@@ -608,123 +728,6 @@
             this.lblBannerMoTa.Text = "Quản lý sách, độc giả và hoạt động mượn - trả sách một cách thuận tiện.";
             this.lblBannerMoTa.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // lblMoTaTruyCapDocGia
-            // 
-            this.lblMoTaTruyCapDocGia.BackColor = System.Drawing.Color.Transparent;
-            this.lblMoTaTruyCapDocGia.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblMoTaTruyCapDocGia.ForeColor = System.Drawing.Color.DimGray;
-            this.lblMoTaTruyCapDocGia.Location = new System.Drawing.Point(70, 45);
-            this.lblMoTaTruyCapDocGia.Name = "lblMoTaTruyCapDocGia";
-            this.lblMoTaTruyCapDocGia.Size = new System.Drawing.Size(195, 48);
-            this.lblMoTaTruyCapDocGia.TabIndex = 2;
-            this.lblMoTaTruyCapDocGia.Text = "Thêm, sửa, xóa và tra cứu thông tin độc giả";
-            this.lblMoTaTruyCapDocGia.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // btnMoQuanLyDocGia
-            // 
-            this.btnMoQuanLyDocGia.BackColor = System.Drawing.Color.Transparent;
-            this.btnMoQuanLyDocGia.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnMoQuanLyDocGia.FlatAppearance.BorderSize = 0;
-            this.btnMoQuanLyDocGia.FlatAppearance.MouseOverBackColor = System.Drawing.Color.PaleGreen;
-            this.btnMoQuanLyDocGia.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnMoQuanLyDocGia.Font = new System.Drawing.Font("Segoe UI", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnMoQuanLyDocGia.ForeColor = System.Drawing.Color.DarkGreen;
-            this.btnMoQuanLyDocGia.Location = new System.Drawing.Point(275, 35);
-            this.btnMoQuanLyDocGia.Name = "btnMoQuanLyDocGia";
-            this.btnMoQuanLyDocGia.Size = new System.Drawing.Size(40, 40);
-            this.btnMoQuanLyDocGia.TabIndex = 3;
-            this.btnMoQuanLyDocGia.Text = "➜";
-            this.btnMoQuanLyDocGia.UseVisualStyleBackColor = false;
-            // 
-            // lblMoTaTruyCapMuonTra
-            // 
-            this.lblMoTaTruyCapMuonTra.BackColor = System.Drawing.Color.Transparent;
-            this.lblMoTaTruyCapMuonTra.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblMoTaTruyCapMuonTra.ForeColor = System.Drawing.Color.DimGray;
-            this.lblMoTaTruyCapMuonTra.Location = new System.Drawing.Point(70, 45);
-            this.lblMoTaTruyCapMuonTra.Name = "lblMoTaTruyCapMuonTra";
-            this.lblMoTaTruyCapMuonTra.Size = new System.Drawing.Size(195, 48);
-            this.lblMoTaTruyCapMuonTra.TabIndex = 2;
-            this.lblMoTaTruyCapMuonTra.Text = "Lập phiếu mượn và cập nhật thông tin trả sách";
-            this.lblMoTaTruyCapMuonTra.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // btnMoQuanLyMuonTra
-            // 
-            this.btnMoQuanLyMuonTra.BackColor = System.Drawing.Color.Transparent;
-            this.btnMoQuanLyMuonTra.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnMoQuanLyMuonTra.FlatAppearance.BorderSize = 0;
-            this.btnMoQuanLyMuonTra.FlatAppearance.MouseOverBackColor = System.Drawing.Color.PaleGoldenrod;
-            this.btnMoQuanLyMuonTra.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnMoQuanLyMuonTra.Font = new System.Drawing.Font("Segoe UI", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnMoQuanLyMuonTra.ForeColor = System.Drawing.Color.DarkGoldenrod;
-            this.btnMoQuanLyMuonTra.Location = new System.Drawing.Point(275, 35);
-            this.btnMoQuanLyMuonTra.Name = "btnMoQuanLyMuonTra";
-            this.btnMoQuanLyMuonTra.Size = new System.Drawing.Size(40, 40);
-            this.btnMoQuanLyMuonTra.TabIndex = 3;
-            this.btnMoQuanLyMuonTra.Text = "➜";
-            this.btnMoQuanLyMuonTra.UseVisualStyleBackColor = false;
-            // 
-            // picTruyCapMuonTra
-            // 
-            this.picTruyCapMuonTra.BackColor = System.Drawing.Color.Transparent;
-            this.picTruyCapMuonTra.Image = global::DoAnQLTV.Properties.Resources.đổi_ngược;
-            this.picTruyCapMuonTra.Location = new System.Drawing.Point(10, 25);
-            this.picTruyCapMuonTra.Name = "picTruyCapMuonTra";
-            this.picTruyCapMuonTra.Size = new System.Drawing.Size(55, 55);
-            this.picTruyCapMuonTra.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.picTruyCapMuonTra.TabIndex = 1;
-            this.picTruyCapMuonTra.TabStop = false;
-            // 
-            // picTruyCapDocGia
-            // 
-            this.picTruyCapDocGia.BackColor = System.Drawing.Color.Transparent;
-            this.picTruyCapDocGia.Image = global::DoAnQLTV.Properties.Resources.istockphoto_2022468311_612x612;
-            this.picTruyCapDocGia.Location = new System.Drawing.Point(10, 25);
-            this.picTruyCapDocGia.Name = "picTruyCapDocGia";
-            this.picTruyCapDocGia.Size = new System.Drawing.Size(55, 55);
-            this.picTruyCapDocGia.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.picTruyCapDocGia.TabIndex = 1;
-            this.picTruyCapDocGia.TabStop = false;
-            // 
-            // picTruyCapSach
-            // 
-            this.picTruyCapSach.BackColor = System.Drawing.Color.Transparent;
-            this.picTruyCapSach.Image = global::DoAnQLTV.Properties.Resources.ách;
-            this.picTruyCapSach.Location = new System.Drawing.Point(10, 25);
-            this.picTruyCapSach.Name = "picTruyCapSach";
-            this.picTruyCapSach.Size = new System.Drawing.Size(55, 55);
-            this.picTruyCapSach.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.picTruyCapSach.TabIndex = 1;
-            this.picTruyCapSach.TabStop = false;
-            // 
-            // picBannerSach
-            // 
-            this.picBannerSach.BackColor = System.Drawing.Color.Transparent;
-            this.picBannerSach.Location = new System.Drawing.Point(850, 25);
-            this.picBannerSach.Name = "picBannerSach";
-            this.picBannerSach.Size = new System.Drawing.Size(160, 130);
-            this.picBannerSach.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.picBannerSach.TabIndex = 3;
-            this.picBannerSach.TabStop = false;
-            // 
-            // pnlNoiDungChinh
-            // 
-            this.pnlNoiDungChinh.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.pnlNoiDungChinh.AutoScroll = true;
-            this.pnlNoiDungChinh.Controls.Add(this.pnlTruyCapMuonTra);
-            this.pnlNoiDungChinh.Controls.Add(this.pnlTruyCapDocGia);
-            this.pnlNoiDungChinh.Controls.Add(this.pnlTruyCapSach);
-            this.pnlNoiDungChinh.Controls.Add(this.lblTieuDeTruyCapNhanh);
-            this.pnlNoiDungChinh.Controls.Add(this.pnlThongKeChuaTra);
-            this.pnlNoiDungChinh.Controls.Add(this.pnlThongKePhieuMuon);
-            this.pnlNoiDungChinh.Controls.Add(this.pnlThongKeDocGia);
-            this.pnlNoiDungChinh.Controls.Add(this.pnlThongKeSach);
-            this.pnlNoiDungChinh.Controls.Add(this.pnlBanner);
-            this.pnlNoiDungChinh.Location = new System.Drawing.Point(9, 0);
-            this.pnlNoiDungChinh.Name = "pnlNoiDungChinh";
-            this.pnlNoiDungChinh.Size = new System.Drawing.Size(1084, 560);
-            this.pnlNoiDungChinh.TabIndex = 9;
-            // 
             // pnlThanhBen
             // 
             this.pnlThanhBen.AutoScroll = true;
@@ -743,6 +746,188 @@
             this.pnlThanhBen.Name = "pnlThanhBen";
             this.pnlThanhBen.Size = new System.Drawing.Size(190, 637);
             this.pnlThanhBen.TabIndex = 10;
+            // 
+            // pnlNhomTroGiup
+            // 
+            this.pnlNhomTroGiup.BackColor = System.Drawing.Color.DimGray;
+            this.pnlNhomTroGiup.Controls.Add(this.btnHuongDanSuDung);
+            this.pnlNhomTroGiup.Controls.Add(this.btnThongTinChuongTrinh);
+            this.pnlNhomTroGiup.Location = new System.Drawing.Point(3, 602);
+            this.pnlNhomTroGiup.Name = "pnlNhomTroGiup";
+            this.pnlNhomTroGiup.Size = new System.Drawing.Size(200, 100);
+            this.pnlNhomTroGiup.TabIndex = 8;
+            this.pnlNhomTroGiup.Visible = false;
+            // 
+            // btnHuongDanSuDung
+            // 
+            this.btnHuongDanSuDung.Dock = System.Windows.Forms.DockStyle.Top;
+            this.btnHuongDanSuDung.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnHuongDanSuDung.ForeColor = System.Drawing.Color.White;
+            this.btnHuongDanSuDung.Location = new System.Drawing.Point(0, 45);
+            this.btnHuongDanSuDung.Name = "btnHuongDanSuDung";
+            this.btnHuongDanSuDung.Padding = new System.Windows.Forms.Padding(20, 0, 0, 0);
+            this.btnHuongDanSuDung.Size = new System.Drawing.Size(200, 45);
+            this.btnHuongDanSuDung.TabIndex = 5;
+            this.btnHuongDanSuDung.Text = "Hướng dẫn sử dụng";
+            this.btnHuongDanSuDung.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnHuongDanSuDung.UseVisualStyleBackColor = true;
+            this.btnHuongDanSuDung.Click += new System.EventHandler(this.btnHuongDanSuDung_Click);
+            // 
+            // btnThongTinChuongTrinh
+            // 
+            this.btnThongTinChuongTrinh.Dock = System.Windows.Forms.DockStyle.Top;
+            this.btnThongTinChuongTrinh.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnThongTinChuongTrinh.ForeColor = System.Drawing.Color.White;
+            this.btnThongTinChuongTrinh.Location = new System.Drawing.Point(0, 0);
+            this.btnThongTinChuongTrinh.Name = "btnThongTinChuongTrinh";
+            this.btnThongTinChuongTrinh.Padding = new System.Windows.Forms.Padding(20, 0, 0, 0);
+            this.btnThongTinChuongTrinh.Size = new System.Drawing.Size(200, 45);
+            this.btnThongTinChuongTrinh.TabIndex = 4;
+            this.btnThongTinChuongTrinh.Text = "Thông tin chương trình";
+            this.btnThongTinChuongTrinh.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnThongTinChuongTrinh.UseVisualStyleBackColor = true;
+            this.btnThongTinChuongTrinh.Click += new System.EventHandler(this.btnThongTinChuongTrinh_Click);
+            // 
+            // pnlNhomMuonTra
+            // 
+            this.pnlNhomMuonTra.BackColor = System.Drawing.Color.DimGray;
+            this.pnlNhomMuonTra.Controls.Add(this.btnDanhSachPhieuMuon);
+            this.pnlNhomMuonTra.Controls.Add(this.btnTraSach);
+            this.pnlNhomMuonTra.Controls.Add(this.btnLapPhieuMuon);
+            this.pnlNhomMuonTra.Location = new System.Drawing.Point(0, 461);
+            this.pnlNhomMuonTra.Name = "pnlNhomMuonTra";
+            this.pnlNhomMuonTra.Size = new System.Drawing.Size(190, 135);
+            this.pnlNhomMuonTra.TabIndex = 7;
+            this.pnlNhomMuonTra.Visible = false;
+            // 
+            // btnDanhSachPhieuMuon
+            // 
+            this.btnDanhSachPhieuMuon.Dock = System.Windows.Forms.DockStyle.Top;
+            this.btnDanhSachPhieuMuon.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnDanhSachPhieuMuon.ForeColor = System.Drawing.Color.White;
+            this.btnDanhSachPhieuMuon.Location = new System.Drawing.Point(0, 90);
+            this.btnDanhSachPhieuMuon.Name = "btnDanhSachPhieuMuon";
+            this.btnDanhSachPhieuMuon.Padding = new System.Windows.Forms.Padding(20, 0, 0, 0);
+            this.btnDanhSachPhieuMuon.Size = new System.Drawing.Size(190, 45);
+            this.btnDanhSachPhieuMuon.TabIndex = 4;
+            this.btnDanhSachPhieuMuon.Text = "Danh sách phiếu mượn";
+            this.btnDanhSachPhieuMuon.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnDanhSachPhieuMuon.UseVisualStyleBackColor = true;
+            this.btnDanhSachPhieuMuon.Click += new System.EventHandler(this.btnDanhSachPhieuMuon_Click);
+            // 
+            // btnTraSach
+            // 
+            this.btnTraSach.Dock = System.Windows.Forms.DockStyle.Top;
+            this.btnTraSach.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnTraSach.ForeColor = System.Drawing.Color.White;
+            this.btnTraSach.Location = new System.Drawing.Point(0, 45);
+            this.btnTraSach.Name = "btnTraSach";
+            this.btnTraSach.Padding = new System.Windows.Forms.Padding(20, 0, 0, 0);
+            this.btnTraSach.Size = new System.Drawing.Size(190, 45);
+            this.btnTraSach.TabIndex = 3;
+            this.btnTraSach.Text = "Trả sách";
+            this.btnTraSach.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnTraSach.UseVisualStyleBackColor = true;
+            this.btnTraSach.Click += new System.EventHandler(this.btnTraSach_Click);
+            // 
+            // btnLapPhieuMuon
+            // 
+            this.btnLapPhieuMuon.Dock = System.Windows.Forms.DockStyle.Top;
+            this.btnLapPhieuMuon.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnLapPhieuMuon.ForeColor = System.Drawing.Color.White;
+            this.btnLapPhieuMuon.Location = new System.Drawing.Point(0, 0);
+            this.btnLapPhieuMuon.Name = "btnLapPhieuMuon";
+            this.btnLapPhieuMuon.Padding = new System.Windows.Forms.Padding(20, 0, 0, 0);
+            this.btnLapPhieuMuon.Size = new System.Drawing.Size(190, 45);
+            this.btnLapPhieuMuon.TabIndex = 2;
+            this.btnLapPhieuMuon.Text = "Lập phiếu mượn";
+            this.btnLapPhieuMuon.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnLapPhieuMuon.UseVisualStyleBackColor = true;
+            this.btnLapPhieuMuon.Click += new System.EventHandler(this.btnLapPhieuMuon_Click);
+            // 
+            // btnTroGiup
+            // 
+            this.btnTroGiup.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnTroGiup.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnTroGiup.ForeColor = System.Drawing.Color.White;
+            this.btnTroGiup.Location = new System.Drawing.Point(0, 180);
+            this.btnTroGiup.Name = "btnTroGiup";
+            this.btnTroGiup.Size = new System.Drawing.Size(190, 45);
+            this.btnTroGiup.TabIndex = 4;
+            this.btnTroGiup.Text = "Trợ giúp";
+            this.btnTroGiup.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnTroGiup.UseVisualStyleBackColor = true;
+            this.btnTroGiup.Click += new System.EventHandler(this.btnTroGiup_Click);
+            // 
+            // btnMuonTra
+            // 
+            this.btnMuonTra.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnMuonTra.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnMuonTra.ForeColor = System.Drawing.Color.White;
+            this.btnMuonTra.Location = new System.Drawing.Point(0, 135);
+            this.btnMuonTra.Name = "btnMuonTra";
+            this.btnMuonTra.Size = new System.Drawing.Size(190, 45);
+            this.btnMuonTra.TabIndex = 3;
+            this.btnMuonTra.Text = "Mượn – Trả";
+            this.btnMuonTra.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnMuonTra.UseVisualStyleBackColor = true;
+            this.btnMuonTra.Click += new System.EventHandler(this.btnMuonTra_Click);
+            // 
+            // pnlNhomTraCuu
+            // 
+            this.pnlNhomTraCuu.Controls.Add(this.btnTraCuuDocGia);
+            this.pnlNhomTraCuu.Controls.Add(this.btnTimKiemSach);
+            this.pnlNhomTraCuu.Location = new System.Drawing.Point(0, 360);
+            this.pnlNhomTraCuu.Name = "pnlNhomTraCuu";
+            this.pnlNhomTraCuu.Size = new System.Drawing.Size(190, 90);
+            this.pnlNhomTraCuu.TabIndex = 6;
+            this.pnlNhomTraCuu.Visible = false;
+            // 
+            // btnTraCuuDocGia
+            // 
+            this.btnTraCuuDocGia.BackColor = System.Drawing.Color.DimGray;
+            this.btnTraCuuDocGia.Dock = System.Windows.Forms.DockStyle.Top;
+            this.btnTraCuuDocGia.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnTraCuuDocGia.ForeColor = System.Drawing.Color.White;
+            this.btnTraCuuDocGia.Location = new System.Drawing.Point(0, 45);
+            this.btnTraCuuDocGia.Name = "btnTraCuuDocGia";
+            this.btnTraCuuDocGia.Padding = new System.Windows.Forms.Padding(20, 0, 0, 0);
+            this.btnTraCuuDocGia.Size = new System.Drawing.Size(190, 45);
+            this.btnTraCuuDocGia.TabIndex = 2;
+            this.btnTraCuuDocGia.Text = "Tra cứu độc giả";
+            this.btnTraCuuDocGia.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnTraCuuDocGia.UseVisualStyleBackColor = false;
+            this.btnTraCuuDocGia.Click += new System.EventHandler(this.btnTraCuuDocGia_Click);
+            // 
+            // btnTimKiemSach
+            // 
+            this.btnTimKiemSach.BackColor = System.Drawing.Color.DimGray;
+            this.btnTimKiemSach.Dock = System.Windows.Forms.DockStyle.Top;
+            this.btnTimKiemSach.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnTimKiemSach.ForeColor = System.Drawing.Color.White;
+            this.btnTimKiemSach.Location = new System.Drawing.Point(0, 0);
+            this.btnTimKiemSach.Name = "btnTimKiemSach";
+            this.btnTimKiemSach.Padding = new System.Windows.Forms.Padding(20, 0, 0, 0);
+            this.btnTimKiemSach.Size = new System.Drawing.Size(190, 45);
+            this.btnTimKiemSach.TabIndex = 1;
+            this.btnTimKiemSach.Text = "Tìm kiếm sách";
+            this.btnTimKiemSach.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnTimKiemSach.UseVisualStyleBackColor = false;
+            this.btnTimKiemSach.Click += new System.EventHandler(this.btnTimKiemSach_Click);
+            // 
+            // btnTraCuu
+            // 
+            this.btnTraCuu.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnTraCuu.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnTraCuu.ForeColor = System.Drawing.Color.White;
+            this.btnTraCuu.Location = new System.Drawing.Point(0, 90);
+            this.btnTraCuu.Name = "btnTraCuu";
+            this.btnTraCuu.Size = new System.Drawing.Size(190, 45);
+            this.btnTraCuu.TabIndex = 2;
+            this.btnTraCuu.Text = "⌕  Tra cứu";
+            this.btnTraCuu.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnTraCuu.UseVisualStyleBackColor = true;
+            this.btnTraCuu.Click += new System.EventHandler(this.btnTraCuu_Click);
             // 
             // btnTrangChu
             // 
@@ -772,48 +957,6 @@
             this.btnQuanLy.UseVisualStyleBackColor = true;
             this.btnQuanLy.Click += new System.EventHandler(this.btnQuanLy_Click);
             // 
-            // btnTraCuu
-            // 
-            this.btnTraCuu.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnTraCuu.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnTraCuu.ForeColor = System.Drawing.Color.White;
-            this.btnTraCuu.Location = new System.Drawing.Point(0, 90);
-            this.btnTraCuu.Name = "btnTraCuu";
-            this.btnTraCuu.Size = new System.Drawing.Size(190, 45);
-            this.btnTraCuu.TabIndex = 2;
-            this.btnTraCuu.Text = "⌕  Tra cứu";
-            this.btnTraCuu.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnTraCuu.UseVisualStyleBackColor = true;
-            this.btnTraCuu.Click += new System.EventHandler(this.btnTraCuu_Click);
-            // 
-            // btnMuonTra
-            // 
-            this.btnMuonTra.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnMuonTra.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnMuonTra.ForeColor = System.Drawing.Color.White;
-            this.btnMuonTra.Location = new System.Drawing.Point(0, 135);
-            this.btnMuonTra.Name = "btnMuonTra";
-            this.btnMuonTra.Size = new System.Drawing.Size(190, 45);
-            this.btnMuonTra.TabIndex = 3;
-            this.btnMuonTra.Text = "Mượn – Trả";
-            this.btnMuonTra.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnMuonTra.UseVisualStyleBackColor = true;
-            this.btnMuonTra.Click += new System.EventHandler(this.btnMuonTra_Click);
-            // 
-            // btnTroGiup
-            // 
-            this.btnTroGiup.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnTroGiup.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnTroGiup.ForeColor = System.Drawing.Color.White;
-            this.btnTroGiup.Location = new System.Drawing.Point(0, 180);
-            this.btnTroGiup.Name = "btnTroGiup";
-            this.btnTroGiup.Size = new System.Drawing.Size(190, 45);
-            this.btnTroGiup.TabIndex = 4;
-            this.btnTroGiup.Text = "Trợ giúp";
-            this.btnTroGiup.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnTroGiup.UseVisualStyleBackColor = true;
-            this.btnTroGiup.Click += new System.EventHandler(this.btnTroGiup_Click);
-            // 
             // pnlNhomQuanLy
             // 
             this.pnlNhomQuanLy.BackColor = System.Drawing.Color.DimGray;
@@ -827,66 +970,6 @@
             this.pnlNhomQuanLy.Size = new System.Drawing.Size(190, 225);
             this.pnlNhomQuanLy.TabIndex = 5;
             this.pnlNhomQuanLy.Visible = false;
-            // 
-            // btnQLSach
-            // 
-            this.btnQLSach.Dock = System.Windows.Forms.DockStyle.Top;
-            this.btnQLSach.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnQLSach.ForeColor = System.Drawing.Color.White;
-            this.btnQLSach.Location = new System.Drawing.Point(0, 0);
-            this.btnQLSach.Name = "btnQLSach";
-            this.btnQLSach.Padding = new System.Windows.Forms.Padding(20, 0, 0, 0);
-            this.btnQLSach.Size = new System.Drawing.Size(190, 45);
-            this.btnQLSach.TabIndex = 0;
-            this.btnQLSach.Text = "Quản lý sách";
-            this.btnQLSach.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnQLSach.UseVisualStyleBackColor = true;
-            this.btnQLSach.Click += new System.EventHandler(this.btnQLSach_Click);
-            // 
-            // btnQLTheLoai
-            // 
-            this.btnQLTheLoai.Dock = System.Windows.Forms.DockStyle.Top;
-            this.btnQLTheLoai.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnQLTheLoai.ForeColor = System.Drawing.Color.White;
-            this.btnQLTheLoai.Location = new System.Drawing.Point(0, 45);
-            this.btnQLTheLoai.Name = "btnQLTheLoai";
-            this.btnQLTheLoai.Padding = new System.Windows.Forms.Padding(20, 0, 0, 0);
-            this.btnQLTheLoai.Size = new System.Drawing.Size(190, 45);
-            this.btnQLTheLoai.TabIndex = 1;
-            this.btnQLTheLoai.Text = "Quản lý thể loại";
-            this.btnQLTheLoai.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnQLTheLoai.UseVisualStyleBackColor = true;
-            this.btnQLTheLoai.Click += new System.EventHandler(this.btnQLTheLoai_Click);
-            // 
-            // btnQLTacGia
-            // 
-            this.btnQLTacGia.Dock = System.Windows.Forms.DockStyle.Top;
-            this.btnQLTacGia.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnQLTacGia.ForeColor = System.Drawing.Color.White;
-            this.btnQLTacGia.Location = new System.Drawing.Point(0, 90);
-            this.btnQLTacGia.Name = "btnQLTacGia";
-            this.btnQLTacGia.Padding = new System.Windows.Forms.Padding(20, 0, 0, 0);
-            this.btnQLTacGia.Size = new System.Drawing.Size(190, 45);
-            this.btnQLTacGia.TabIndex = 2;
-            this.btnQLTacGia.Text = "Quản lý tác giả";
-            this.btnQLTacGia.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnQLTacGia.UseVisualStyleBackColor = true;
-            this.btnQLTacGia.Click += new System.EventHandler(this.btnQLTacGia_Click);
-            // 
-            // btnQLDocGia
-            // 
-            this.btnQLDocGia.Dock = System.Windows.Forms.DockStyle.Top;
-            this.btnQLDocGia.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnQLDocGia.ForeColor = System.Drawing.Color.White;
-            this.btnQLDocGia.Location = new System.Drawing.Point(0, 135);
-            this.btnQLDocGia.Name = "btnQLDocGia";
-            this.btnQLDocGia.Padding = new System.Windows.Forms.Padding(20, 0, 0, 0);
-            this.btnQLDocGia.Size = new System.Drawing.Size(190, 45);
-            this.btnQLDocGia.TabIndex = 3;
-            this.btnQLDocGia.Text = "Quản lý độc giả";
-            this.btnQLDocGia.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnQLDocGia.UseVisualStyleBackColor = true;
-            this.btnQLDocGia.Click += new System.EventHandler(this.btnQLDocGia_Click);
             // 
             // btnQLNhanVien
             // 
@@ -903,145 +986,65 @@
             this.btnQLNhanVien.UseVisualStyleBackColor = true;
             this.btnQLNhanVien.Click += new System.EventHandler(this.btnQLNhanVien_Click);
             // 
-            // pnlNhomTraCuu
+            // btnQLDocGia
             // 
-            this.pnlNhomTraCuu.Controls.Add(this.btnTraCuuDocGia);
-            this.pnlNhomTraCuu.Controls.Add(this.btnTimKiemSach);
-            this.pnlNhomTraCuu.Location = new System.Drawing.Point(0, 360);
-            this.pnlNhomTraCuu.Name = "pnlNhomTraCuu";
-            this.pnlNhomTraCuu.Size = new System.Drawing.Size(190, 90);
-            this.pnlNhomTraCuu.TabIndex = 6;
-            this.pnlNhomTraCuu.Visible = false;
+            this.btnQLDocGia.Dock = System.Windows.Forms.DockStyle.Top;
+            this.btnQLDocGia.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnQLDocGia.ForeColor = System.Drawing.Color.White;
+            this.btnQLDocGia.Location = new System.Drawing.Point(0, 135);
+            this.btnQLDocGia.Name = "btnQLDocGia";
+            this.btnQLDocGia.Padding = new System.Windows.Forms.Padding(20, 0, 0, 0);
+            this.btnQLDocGia.Size = new System.Drawing.Size(190, 45);
+            this.btnQLDocGia.TabIndex = 3;
+            this.btnQLDocGia.Text = "Quản lý độc giả";
+            this.btnQLDocGia.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnQLDocGia.UseVisualStyleBackColor = true;
+            this.btnQLDocGia.Click += new System.EventHandler(this.btnQLDocGia_Click);
             // 
-            // btnTimKiemSach
+            // btnQLTacGia
             // 
-            this.btnTimKiemSach.BackColor = System.Drawing.Color.DimGray;
-            this.btnTimKiemSach.Dock = System.Windows.Forms.DockStyle.Top;
-            this.btnTimKiemSach.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnTimKiemSach.ForeColor = System.Drawing.Color.White;
-            this.btnTimKiemSach.Location = new System.Drawing.Point(0, 0);
-            this.btnTimKiemSach.Name = "btnTimKiemSach";
-            this.btnTimKiemSach.Padding = new System.Windows.Forms.Padding(20, 0, 0, 0);
-            this.btnTimKiemSach.Size = new System.Drawing.Size(190, 45);
-            this.btnTimKiemSach.TabIndex = 1;
-            this.btnTimKiemSach.Text = "Tìm kiếm sách";
-            this.btnTimKiemSach.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnTimKiemSach.UseVisualStyleBackColor = false;
-            this.btnTimKiemSach.Click += new System.EventHandler(this.btnTimKiemSach_Click);
+            this.btnQLTacGia.Dock = System.Windows.Forms.DockStyle.Top;
+            this.btnQLTacGia.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnQLTacGia.ForeColor = System.Drawing.Color.White;
+            this.btnQLTacGia.Location = new System.Drawing.Point(0, 90);
+            this.btnQLTacGia.Name = "btnQLTacGia";
+            this.btnQLTacGia.Padding = new System.Windows.Forms.Padding(20, 0, 0, 0);
+            this.btnQLTacGia.Size = new System.Drawing.Size(190, 45);
+            this.btnQLTacGia.TabIndex = 2;
+            this.btnQLTacGia.Text = "Quản lý tác giả";
+            this.btnQLTacGia.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnQLTacGia.UseVisualStyleBackColor = true;
+            this.btnQLTacGia.Click += new System.EventHandler(this.btnQLTacGia_Click);
             // 
-            // btnTraCuuDocGia
+            // btnQLTheLoai
             // 
-            this.btnTraCuuDocGia.BackColor = System.Drawing.Color.DimGray;
-            this.btnTraCuuDocGia.Dock = System.Windows.Forms.DockStyle.Top;
-            this.btnTraCuuDocGia.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnTraCuuDocGia.ForeColor = System.Drawing.Color.White;
-            this.btnTraCuuDocGia.Location = new System.Drawing.Point(0, 45);
-            this.btnTraCuuDocGia.Name = "btnTraCuuDocGia";
-            this.btnTraCuuDocGia.Padding = new System.Windows.Forms.Padding(20, 0, 0, 0);
-            this.btnTraCuuDocGia.Size = new System.Drawing.Size(190, 45);
-            this.btnTraCuuDocGia.TabIndex = 2;
-            this.btnTraCuuDocGia.Text = "Tra cứu độc giả";
-            this.btnTraCuuDocGia.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnTraCuuDocGia.UseVisualStyleBackColor = false;
-            this.btnTraCuuDocGia.Click += new System.EventHandler(this.btnTraCuuDocGia_Click);
+            this.btnQLTheLoai.Dock = System.Windows.Forms.DockStyle.Top;
+            this.btnQLTheLoai.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnQLTheLoai.ForeColor = System.Drawing.Color.White;
+            this.btnQLTheLoai.Location = new System.Drawing.Point(0, 45);
+            this.btnQLTheLoai.Name = "btnQLTheLoai";
+            this.btnQLTheLoai.Padding = new System.Windows.Forms.Padding(20, 0, 0, 0);
+            this.btnQLTheLoai.Size = new System.Drawing.Size(190, 45);
+            this.btnQLTheLoai.TabIndex = 1;
+            this.btnQLTheLoai.Text = "Quản lý thể loại";
+            this.btnQLTheLoai.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnQLTheLoai.UseVisualStyleBackColor = true;
+            this.btnQLTheLoai.Click += new System.EventHandler(this.btnQLTheLoai_Click);
             // 
-            // pnlNhomMuonTra
+            // btnQLSach
             // 
-            this.pnlNhomMuonTra.BackColor = System.Drawing.Color.DimGray;
-            this.pnlNhomMuonTra.Controls.Add(this.btnDanhSachPhieuMuon);
-            this.pnlNhomMuonTra.Controls.Add(this.btnTraSach);
-            this.pnlNhomMuonTra.Controls.Add(this.btnLapPhieuMuon);
-            this.pnlNhomMuonTra.Location = new System.Drawing.Point(0, 461);
-            this.pnlNhomMuonTra.Name = "pnlNhomMuonTra";
-            this.pnlNhomMuonTra.Size = new System.Drawing.Size(190, 135);
-            this.pnlNhomMuonTra.TabIndex = 7;
-            this.pnlNhomMuonTra.Visible = false;
-            // 
-            // btnLapPhieuMuon
-            // 
-            this.btnLapPhieuMuon.Dock = System.Windows.Forms.DockStyle.Top;
-            this.btnLapPhieuMuon.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnLapPhieuMuon.ForeColor = System.Drawing.Color.White;
-            this.btnLapPhieuMuon.Location = new System.Drawing.Point(0, 0);
-            this.btnLapPhieuMuon.Name = "btnLapPhieuMuon";
-            this.btnLapPhieuMuon.Padding = new System.Windows.Forms.Padding(20, 0, 0, 0);
-            this.btnLapPhieuMuon.Size = new System.Drawing.Size(190, 45);
-            this.btnLapPhieuMuon.TabIndex = 2;
-            this.btnLapPhieuMuon.Text = "Lập phiếu mượn";
-            this.btnLapPhieuMuon.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnLapPhieuMuon.UseVisualStyleBackColor = true;
-            this.btnLapPhieuMuon.Click += new System.EventHandler(this.btnLapPhieuMuon_Click);
-            // 
-            // btnTraSach
-            // 
-            this.btnTraSach.Dock = System.Windows.Forms.DockStyle.Top;
-            this.btnTraSach.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnTraSach.ForeColor = System.Drawing.Color.White;
-            this.btnTraSach.Location = new System.Drawing.Point(0, 45);
-            this.btnTraSach.Name = "btnTraSach";
-            this.btnTraSach.Padding = new System.Windows.Forms.Padding(20, 0, 0, 0);
-            this.btnTraSach.Size = new System.Drawing.Size(190, 45);
-            this.btnTraSach.TabIndex = 3;
-            this.btnTraSach.Text = "Trả sách";
-            this.btnTraSach.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnTraSach.UseVisualStyleBackColor = true;
-            this.btnTraSach.Click += new System.EventHandler(this.btnTraSach_Click);
-            // 
-            // btnDanhSachPhieuMuon
-            // 
-            this.btnDanhSachPhieuMuon.Dock = System.Windows.Forms.DockStyle.Top;
-            this.btnDanhSachPhieuMuon.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnDanhSachPhieuMuon.ForeColor = System.Drawing.Color.White;
-            this.btnDanhSachPhieuMuon.Location = new System.Drawing.Point(0, 90);
-            this.btnDanhSachPhieuMuon.Name = "btnDanhSachPhieuMuon";
-            this.btnDanhSachPhieuMuon.Padding = new System.Windows.Forms.Padding(20, 0, 0, 0);
-            this.btnDanhSachPhieuMuon.Size = new System.Drawing.Size(190, 45);
-            this.btnDanhSachPhieuMuon.TabIndex = 4;
-            this.btnDanhSachPhieuMuon.Text = "Danh sách phiếu mượn";
-            this.btnDanhSachPhieuMuon.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnDanhSachPhieuMuon.UseVisualStyleBackColor = true;
-            this.btnDanhSachPhieuMuon.Click += new System.EventHandler(this.btnDanhSachPhieuMuon_Click);
-            // 
-            // pnlNhomTroGiup
-            // 
-            this.pnlNhomTroGiup.BackColor = System.Drawing.Color.DimGray;
-            this.pnlNhomTroGiup.Controls.Add(this.btnHuongDanSuDung);
-            this.pnlNhomTroGiup.Controls.Add(this.btnThongTinChuongTrinh);
-            this.pnlNhomTroGiup.Location = new System.Drawing.Point(3, 602);
-            this.pnlNhomTroGiup.Name = "pnlNhomTroGiup";
-            this.pnlNhomTroGiup.Size = new System.Drawing.Size(200, 100);
-            this.pnlNhomTroGiup.TabIndex = 8;
-            this.pnlNhomTroGiup.Visible = false;
-            // 
-            // btnThongTinChuongTrinh
-            // 
-            this.btnThongTinChuongTrinh.Dock = System.Windows.Forms.DockStyle.Top;
-            this.btnThongTinChuongTrinh.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnThongTinChuongTrinh.ForeColor = System.Drawing.Color.White;
-            this.btnThongTinChuongTrinh.Location = new System.Drawing.Point(0, 0);
-            this.btnThongTinChuongTrinh.Name = "btnThongTinChuongTrinh";
-            this.btnThongTinChuongTrinh.Padding = new System.Windows.Forms.Padding(20, 0, 0, 0);
-            this.btnThongTinChuongTrinh.Size = new System.Drawing.Size(200, 45);
-            this.btnThongTinChuongTrinh.TabIndex = 4;
-            this.btnThongTinChuongTrinh.Text = "Thông tin chương trình";
-            this.btnThongTinChuongTrinh.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnThongTinChuongTrinh.UseVisualStyleBackColor = true;
-            this.btnThongTinChuongTrinh.Click += new System.EventHandler(this.btnThongTinChuongTrinh_Click);
-            // 
-            // btnHuongDanSuDung
-            // 
-            this.btnHuongDanSuDung.Dock = System.Windows.Forms.DockStyle.Top;
-            this.btnHuongDanSuDung.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnHuongDanSuDung.ForeColor = System.Drawing.Color.White;
-            this.btnHuongDanSuDung.Location = new System.Drawing.Point(0, 45);
-            this.btnHuongDanSuDung.Name = "btnHuongDanSuDung";
-            this.btnHuongDanSuDung.Padding = new System.Windows.Forms.Padding(20, 0, 0, 0);
-            this.btnHuongDanSuDung.Size = new System.Drawing.Size(200, 45);
-            this.btnHuongDanSuDung.TabIndex = 5;
-            this.btnHuongDanSuDung.Text = "Hướng dẫn sử dụng";
-            this.btnHuongDanSuDung.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnHuongDanSuDung.UseVisualStyleBackColor = true;
-            this.btnHuongDanSuDung.Click += new System.EventHandler(this.btnHuongDanSuDung_Click);
+            this.btnQLSach.Dock = System.Windows.Forms.DockStyle.Top;
+            this.btnQLSach.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnQLSach.ForeColor = System.Drawing.Color.White;
+            this.btnQLSach.Location = new System.Drawing.Point(0, 0);
+            this.btnQLSach.Name = "btnQLSach";
+            this.btnQLSach.Padding = new System.Windows.Forms.Padding(20, 0, 0, 0);
+            this.btnQLSach.Size = new System.Drawing.Size(190, 45);
+            this.btnQLSach.TabIndex = 0;
+            this.btnQLSach.Text = "Quản lý sách";
+            this.btnQLSach.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnQLSach.UseVisualStyleBackColor = true;
+            this.btnQLSach.Click += new System.EventHandler(this.btnQLSach_Click);
             // 
             // FrmMain
             // 
@@ -1058,29 +1061,30 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "QUẢN LÝ THƯ VIỆN - HUTECH";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FrmMain_FormClosing);
             this.Load += new System.EventHandler(this.FrmMain_Load);
             this.Click += new System.EventHandler(this.lậpPhiếuMượnToolStripMenuItem_Click);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.pnlTrangChu.ResumeLayout(false);
+            this.pnlNoiDungChinh.ResumeLayout(false);
             this.pnlTruyCapMuonTra.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.picTruyCapMuonTra)).EndInit();
             this.pnlTruyCapDocGia.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.picTruyCapDocGia)).EndInit();
             this.pnlTruyCapSach.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.picTruyCapSach)).EndInit();
             this.pnlThongKeChuaTra.ResumeLayout(false);
             this.pnlThongKePhieuMuon.ResumeLayout(false);
             this.pnlThongKeDocGia.ResumeLayout(false);
             this.pnlThongKeSach.ResumeLayout(false);
             this.pnlBanner.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.picTruyCapMuonTra)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.picTruyCapDocGia)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.picTruyCapSach)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.picBannerSach)).EndInit();
-            this.pnlNoiDungChinh.ResumeLayout(false);
             this.pnlThanhBen.ResumeLayout(false);
-            this.pnlNhomQuanLy.ResumeLayout(false);
-            this.pnlNhomTraCuu.ResumeLayout(false);
-            this.pnlNhomMuonTra.ResumeLayout(false);
             this.pnlNhomTroGiup.ResumeLayout(false);
+            this.pnlNhomMuonTra.ResumeLayout(false);
+            this.pnlNhomTraCuu.ResumeLayout(false);
+            this.pnlNhomQuanLy.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 

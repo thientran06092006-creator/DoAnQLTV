@@ -31,16 +31,34 @@ namespace DoAnQLTV
         }
 
 
+
         private int soFormDaMo = 0;
 
         private void MoFormChucNang(Form form)
         {
+            // Nếu Form cùng loại đã mở thì đưa lên trước
+            foreach (Form formDangMo in Application.OpenForms)
+            {
+                if (formDangMo.GetType() == form.GetType())
+                {
+                    form.Dispose();
+                    formDangMo.WindowState = FormWindowState.Normal;
+                    formDangMo.BringToFront();
+                    formDangMo.Activate();
+                    return;
+                }
+            }
+
             form.StartPosition = FormStartPosition.Manual;
 
-            // Sắp xếp cửa sổ lệch nhau để dễ nhìn thấy
             int buoc = 35;
-            int gioiHanX = Math.Max(0, Screen.PrimaryScreen.WorkingArea.Width - form.Width);
-            int gioiHanY = Math.Max(0, Screen.PrimaryScreen.WorkingArea.Height - form.Height);
+            int gioiHanX = Math.Max(
+                0,
+                Screen.PrimaryScreen.WorkingArea.Width - form.Width);
+
+            int gioiHanY = Math.Max(
+                0,
+                Screen.PrimaryScreen.WorkingArea.Height - form.Height);
 
             form.Location = new Point(
                 Math.Min(250 + (soFormDaMo * buoc) % Math.Max(1, gioiHanX), gioiHanX),
@@ -48,10 +66,13 @@ namespace DoAnQLTV
             );
 
             soFormDaMo++;
-            form.FormClosed += (s, e) => soFormDaMo = Math.Max(0, soFormDaMo - 1);
+
+            form.FormClosed += (s, e) =>
+                soFormDaMo = Math.Max(0, soFormDaMo - 1);
 
             form.Show();
         }
+
 
 
         private void quảnLýSáchToolStripMenuItem_Click(object sender, EventArgs e)
@@ -104,6 +125,7 @@ namespace DoAnQLTV
             MoFormChucNang(new FrmDanhSachPhieuMuon());
         }
 
+
         private void đăngXuấtToolStripMenuItem_Click(object sender, EventArgs e)
         {
             DialogResult ketQua = MessageBox.Show(
@@ -114,26 +136,65 @@ namespace DoAnQLTV
 
             if (ketQua == DialogResult.Yes)
             {
-                FrmLogin frmLogin = new FrmLogin();
-                frmLogin.Show();
+                // Lấy lại FrmLogin đã được lưu khi đăng nhập
+                FrmLogin frmLogin = this.Tag as FrmLogin;
 
-                this.Hide();
+                if (frmLogin != null)
+                {
+                    // Đóng các Form chức năng đang mở
+                    DongTatCaFormChucNang();
+
+                    // Hiện lại màn hình đăng nhập
+                    frmLogin.Show();
+                    frmLogin.Activate();
+
+                    // Đóng FrmMain hiện tại
+                    this.Close();
+                }
+                else
+                {
+                    MessageBox.Show(
+                        "Không tìm thấy màn hình đăng nhập hiện tại.",
+                        "Thông báo",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Warning);
+                }
             }
         }
 
+
+
         private void thoátToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            this.Close();
+        }
+
+
+
+        private bool dangXacNhanThoat = false;
+
+        private void FrmMain_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (dangXacNhanThoat)
+                return;
+
             DialogResult ketQua = MessageBox.Show(
                 "Bạn có chắc chắn muốn thoát chương trình không?",
                 "Xác nhận thoát",
                 MessageBoxButtons.YesNo,
                 MessageBoxIcon.Question);
 
-            if (ketQua == DialogResult.Yes)
+            if (ketQua == DialogResult.No)
             {
+                e.Cancel = true;
+            }
+            else
+            {
+                dangXacNhanThoat = true;
                 Application.Exit();
             }
         }
+
 
         private void thôngTinChươngTrìnhToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -142,7 +203,6 @@ namespace DoAnQLTV
 
         private void hướngDẫnSửDụngToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            MoFormChucNang(new FrmThongTinChuongTrinh());
             MoFormChucNang(new FrmHuongDanSuDung());
         }
 
@@ -187,8 +247,7 @@ namespace DoAnQLTV
 
         private void btnQLSach_Click(object sender, EventArgs e)
         {
-            FrmSach frmSach = new FrmSach();
-            frmSach.Show();
+            MoFormChucNang(new FrmSach());
         }
 
 
@@ -304,26 +363,22 @@ namespace DoAnQLTV
 
         private void btnQLTheLoai_Click(object sender, EventArgs e)
         {
-            FrmTheLoai frm = new FrmTheLoai();
-            frm.Show();
+            MoFormChucNang(new FrmTheLoai());
         }
 
         private void btnQLTacGia_Click(object sender, EventArgs e)
         {
-            FrmTacGia frm = new FrmTacGia();
-            frm.Show();
+            MoFormChucNang(new FrmTacGia());
         }
 
         private void btnQLDocGia_Click(object sender, EventArgs e)
         {
-            FrmDocGia frm = new FrmDocGia();
-            frm.Show();
+            MoFormChucNang(new FrmDocGia());
         }
 
         private void btnQLNhanVien_Click(object sender, EventArgs e)
         {
-            FrmNhanVien frm = new FrmNhanVien();
-            frm.Show();
+            MoFormChucNang(new FrmNhanVien());
         }
 
         private void btnTraCuu_Click(object sender, EventArgs e)
@@ -334,14 +389,12 @@ namespace DoAnQLTV
 
         private void btnTimKiemSach_Click(object sender, EventArgs e)
         {
-            FrmTimKiemSach frm = new FrmTimKiemSach();
-            frm.Show();
+            MoFormChucNang(new FrmTimKiemSach());
         }
 
         private void btnTraCuuDocGia_Click(object sender, EventArgs e)
         {
-            FrmThongTinDocGia frm = new FrmThongTinDocGia();
-            frm.Show();
+            MoFormChucNang(new FrmThongTinDocGia());
         }
 
         private void btnMuonTra_Click(object sender, EventArgs e)
@@ -352,20 +405,17 @@ namespace DoAnQLTV
 
         private void btnLapPhieuMuon_Click(object sender, EventArgs e)
         {
-            FrmLapPhieuMuon frm = new FrmLapPhieuMuon();
-            frm.Show();
+            MoFormChucNang(new FrmLapPhieuMuon());
         }
 
         private void btnTraSach_Click(object sender, EventArgs e)
         {
-            FrmTraSach frm = new FrmTraSach();
-            frm.Show();
+            MoFormChucNang(new FrmTraSach());
         }
 
         private void btnDanhSachPhieuMuon_Click(object sender, EventArgs e)
         {
-            FrmDanhSachPhieuMuon frm = new FrmDanhSachPhieuMuon();
-            frm.Show();
+            MoFormChucNang(new FrmDanhSachPhieuMuon());
         }
 
         private void btnTroGiup_Click(object sender, EventArgs e)
@@ -376,15 +426,30 @@ namespace DoAnQLTV
 
         private void btnHuongDanSuDung_Click(object sender, EventArgs e)
         {
-            FrmHuongDanSuDung frm = new FrmHuongDanSuDung();
-            frm.Show();
+            MoFormChucNang(new FrmHuongDanSuDung());
         }
 
         private void btnThongTinChuongTrinh_Click(object sender, EventArgs e)
         {
-            FrmThongTinChuongTrinh frm = new FrmThongTinChuongTrinh();
-            frm.Show();
+            MoFormChucNang(new FrmThongTinChuongTrinh());
         }
+
+        private void btnMoQuanLySach_Click(object sender, EventArgs e)
+        {
+            MoFormChucNang(new FrmSach());
+        }
+
+        private void btnMoQuanLyDocGia_Click(object sender, EventArgs e)
+        {
+            MoFormChucNang(new FrmDocGia());
+        }
+
+        private void btnMoMuonTraSach_Click(object sender, EventArgs e)
+        {
+            MoFormChucNang(new FrmLapPhieuMuon());
+        }
+
+
     }
 
 }

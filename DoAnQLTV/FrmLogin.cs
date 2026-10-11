@@ -31,6 +31,9 @@ namespace DoAnQLTV
                     MessageBoxIcon.Information);
 
                 FrmMain frmMain = new FrmMain();
+
+                // Giữ FrmLogin hiện tại để dùng lại khi đăng xuất
+                frmMain.Tag = this;
                 frmMain.Show();
 
                 this.Hide();
@@ -44,5 +47,6 @@ namespace DoAnQLTV
                     MessageBoxIcon.Warning);
             }
         }
+
     }
 }
