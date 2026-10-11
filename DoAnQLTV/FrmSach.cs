@@ -677,14 +677,25 @@ namespace DoAnQLTV
                                 return;
                             }
 
-                            dgvSach.ClearSelection();
-
-                            if (dgvSach.Rows.Count > 0)
+                            if (dt.Rows.Count == 1)
                             {
-                                dgvSach.Rows[0].Selected = true;
-                                dgvSach.CurrentCell =
-                                    dgvSach.Rows[0].Cells["colMaSach"];
+                                txtMaSach.Text =
+                                dt.Rows[0]["MaSach"].ToString();
+
+                                txtTenSach.Text =
+                                    dt.Rows[0]["TenSach"].ToString();
+
+                                cboTheLoai.Text =
+                                    dt.Rows[0]["TenTheLoai"].ToString();
+
+                                cboTacGia.Text =
+                                    dt.Rows[0]["TenTacGia"].ToString();
+
                             }
+
+                            dgvSach.ClearSelection();
+                            dgvSach.CurrentCell = null;
+                            dongDangChon = -1;
                         }
                     }
                 }

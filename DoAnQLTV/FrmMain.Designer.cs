@@ -295,15 +295,17 @@
             this.pnlTrangChu.AutoScroll = true;
             this.pnlTrangChu.Controls.Add(this.pnlNoiDungChinh);
             this.pnlTrangChu.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pnlTrangChu.Location = new System.Drawing.Point(0, 24);
+            this.pnlTrangChu.Location = new System.Drawing.Point(190, 24);
             this.pnlTrangChu.Name = "pnlTrangChu";
-            this.pnlTrangChu.Size = new System.Drawing.Size(1084, 637);
+            this.pnlTrangChu.Size = new System.Drawing.Size(894, 637);
             this.pnlTrangChu.TabIndex = 1;
             this.pnlTrangChu.Resize += new System.EventHandler(this.pnlTrangChu_Resize);
             // 
             // pnlNoiDungChinh
             // 
-            this.pnlNoiDungChinh.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.pnlNoiDungChinh.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.pnlNoiDungChinh.AutoScroll = true;
             this.pnlNoiDungChinh.Controls.Add(this.pnlTruyCapMuonTra);
             this.pnlNoiDungChinh.Controls.Add(this.pnlTruyCapDocGia);
@@ -314,9 +316,9 @@
             this.pnlNoiDungChinh.Controls.Add(this.pnlThongKeDocGia);
             this.pnlNoiDungChinh.Controls.Add(this.pnlThongKeSach);
             this.pnlNoiDungChinh.Controls.Add(this.pnlBanner);
-            this.pnlNoiDungChinh.Location = new System.Drawing.Point(9, 0);
+            this.pnlNoiDungChinh.Location = new System.Drawing.Point(0, 0);
             this.pnlNoiDungChinh.Name = "pnlNoiDungChinh";
-            this.pnlNoiDungChinh.Size = new System.Drawing.Size(1084, 560);
+            this.pnlNoiDungChinh.Size = new System.Drawing.Size(894, 560);
             this.pnlNoiDungChinh.TabIndex = 9;
             // 
             // pnlTruyCapMuonTra
@@ -352,7 +354,7 @@
             // lblMoTaTruyCapMuonTra
             // 
             this.lblMoTaTruyCapMuonTra.BackColor = System.Drawing.Color.Transparent;
-            this.lblMoTaTruyCapMuonTra.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblMoTaTruyCapMuonTra.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblMoTaTruyCapMuonTra.ForeColor = System.Drawing.Color.DimGray;
             this.lblMoTaTruyCapMuonTra.Location = new System.Drawing.Point(70, 45);
             this.lblMoTaTruyCapMuonTra.Name = "lblMoTaTruyCapMuonTra";
@@ -375,7 +377,7 @@
             // lblTruyCapMuonTra
             // 
             this.lblTruyCapMuonTra.BackColor = System.Drawing.Color.Transparent;
-            this.lblTruyCapMuonTra.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblTruyCapMuonTra.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblTruyCapMuonTra.ForeColor = System.Drawing.Color.DarkGoldenrod;
             this.lblTruyCapMuonTra.Location = new System.Drawing.Point(70, 15);
             this.lblTruyCapMuonTra.Name = "lblTruyCapMuonTra";
@@ -417,7 +419,7 @@
             // lblMoTaTruyCapDocGia
             // 
             this.lblMoTaTruyCapDocGia.BackColor = System.Drawing.Color.Transparent;
-            this.lblMoTaTruyCapDocGia.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblMoTaTruyCapDocGia.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblMoTaTruyCapDocGia.ForeColor = System.Drawing.Color.DimGray;
             this.lblMoTaTruyCapDocGia.Location = new System.Drawing.Point(70, 45);
             this.lblMoTaTruyCapDocGia.Name = "lblMoTaTruyCapDocGia";
@@ -440,7 +442,7 @@
             // lblTruyCapDocGia
             // 
             this.lblTruyCapDocGia.BackColor = System.Drawing.Color.Transparent;
-            this.lblTruyCapDocGia.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblTruyCapDocGia.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblTruyCapDocGia.ForeColor = System.Drawing.Color.DarkGreen;
             this.lblTruyCapDocGia.Location = new System.Drawing.Point(70, 15);
             this.lblTruyCapDocGia.Name = "lblTruyCapDocGia";
@@ -469,11 +471,11 @@
             this.btnMoQuanLySach.FlatAppearance.BorderSize = 0;
             this.btnMoQuanLySach.FlatAppearance.MouseOverBackColor = System.Drawing.Color.LightSkyBlue;
             this.btnMoQuanLySach.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnMoQuanLySach.Font = new System.Drawing.Font("Segoe UI", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnMoQuanLySach.Font = new System.Drawing.Font("Segoe UI", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnMoQuanLySach.ForeColor = System.Drawing.Color.MidnightBlue;
             this.btnMoQuanLySach.Location = new System.Drawing.Point(275, 35);
             this.btnMoQuanLySach.Name = "btnMoQuanLySach";
-            this.btnMoQuanLySach.Size = new System.Drawing.Size(40, 40);
+            this.btnMoQuanLySach.Size = new System.Drawing.Size(35, 40);
             this.btnMoQuanLySach.TabIndex = 3;
             this.btnMoQuanLySach.Text = "➜";
             this.btnMoQuanLySach.UseVisualStyleBackColor = false;
@@ -482,11 +484,11 @@
             // lblMoTaTruyCapSach
             // 
             this.lblMoTaTruyCapSach.BackColor = System.Drawing.Color.Transparent;
-            this.lblMoTaTruyCapSach.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblMoTaTruyCapSach.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblMoTaTruyCapSach.ForeColor = System.Drawing.Color.DimGray;
-            this.lblMoTaTruyCapSach.Location = new System.Drawing.Point(70, 45);
+            this.lblMoTaTruyCapSach.Location = new System.Drawing.Point(80, 48);
             this.lblMoTaTruyCapSach.Name = "lblMoTaTruyCapSach";
-            this.lblMoTaTruyCapSach.Size = new System.Drawing.Size(195, 48);
+            this.lblMoTaTruyCapSach.Size = new System.Drawing.Size(190, 50);
             this.lblMoTaTruyCapSach.TabIndex = 2;
             this.lblMoTaTruyCapSach.Text = "Thêm, sửa, xóa và tìm kiếm thông tin sách";
             this.lblMoTaTruyCapSach.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -495,9 +497,9 @@
             // 
             this.picTruyCapSach.BackColor = System.Drawing.Color.Transparent;
             this.picTruyCapSach.Image = global::DoAnQLTV.Properties.Resources.ách;
-            this.picTruyCapSach.Location = new System.Drawing.Point(10, 25);
+            this.picTruyCapSach.Location = new System.Drawing.Point(15, 25);
             this.picTruyCapSach.Name = "picTruyCapSach";
-            this.picTruyCapSach.Size = new System.Drawing.Size(55, 55);
+            this.picTruyCapSach.Size = new System.Drawing.Size(60, 60);
             this.picTruyCapSach.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.picTruyCapSach.TabIndex = 1;
             this.picTruyCapSach.TabStop = false;
@@ -505,11 +507,11 @@
             // lblTruyCapSach
             // 
             this.lblTruyCapSach.BackColor = System.Drawing.Color.Transparent;
-            this.lblTruyCapSach.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblTruyCapSach.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblTruyCapSach.ForeColor = System.Drawing.Color.MidnightBlue;
-            this.lblTruyCapSach.Location = new System.Drawing.Point(70, 15);
+            this.lblTruyCapSach.Location = new System.Drawing.Point(80, 12);
             this.lblTruyCapSach.Name = "lblTruyCapSach";
-            this.lblTruyCapSach.Size = new System.Drawing.Size(195, 30);
+            this.lblTruyCapSach.Size = new System.Drawing.Size(250, 35);
             this.lblTruyCapSach.TabIndex = 0;
             this.lblTruyCapSach.Text = "QUẢN LÝ SÁCH";
             this.lblTruyCapSach.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -552,7 +554,7 @@
             // lblTieuDeThongKeChuaTra
             // 
             this.lblTieuDeThongKeChuaTra.BackColor = System.Drawing.Color.Transparent;
-            this.lblTieuDeThongKeChuaTra.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblTieuDeThongKeChuaTra.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblTieuDeThongKeChuaTra.ForeColor = System.Drawing.Color.DimGray;
             this.lblTieuDeThongKeChuaTra.Location = new System.Drawing.Point(15, 12);
             this.lblTieuDeThongKeChuaTra.Name = "lblTieuDeThongKeChuaTra";
@@ -587,7 +589,7 @@
             // lblTieuDeThongKePhieuMuon
             // 
             this.lblTieuDeThongKePhieuMuon.BackColor = System.Drawing.Color.Transparent;
-            this.lblTieuDeThongKePhieuMuon.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblTieuDeThongKePhieuMuon.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblTieuDeThongKePhieuMuon.ForeColor = System.Drawing.Color.DimGray;
             this.lblTieuDeThongKePhieuMuon.Location = new System.Drawing.Point(15, 12);
             this.lblTieuDeThongKePhieuMuon.Name = "lblTieuDeThongKePhieuMuon";
@@ -622,7 +624,7 @@
             // lblTieuDeThongKeDocGia
             // 
             this.lblTieuDeThongKeDocGia.BackColor = System.Drawing.Color.Transparent;
-            this.lblTieuDeThongKeDocGia.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblTieuDeThongKeDocGia.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblTieuDeThongKeDocGia.ForeColor = System.Drawing.Color.DimGray;
             this.lblTieuDeThongKeDocGia.Location = new System.Drawing.Point(15, 12);
             this.lblTieuDeThongKeDocGia.Name = "lblTieuDeThongKeDocGia";
@@ -645,7 +647,7 @@
             // lblTieuDeThongKeSach
             // 
             this.lblTieuDeThongKeSach.BackColor = System.Drawing.Color.Transparent;
-            this.lblTieuDeThongKeSach.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblTieuDeThongKeSach.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblTieuDeThongKeSach.ForeColor = System.Drawing.Color.DimGray;
             this.lblTieuDeThongKeSach.Location = new System.Drawing.Point(15, 12);
             this.lblTieuDeThongKeSach.Name = "lblTieuDeThongKeSach";
@@ -678,7 +680,7 @@
             this.pnlBanner.Controls.Add(this.lblBannerMoTa);
             this.pnlBanner.Location = new System.Drawing.Point(20, 20);
             this.pnlBanner.Name = "pnlBanner";
-            this.pnlBanner.Size = new System.Drawing.Size(1044, 180);
+            this.pnlBanner.Size = new System.Drawing.Size(1020, 180);
             this.pnlBanner.TabIndex = 0;
             // 
             // picBannerSach
@@ -694,7 +696,7 @@
             // lblBannerTieuDe
             // 
             this.lblBannerTieuDe.BackColor = System.Drawing.Color.Transparent;
-            this.lblBannerTieuDe.Font = new System.Drawing.Font("Segoe UI", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblBannerTieuDe.Font = new System.Drawing.Font("Segoe UI", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblBannerTieuDe.ForeColor = System.Drawing.Color.MidnightBlue;
             this.lblBannerTieuDe.Location = new System.Drawing.Point(35, 25);
             this.lblBannerTieuDe.Name = "lblBannerTieuDe";
@@ -706,7 +708,7 @@
             // lblBannerChaoMung
             // 
             this.lblBannerChaoMung.BackColor = System.Drawing.Color.Transparent;
-            this.lblBannerChaoMung.Font = new System.Drawing.Font("Segoe UI", 12.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblBannerChaoMung.Font = new System.Drawing.Font("Segoe UI", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblBannerChaoMung.ForeColor = System.Drawing.Color.DarkSlateBlue;
             this.lblBannerChaoMung.Location = new System.Drawing.Point(35, 85);
             this.lblBannerChaoMung.Name = "lblBannerChaoMung";
@@ -718,7 +720,7 @@
             // lblBannerMoTa
             // 
             this.lblBannerMoTa.BackColor = System.Drawing.Color.Transparent;
-            this.lblBannerMoTa.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblBannerMoTa.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblBannerMoTa.ForeColor = System.Drawing.Color.SlateGray;
             this.lblBannerMoTa.Location = new System.Drawing.Point(35, 125);
             this.lblBannerMoTa.Name = "lblBannerMoTa";
@@ -1051,8 +1053,8 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(1084, 661);
-            this.Controls.Add(this.pnlThanhBen);
             this.Controls.Add(this.pnlTrangChu);
+            this.Controls.Add(this.pnlThanhBen);
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
             this.MinimumSize = new System.Drawing.Size(1100, 700);

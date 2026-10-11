@@ -578,7 +578,7 @@ namespace DoAnQLTV
                             if (dt.Rows.Count == 1)
                             {
                                 txtMaDocGia.Text =
-                                    dt.Rows[0]["MaDocGia"].ToString();
+                                dt.Rows[0]["MaDocGia"].ToString();
 
                                 txtTenDocGia.Text =
                                     dt.Rows[0]["TenDocGia"].ToString();
@@ -592,14 +592,11 @@ namespace DoAnQLTV
                                 txtSoDienThoai.Text =
                                     dt.Rows[0]["SoDienThoai"].ToString();
 
-                                dgvDocGia.Rows[0].Selected = true;
-
-                                dgvDocGia.CurrentCell =
-                                    dgvDocGia.Rows[0]
-                                        .Cells["colMaDocGia"];
-
-                                dongDangChon = 0;
                             }
+
+                            dgvDocGia.ClearSelection();
+                            dgvDocGia.CurrentCell = null;
+                            dongDangChon = -1;
                         }
                     }
                 }

@@ -20,7 +20,102 @@ namespace DoAnQLTV
         public FrmMain()
         {
             InitializeComponent();
-            
+
+            this.StartPosition = FormStartPosition.CenterScreen;
+            this.WindowState = FormWindowState.Maximized;
+            this.MinimumSize = new Size(1000, 650);
+
+            // Cho vùng nội dung chính lấp đầy vùng trang chủ
+            pnlNoiDungChinh.Dock = DockStyle.Fill;
+
+        }
+
+
+
+        private void BoTriTruyCapNhanh()
+        {
+            if (pnlNoiDungChinh == null)
+                return;
+
+            int leTrai = 20;
+            int khoangCach = 16;
+            int chieuRongNoiDung = pnlNoiDungChinh.ClientSize.Width;
+
+            int chieuRongThe =
+                (chieuRongNoiDung - leTrai * 2 - khoangCach * 2) / 3;
+
+            int chieuCaoThe = 110;
+            int viTriY = 425;
+
+            Panel[] cacThe =
+            {
+        pnlTruyCapSach,
+        pnlTruyCapDocGia,
+        pnlTruyCapMuonTra
+    };
+
+            for (int i = 0; i < cacThe.Length; i++)
+            {
+                cacThe[i].Location = new Point(
+                    leTrai + i * (chieuRongThe + khoangCach),
+                    viTriY);
+
+                cacThe[i].Size = new Size(
+                    chieuRongThe,
+                    chieuCaoThe);
+            }
+
+            // Căn nút mũi tên sát mép phải của từng thẻ
+            btnMoQuanLySach.Location = new Point(
+     pnlTruyCapSach.ClientSize.Width
+     - btnMoQuanLySach.Width - 15, 35);
+
+            btnMoQuanLyDocGia.Location = new Point(
+                pnlTruyCapDocGia.ClientSize.Width
+                - btnMoQuanLyDocGia.Width - 15, 35);
+
+            btnMoQuanLyMuonTra.Location = new Point(
+                pnlTruyCapMuonTra.ClientSize.Width
+                - btnMoQuanLyMuonTra.Width - 15, 35);
+
+            // Giữ tiêu đề phía trên ba thẻ
+            lblTieuDeTruyCapNhanh.Location =
+                new Point(leTrai, 375);
+        }
+
+
+
+        private void BoTriTheThongKe()
+        {
+            if (pnlNoiDungChinh == null)
+                return;
+
+            int leTrai = 20;
+            int khoangCach = 16;
+            int chieuCao = 115;
+
+            Panel[] cacThe =
+            {
+        pnlThongKeSach,
+        pnlThongKeDocGia,
+        pnlThongKePhieuMuon,
+        pnlThongKeChuaTra
+    };
+
+            int tongChieuRong =
+                pnlNoiDungChinh.ClientSize.Width - leTrai * 2
+                - khoangCach * (cacThe.Length - 1);
+
+            int chieuRongThe = tongChieuRong / cacThe.Length;
+
+            for (int i = 0; i < cacThe.Length; i++)
+            {
+                cacThe[i].Location = new Point(
+                    leTrai + i * (chieuRongThe + khoangCach),
+                    220);
+
+                cacThe[i].Size = new Size(chieuRongThe, chieuCao);
+            }
         }
 
 
@@ -79,21 +174,27 @@ namespace DoAnQLTV
             }
         }
 
+
         private void CanGiuaNoiDung()
         {
-            pnlNoiDungChinh.Left =
-                Math.Max(0, (pnlTrangChu.ClientSize.Width
-                - pnlNoiDungChinh.Width) / 2);
+            if (pnlTrangChu == null || pnlNoiDungChinh == null)
+                return;
 
-            pnlNoiDungChinh.Top =
-                Math.Max(0, (pnlTrangChu.ClientSize.Height
-                - pnlNoiDungChinh.Height) / 2);
+            pnlNoiDungChinh.Left = 0;
+            pnlNoiDungChinh.Top = 0;
+            pnlNoiDungChinh.Width = pnlTrangChu.ClientSize.Width;
+            pnlNoiDungChinh.Height = pnlTrangChu.ClientSize.Height;
         }
+
+
+
 
         private void pnlTrangChu_Resize(object sender, EventArgs e)
         {
             CanGiuaNoiDung();
         }
+
+
 
         private int soFormDaMo = 0;
 

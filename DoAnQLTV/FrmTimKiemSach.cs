@@ -155,17 +155,9 @@ namespace DoAnQLTV
                                 return;
                             }
 
-                            // Chọn dòng đầu tiên
+                            // Không tự chọn dòng sau khi tìm kiếm
                             dgvKetQua.ClearSelection();
-
-                            if (dgvKetQua.Rows.Count > 0)
-                            {
-                                dgvKetQua.Rows[0].Selected = true;
-
-                                dgvKetQua.CurrentCell =
-                                    dgvKetQua.Rows[0]
-                                    .Cells["colMaSach"];
-                            }
+                            dgvKetQua.CurrentCell = null;
                         }
                     }
                 }
