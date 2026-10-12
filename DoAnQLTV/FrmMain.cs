@@ -27,10 +27,41 @@ namespace DoAnQLTV
             this.BackColor = System.Drawing.Color.White;
         }
 
+
         private void FrmMain_Load(object sender, EventArgs e)
         {
-            // Để trống trong thời gian thiết kế lại giao diện.
+            dgvHoatDongGanDay.Rows.Clear();
+
+            dgvHoatDongGanDay.Rows.Add(
+                "08:30 12/10/2026",
+                "Mượn sách",
+                "Lập phiếu mượn sách",
+                "Nguyễn Văn A"
+            );
+
+            dgvHoatDongGanDay.Rows.Add(
+                "09:15 12/10/2026",
+                "Thêm sách",
+                "Thêm sách mới vào thư viện",
+                "Trần Thị B"
+            );
+
+            dgvHoatDongGanDay.Rows.Add(
+                "10:00 12/10/2026",
+                "Trả sách",
+                "Cập nhật ngày trả sách",
+                "Lê Văn C"
+            );
+
+            dgvHoatDongGanDay.Rows.Add(
+                "10:30 12/10/2026",
+                "Cập nhật độc giả",
+                "Chỉnh sửa thông tin độc giả",
+                "Phạm Thị D"
+            );
+            dgvHoatDongGanDay.ClearSelection();
         }
+
 
         private void MoFormChucNang(Form form)
         {

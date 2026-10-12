@@ -73,6 +73,16 @@ namespace DoAnQLTV.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        public static System.Drawing.Bitmap độc_giả {
+            get {
+                object obj = ResourceManager.GetObject("độc giả", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         public static System.Drawing.Bitmap đổi_ngược {
             get {
                 object obj = ResourceManager.GetObject("đổi ngược", resourceCulture);
@@ -86,6 +96,56 @@ namespace DoAnQLTV.Properties {
         public static System.Drawing.Bitmap istockphoto_2022468311_612x612 {
             get {
                 object obj = ResourceManager.GetObject("istockphoto-2022468311-612x612", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap lập_phiếu_mượn {
+            get {
+                object obj = ResourceManager.GetObject("lập phiếu mượn", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap nhân_viên {
+            get {
+                object obj = ResourceManager.GetObject("nhân viên", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap sách {
+            get {
+                object obj = ResourceManager.GetObject("sách", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap tìm_kiếm {
+            get {
+                object obj = ResourceManager.GetObject("tìm kiếm", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap trả_sách {
+            get {
+                object obj = ResourceManager.GetObject("trả sách", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

@@ -28,6 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.menuStripMain = new System.Windows.Forms.ToolStripMenuItem();
             this.đăngXuấtToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -79,26 +81,33 @@
             this.pnlTheQuanLySach = new System.Windows.Forms.Panel();
             this.lblMoTaQuanLySach = new System.Windows.Forms.Label();
             this.lblTenQuanLySach = new System.Windows.Forms.Label();
-            this.picQuanLySach = new System.Windows.Forms.PictureBox();
             this.pnlTheQuanLyDocGia = new System.Windows.Forms.Panel();
             this.lblMoTaQuanLyDocGia = new System.Windows.Forms.Label();
             this.lblTenQuanLyDocGia = new System.Windows.Forms.Label();
-            this.picQuanLyDocGia = new System.Windows.Forms.PictureBox();
             this.pnlTheQuanLyNhanVien = new System.Windows.Forms.Panel();
             this.lblMoTaQuanLyNhanVien = new System.Windows.Forms.Label();
             this.lblTenQuanLyNhanVien = new System.Windows.Forms.Label();
-            this.picQuanLyNhanVien = new System.Windows.Forms.PictureBox();
             this.pnlTheLapPhieuMuon = new System.Windows.Forms.Panel();
             this.lblMoTaLapPhieuMuon = new System.Windows.Forms.Label();
             this.lblTenLapPhieuMuon = new System.Windows.Forms.Label();
-            this.picLapPhieuMuon = new System.Windows.Forms.PictureBox();
             this.pnlTheTraSach = new System.Windows.Forms.Panel();
             this.lblMoTaTraSach = new System.Windows.Forms.Label();
             this.lblTenTraSach = new System.Windows.Forms.Label();
-            this.picTraSach = new System.Windows.Forms.PictureBox();
             this.pnlTheTimKiemSach = new System.Windows.Forms.Panel();
             this.lblMoTaTimKiemSach = new System.Windows.Forms.Label();
             this.lblTenTimKiemSach = new System.Windows.Forms.Label();
+            this.pnlHoatDongGanDay = new System.Windows.Forms.Panel();
+            this.lblTieuDeHoatDongGanDay = new System.Windows.Forms.Label();
+            this.dgvHoatDongGanDay = new System.Windows.Forms.DataGridView();
+            this.colThoiGian = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colLoaiHoatDong = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colThongTinChiTiet = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colNguoiThucHien = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.picTraSach = new System.Windows.Forms.PictureBox();
+            this.picLapPhieuMuon = new System.Windows.Forms.PictureBox();
+            this.picQuanLyNhanVien = new System.Windows.Forms.PictureBox();
+            this.picQuanLyDocGia = new System.Windows.Forms.PictureBox();
+            this.picQuanLySach = new System.Windows.Forms.PictureBox();
             this.picTimKiemSach = new System.Windows.Forms.PictureBox();
             this.menuStrip1.SuspendLayout();
             this.pnlHeader.SuspendLayout();
@@ -114,16 +123,18 @@
             this.pnlThaoTacNhanh.SuspendLayout();
             this.tlpTruyCapNhanh.SuspendLayout();
             this.pnlTheQuanLySach.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.picQuanLySach)).BeginInit();
             this.pnlTheQuanLyDocGia.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.picQuanLyDocGia)).BeginInit();
             this.pnlTheQuanLyNhanVien.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.picQuanLyNhanVien)).BeginInit();
             this.pnlTheLapPhieuMuon.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.picLapPhieuMuon)).BeginInit();
             this.pnlTheTraSach.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.picTraSach)).BeginInit();
             this.pnlTheTimKiemSach.SuspendLayout();
+            this.pnlHoatDongGanDay.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvHoatDongGanDay)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picTraSach)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picLapPhieuMuon)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picQuanLyNhanVien)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picQuanLyDocGia)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picQuanLySach)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picTimKiemSach)).BeginInit();
             this.SuspendLayout();
             // 
@@ -339,6 +350,7 @@
             // pnlContent
             // 
             this.pnlContent.BackColor = System.Drawing.Color.AliceBlue;
+            this.pnlContent.Controls.Add(this.pnlHoatDongGanDay);
             this.pnlContent.Controls.Add(this.pnlThaoTacNhanh);
             this.pnlContent.Controls.Add(this.tlpBieuDo);
             this.pnlContent.Controls.Add(this.tlpThongKe);
@@ -392,7 +404,7 @@
             this.tlpThongKe.Name = "tlpThongKe";
             this.tlpThongKe.RowCount = 1;
             this.tlpThongKe.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpThongKe.Size = new System.Drawing.Size(1030, 130);
+            this.tlpThongKe.Size = new System.Drawing.Size(1030, 115);
             this.tlpThongKe.TabIndex = 6;
             // 
             // pnlCardSach
@@ -405,7 +417,7 @@
             this.pnlCardSach.Location = new System.Drawing.Point(5, 5);
             this.pnlCardSach.Margin = new System.Windows.Forms.Padding(5);
             this.pnlCardSach.Name = "pnlCardSach";
-            this.pnlCardSach.Size = new System.Drawing.Size(247, 120);
+            this.pnlCardSach.Size = new System.Drawing.Size(247, 105);
             this.pnlCardSach.TabIndex = 3;
             // 
             // lblSoSach
@@ -441,7 +453,7 @@
             this.pnlCardDocGia.Location = new System.Drawing.Point(262, 5);
             this.pnlCardDocGia.Margin = new System.Windows.Forms.Padding(5);
             this.pnlCardDocGia.Name = "pnlCardDocGia";
-            this.pnlCardDocGia.Size = new System.Drawing.Size(247, 120);
+            this.pnlCardDocGia.Size = new System.Drawing.Size(247, 105);
             this.pnlCardDocGia.TabIndex = 4;
             // 
             // lblSoDocGia
@@ -477,7 +489,7 @@
             this.pnlCardDangMuon.Location = new System.Drawing.Point(519, 5);
             this.pnlCardDangMuon.Margin = new System.Windows.Forms.Padding(5);
             this.pnlCardDangMuon.Name = "pnlCardDangMuon";
-            this.pnlCardDangMuon.Size = new System.Drawing.Size(247, 120);
+            this.pnlCardDangMuon.Size = new System.Drawing.Size(247, 105);
             this.pnlCardDangMuon.TabIndex = 5;
             // 
             // lblSoDangMuon
@@ -513,7 +525,7 @@
             this.pnlCardQuaHan.Location = new System.Drawing.Point(776, 5);
             this.pnlCardQuaHan.Margin = new System.Windows.Forms.Padding(5);
             this.pnlCardQuaHan.Name = "pnlCardQuaHan";
-            this.pnlCardQuaHan.Size = new System.Drawing.Size(249, 120);
+            this.pnlCardQuaHan.Size = new System.Drawing.Size(249, 105);
             this.pnlCardQuaHan.TabIndex = 6;
             // 
             // lblSoQuaHan
@@ -549,13 +561,13 @@
             this.tlpBieuDo.Controls.Add(this.pnlBieuDoMuonTra, 0, 0);
             this.tlpBieuDo.Controls.Add(this.pnlBieuDoTheLoai, 1, 0);
             this.tlpBieuDo.GrowStyle = System.Windows.Forms.TableLayoutPanelGrowStyle.FixedSize;
-            this.tlpBieuDo.Location = new System.Drawing.Point(30, 280);
+            this.tlpBieuDo.Location = new System.Drawing.Point(30, 255);
             this.tlpBieuDo.Margin = new System.Windows.Forms.Padding(0, 10, 0, 0);
             this.tlpBieuDo.Name = "tlpBieuDo";
             this.tlpBieuDo.RowCount = 1;
             this.tlpBieuDo.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tlpBieuDo.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tlpBieuDo.Size = new System.Drawing.Size(1030, 280);
+            this.tlpBieuDo.Size = new System.Drawing.Size(1030, 260);
             this.tlpBieuDo.TabIndex = 7;
             // 
             // pnlBieuDoMuonTra
@@ -567,7 +579,7 @@
             this.pnlBieuDoMuonTra.Location = new System.Drawing.Point(5, 5);
             this.pnlBieuDoMuonTra.Margin = new System.Windows.Forms.Padding(5);
             this.pnlBieuDoMuonTra.Name = "pnlBieuDoMuonTra";
-            this.pnlBieuDoMuonTra.Size = new System.Drawing.Size(505, 270);
+            this.pnlBieuDoMuonTra.Size = new System.Drawing.Size(505, 250);
             this.pnlBieuDoMuonTra.TabIndex = 0;
             // 
             // lblTieuDeMuonTra
@@ -591,7 +603,7 @@
             this.pnlBieuDoTheLoai.Location = new System.Drawing.Point(520, 5);
             this.pnlBieuDoTheLoai.Margin = new System.Windows.Forms.Padding(5);
             this.pnlBieuDoTheLoai.Name = "pnlBieuDoTheLoai";
-            this.pnlBieuDoTheLoai.Size = new System.Drawing.Size(505, 270);
+            this.pnlBieuDoTheLoai.Size = new System.Drawing.Size(505, 250);
             this.pnlBieuDoTheLoai.TabIndex = 1;
             // 
             // lblTieuDeTheLoai
@@ -614,7 +626,7 @@
             this.pnlThaoTacNhanh.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.pnlThaoTacNhanh.Controls.Add(this.tlpTruyCapNhanh);
             this.pnlThaoTacNhanh.Controls.Add(this.lblTieuDeTruyCapNhanh);
-            this.pnlThaoTacNhanh.Location = new System.Drawing.Point(30, 590);
+            this.pnlThaoTacNhanh.Location = new System.Drawing.Point(30, 535);
             this.pnlThaoTacNhanh.Name = "pnlThaoTacNhanh";
             this.pnlThaoTacNhanh.Size = new System.Drawing.Size(1030, 190);
             this.pnlThaoTacNhanh.TabIndex = 8;
@@ -692,16 +704,6 @@
             this.lblTenQuanLySach.Text = "Quản lý sách";
             this.lblTenQuanLySach.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // picQuanLySach
-            // 
-            this.picQuanLySach.BackColor = System.Drawing.Color.AliceBlue;
-            this.picQuanLySach.Location = new System.Drawing.Point(52, 8);
-            this.picQuanLySach.Name = "picQuanLySach";
-            this.picQuanLySach.Size = new System.Drawing.Size(50, 50);
-            this.picQuanLySach.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.picQuanLySach.TabIndex = 0;
-            this.picQuanLySach.TabStop = false;
-            // 
             // pnlTheQuanLyDocGia
             // 
             this.pnlTheQuanLyDocGia.Anchor = System.Windows.Forms.AnchorStyles.None;
@@ -737,16 +739,6 @@
             this.lblTenQuanLyDocGia.TabIndex = 1;
             this.lblTenQuanLyDocGia.Text = "Quản lý độc giả";
             this.lblTenQuanLyDocGia.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // picQuanLyDocGia
-            // 
-            this.picQuanLyDocGia.BackColor = System.Drawing.Color.AliceBlue;
-            this.picQuanLyDocGia.Location = new System.Drawing.Point(52, 8);
-            this.picQuanLyDocGia.Name = "picQuanLyDocGia";
-            this.picQuanLyDocGia.Size = new System.Drawing.Size(50, 50);
-            this.picQuanLyDocGia.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.picQuanLyDocGia.TabIndex = 0;
-            this.picQuanLyDocGia.TabStop = false;
             // 
             // pnlTheQuanLyNhanVien
             // 
@@ -784,16 +776,6 @@
             this.lblTenQuanLyNhanVien.Text = "Quản lý nhân viên";
             this.lblTenQuanLyNhanVien.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // picQuanLyNhanVien
-            // 
-            this.picQuanLyNhanVien.BackColor = System.Drawing.Color.AliceBlue;
-            this.picQuanLyNhanVien.Location = new System.Drawing.Point(52, 8);
-            this.picQuanLyNhanVien.Name = "picQuanLyNhanVien";
-            this.picQuanLyNhanVien.Size = new System.Drawing.Size(50, 50);
-            this.picQuanLyNhanVien.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.picQuanLyNhanVien.TabIndex = 0;
-            this.picQuanLyNhanVien.TabStop = false;
-            // 
             // pnlTheLapPhieuMuon
             // 
             this.pnlTheLapPhieuMuon.Anchor = System.Windows.Forms.AnchorStyles.None;
@@ -829,16 +811,6 @@
             this.lblTenLapPhieuMuon.TabIndex = 1;
             this.lblTenLapPhieuMuon.Text = "Lập phiếu mượn";
             this.lblTenLapPhieuMuon.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // picLapPhieuMuon
-            // 
-            this.picLapPhieuMuon.BackColor = System.Drawing.Color.AliceBlue;
-            this.picLapPhieuMuon.Location = new System.Drawing.Point(52, 8);
-            this.picLapPhieuMuon.Name = "picLapPhieuMuon";
-            this.picLapPhieuMuon.Size = new System.Drawing.Size(50, 50);
-            this.picLapPhieuMuon.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.picLapPhieuMuon.TabIndex = 0;
-            this.picLapPhieuMuon.TabStop = false;
             // 
             // pnlTheTraSach
             // 
@@ -876,16 +848,6 @@
             this.lblTenTraSach.Text = "Trả sách";
             this.lblTenTraSach.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // picTraSach
-            // 
-            this.picTraSach.BackColor = System.Drawing.Color.AliceBlue;
-            this.picTraSach.Location = new System.Drawing.Point(52, 8);
-            this.picTraSach.Name = "picTraSach";
-            this.picTraSach.Size = new System.Drawing.Size(50, 50);
-            this.picTraSach.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.picTraSach.TabIndex = 0;
-            this.picTraSach.TabStop = false;
-            // 
             // pnlTheTimKiemSach
             // 
             this.pnlTheTimKiemSach.Anchor = System.Windows.Forms.AnchorStyles.None;
@@ -922,9 +884,161 @@
             this.lblTenTimKiemSach.Text = "Tìm kiếm sách";
             this.lblTenTimKiemSach.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
+            // pnlHoatDongGanDay
+            // 
+            this.pnlHoatDongGanDay.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.pnlHoatDongGanDay.BackColor = System.Drawing.Color.White;
+            this.pnlHoatDongGanDay.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.pnlHoatDongGanDay.Controls.Add(this.dgvHoatDongGanDay);
+            this.pnlHoatDongGanDay.Controls.Add(this.lblTieuDeHoatDongGanDay);
+            this.pnlHoatDongGanDay.Location = new System.Drawing.Point(30, 735);
+            this.pnlHoatDongGanDay.Name = "pnlHoatDongGanDay";
+            this.pnlHoatDongGanDay.Size = new System.Drawing.Size(1030, 200);
+            this.pnlHoatDongGanDay.TabIndex = 9;
+            // 
+            // lblTieuDeHoatDongGanDay
+            // 
+            this.lblTieuDeHoatDongGanDay.AutoSize = true;
+            this.lblTieuDeHoatDongGanDay.BackColor = System.Drawing.Color.Transparent;
+            this.lblTieuDeHoatDongGanDay.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblTieuDeHoatDongGanDay.ForeColor = System.Drawing.Color.MidnightBlue;
+            this.lblTieuDeHoatDongGanDay.Location = new System.Drawing.Point(15, 15);
+            this.lblTieuDeHoatDongGanDay.Name = "lblTieuDeHoatDongGanDay";
+            this.lblTieuDeHoatDongGanDay.Size = new System.Drawing.Size(156, 21);
+            this.lblTieuDeHoatDongGanDay.TabIndex = 0;
+            this.lblTieuDeHoatDongGanDay.Text = "Hoạt động gần đây";
+            // 
+            // dgvHoatDongGanDay
+            // 
+            this.dgvHoatDongGanDay.AllowUserToAddRows = false;
+            this.dgvHoatDongGanDay.AllowUserToDeleteRows = false;
+            this.dgvHoatDongGanDay.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.dgvHoatDongGanDay.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dgvHoatDongGanDay.BackgroundColor = System.Drawing.Color.White;
+            this.dgvHoatDongGanDay.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = System.Drawing.Color.AliceBlue;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle1.ForeColor = System.Drawing.Color.MidnightBlue;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dgvHoatDongGanDay.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            this.dgvHoatDongGanDay.ColumnHeadersHeight = 35;
+            this.dgvHoatDongGanDay.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
+            this.dgvHoatDongGanDay.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.colThoiGian,
+            this.colLoaiHoatDong,
+            this.colThongTinChiTiet,
+            this.colNguoiThucHien});
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle2.ForeColor = System.Drawing.Color.MidnightBlue;
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.Color.LightSteelBlue;
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.Color.MidnightBlue;
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dgvHoatDongGanDay.DefaultCellStyle = dataGridViewCellStyle2;
+            this.dgvHoatDongGanDay.EnableHeadersVisualStyles = false;
+            this.dgvHoatDongGanDay.GridColor = System.Drawing.Color.LightGray;
+            this.dgvHoatDongGanDay.Location = new System.Drawing.Point(10, 45);
+            this.dgvHoatDongGanDay.Name = "dgvHoatDongGanDay";
+            this.dgvHoatDongGanDay.ReadOnly = true;
+            this.dgvHoatDongGanDay.RowHeadersVisible = false;
+            this.dgvHoatDongGanDay.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dgvHoatDongGanDay.Size = new System.Drawing.Size(1008, 145);
+            this.dgvHoatDongGanDay.TabIndex = 1;
+            // 
+            // colThoiGian
+            // 
+            this.colThoiGian.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.colThoiGian.HeaderText = "Thời gian";
+            this.colThoiGian.Name = "colThoiGian";
+            this.colThoiGian.ReadOnly = true;
+            // 
+            // colLoaiHoatDong
+            // 
+            this.colLoaiHoatDong.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.colLoaiHoatDong.HeaderText = "Loại hoạt động";
+            this.colLoaiHoatDong.Name = "colLoaiHoatDong";
+            this.colLoaiHoatDong.ReadOnly = true;
+            // 
+            // colThongTinChiTiet
+            // 
+            this.colThongTinChiTiet.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.colThongTinChiTiet.HeaderText = "Thông tin chi tiết";
+            this.colThongTinChiTiet.Name = "colThongTinChiTiet";
+            this.colThongTinChiTiet.ReadOnly = true;
+            // 
+            // colNguoiThucHien
+            // 
+            this.colNguoiThucHien.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.colNguoiThucHien.HeaderText = "Người thực hiện";
+            this.colNguoiThucHien.Name = "colNguoiThucHien";
+            this.colNguoiThucHien.ReadOnly = true;
+            // 
+            // picTraSach
+            // 
+            this.picTraSach.BackColor = System.Drawing.Color.AliceBlue;
+            this.picTraSach.Image = global::DoAnQLTV.Properties.Resources.trả_sách;
+            this.picTraSach.Location = new System.Drawing.Point(52, 8);
+            this.picTraSach.Name = "picTraSach";
+            this.picTraSach.Size = new System.Drawing.Size(50, 50);
+            this.picTraSach.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.picTraSach.TabIndex = 0;
+            this.picTraSach.TabStop = false;
+            // 
+            // picLapPhieuMuon
+            // 
+            this.picLapPhieuMuon.BackColor = System.Drawing.Color.AliceBlue;
+            this.picLapPhieuMuon.Image = global::DoAnQLTV.Properties.Resources.lập_phiếu_mượn;
+            this.picLapPhieuMuon.Location = new System.Drawing.Point(52, 8);
+            this.picLapPhieuMuon.Name = "picLapPhieuMuon";
+            this.picLapPhieuMuon.Size = new System.Drawing.Size(50, 50);
+            this.picLapPhieuMuon.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.picLapPhieuMuon.TabIndex = 0;
+            this.picLapPhieuMuon.TabStop = false;
+            // 
+            // picQuanLyNhanVien
+            // 
+            this.picQuanLyNhanVien.BackColor = System.Drawing.Color.AliceBlue;
+            this.picQuanLyNhanVien.Image = global::DoAnQLTV.Properties.Resources.nhân_viên;
+            this.picQuanLyNhanVien.Location = new System.Drawing.Point(52, 8);
+            this.picQuanLyNhanVien.Name = "picQuanLyNhanVien";
+            this.picQuanLyNhanVien.Size = new System.Drawing.Size(50, 50);
+            this.picQuanLyNhanVien.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.picQuanLyNhanVien.TabIndex = 0;
+            this.picQuanLyNhanVien.TabStop = false;
+            // 
+            // picQuanLyDocGia
+            // 
+            this.picQuanLyDocGia.BackColor = System.Drawing.Color.AliceBlue;
+            this.picQuanLyDocGia.Image = global::DoAnQLTV.Properties.Resources.độc_giả;
+            this.picQuanLyDocGia.Location = new System.Drawing.Point(52, 8);
+            this.picQuanLyDocGia.Name = "picQuanLyDocGia";
+            this.picQuanLyDocGia.Size = new System.Drawing.Size(50, 50);
+            this.picQuanLyDocGia.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.picQuanLyDocGia.TabIndex = 0;
+            this.picQuanLyDocGia.TabStop = false;
+            // 
+            // picQuanLySach
+            // 
+            this.picQuanLySach.BackColor = System.Drawing.Color.AliceBlue;
+            this.picQuanLySach.Image = global::DoAnQLTV.Properties.Resources.sách;
+            this.picQuanLySach.Location = new System.Drawing.Point(52, 8);
+            this.picQuanLySach.Name = "picQuanLySach";
+            this.picQuanLySach.Size = new System.Drawing.Size(50, 50);
+            this.picQuanLySach.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.picQuanLySach.TabIndex = 0;
+            this.picQuanLySach.TabStop = false;
+            // 
             // picTimKiemSach
             // 
             this.picTimKiemSach.BackColor = System.Drawing.Color.AliceBlue;
+            this.picTimKiemSach.Image = global::DoAnQLTV.Properties.Resources.tìm_kiếm;
             this.picTimKiemSach.Location = new System.Drawing.Point(52, 8);
             this.picTimKiemSach.Name = "picTimKiemSach";
             this.picTimKiemSach.Size = new System.Drawing.Size(50, 50);
@@ -977,16 +1091,19 @@
             this.pnlThaoTacNhanh.PerformLayout();
             this.tlpTruyCapNhanh.ResumeLayout(false);
             this.pnlTheQuanLySach.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.picQuanLySach)).EndInit();
             this.pnlTheQuanLyDocGia.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.picQuanLyDocGia)).EndInit();
             this.pnlTheQuanLyNhanVien.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.picQuanLyNhanVien)).EndInit();
             this.pnlTheLapPhieuMuon.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.picLapPhieuMuon)).EndInit();
             this.pnlTheTraSach.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.picTraSach)).EndInit();
             this.pnlTheTimKiemSach.ResumeLayout(false);
+            this.pnlHoatDongGanDay.ResumeLayout(false);
+            this.pnlHoatDongGanDay.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvHoatDongGanDay)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picTraSach)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picLapPhieuMuon)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picQuanLyNhanVien)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picQuanLyDocGia)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picQuanLySach)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.picTimKiemSach)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -1067,5 +1184,12 @@
         private System.Windows.Forms.Label lblMoTaTimKiemSach;
         private System.Windows.Forms.Label lblTenTimKiemSach;
         private System.Windows.Forms.PictureBox picTimKiemSach;
+        private System.Windows.Forms.Panel pnlHoatDongGanDay;
+        private System.Windows.Forms.Label lblTieuDeHoatDongGanDay;
+        private System.Windows.Forms.DataGridView dgvHoatDongGanDay;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colThoiGian;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colLoaiHoatDong;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colThongTinChiTiet;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colNguoiThucHien;
     }
 }

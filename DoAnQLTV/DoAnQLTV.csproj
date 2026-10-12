@@ -218,5 +218,23 @@
   <ItemGroup>
     <None Include="Resources\istockphoto-2022468311-612x612.jpg" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\sách.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\độc giả.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\nhân viên.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\lập phiếu mượn.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\trả sách.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\tìm kiếm.jpg" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
