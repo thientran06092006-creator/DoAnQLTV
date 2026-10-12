@@ -46,7 +46,7 @@ namespace DoAnQLTV
         private void FrmMain_Load(object sender, EventArgs e)
         {
             if (System.ComponentModel.LicenseManager.UsageMode
-    == System.ComponentModel.LicenseUsageMode.Designtime)
+       == System.ComponentModel.LicenseUsageMode.Designtime)
             {
                 return;
             }
@@ -279,43 +279,6 @@ namespace DoAnQLTV
             }
         }
 
-        private void DongMoNhomMenu(Panel nhomDuocChon)
-        {
-            pnlNhomQuanLy.Visible = false;
-            pnlNhomTraCuu.Visible = false;
-            pnlNhomMuonTra.Visible = false;
-            pnlNhomTroGiup.Visible = false;
-            pnlNhomHeThong.Visible = false;
-
-            if (nhomDuocChon != null)
-            {
-                nhomDuocChon.Visible = true;
-            }
-        }
-        private void btnTraCuu_Click(object sender, EventArgs e)
-        {
-            DongMoNhomMenu(
-                pnlNhomTraCuu.Visible ? null : pnlNhomTraCuu);
-        }
-
-        private void btnMuonTra_Click(object sender, EventArgs e)
-        {
-            DongMoNhomMenu(
-                pnlNhomMuonTra.Visible ? null : pnlNhomMuonTra);
-        }
-
-        private void btnTroGiup_Click(object sender, EventArgs e)
-        {
-            DongMoNhomMenu(
-                pnlNhomTroGiup.Visible ? null : pnlNhomTroGiup);
-        }
-
-        private void btnHeThong_Click(object sender, EventArgs e)
-        {
-            DongMoNhomMenu(
-                pnlNhomHeThong.Visible ? null : pnlNhomHeThong);
-        }
-
 
         private void MoFormChucNang(Form form)
         {
@@ -526,76 +489,62 @@ namespace DoAnQLTV
         }
 
         // Truy cập nhanh
+
         private void pnlTheQuanLySach_Click(object sender, EventArgs e)
         {
-            FrmSach frm = new FrmSach();
-            frm.ShowDialog();
+            MoFormChucNang(new FrmSach());
         }
+
         private void pnlTheQuanLyDocGia_Click(object sender, EventArgs e)
         {
-            FrmDocGia frm = new FrmDocGia();
-            frm.ShowDialog();
+            MoFormChucNang(new FrmDocGia());
         }
 
         private void pnlTheQuanLyNhanVien_Click(object sender, EventArgs e)
         {
-            FrmNhanVien frm = new FrmNhanVien();
-            frm.ShowDialog();
+            MoFormChucNang(new FrmNhanVien());
         }
 
         private void pnlTheLapPhieuMuon_Click(object sender, EventArgs e)
         {
-            FrmLapPhieuMuon frm = new FrmLapPhieuMuon();
-            frm.ShowDialog();
+            MoFormChucNang(new FrmLapPhieuMuon());
         }
 
         private void pnlTheTraSach_Click(object sender, EventArgs e)
         {
-            FrmTraSach frm = new FrmTraSach();
-            frm.ShowDialog();
+            MoFormChucNang(new FrmTraSach());
         }
 
         private void pnlTheTimKiemSach_Click(object sender, EventArgs e)
         {
-            FrmTimKiemSach frm = new FrmTimKiemSach();
-            frm.ShowDialog();
+            MoFormChucNang(new FrmTimKiemSach());
         }
 
-        private void btnQuanLy_Click_1(object sender, EventArgs e)
+
+
+
+        private void DongTatCaFormCon()
         {
-            pnlNhomQuanLy.Visible = true;
+            // Lấy danh sách tất cả Form chức năng đang mở.
+            List<Form> danhSachForm = Application.OpenForms
+                .Cast<Form>()
+                .Where(f => f != this && !(f is FrmLogin))
+                .ToList();
+
+            // Đóng tất cả Form chức năng.
+            foreach (Form form in danhSachForm)
+            {
+                if (!form.IsDisposed)
+                {
+                    form.Close();
+                }
+            }
         }
 
-
-        private void btnTraCuu_Click_1(object sender, EventArgs e)
+        private void btnTrangChu_Click(object sender, EventArgs e)
         {
-            DongMoNhomMenu(
-                pnlNhomTraCuu.Visible ? null : pnlNhomTraCuu);
+            DongTatCaFormCon();
         }
 
-        private void btnMuonTra_Click_1(object sender, EventArgs e)
-        {
-            DongMoNhomMenu(
-                pnlNhomMuonTra.Visible ? null : pnlNhomMuonTra);
-        }
-
-        private void btnTroGiup_Click_1(object sender, EventArgs e)
-        {
-            DongMoNhomMenu(
-                pnlNhomTroGiup.Visible ? null : pnlNhomTroGiup);
-        }
-
-        private void btnHeThong_Click_1(object sender, EventArgs e)
-        {
-            DongMoNhomMenu(
-                pnlNhomHeThong.Visible ? null : pnlNhomHeThong);
-        }
-
-        private void btnQuanLy_Click_1(object sender, EventArgs e)
-        {
-            MessageBox.Show("Đã bấm nút Quản lý");
-
-            pnlNhomQuanLy.Visible = !pnlNhomQuanLy.Visible;
-        }
     }
 }

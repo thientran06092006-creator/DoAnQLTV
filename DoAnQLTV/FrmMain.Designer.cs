@@ -29,15 +29,15 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle29 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle30 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea29 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend29 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series43 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.Series series44 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea30 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend30 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series45 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea3 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend3 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series4 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series5 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea4 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend4 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series6 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.menuStripMain = new System.Windows.Forms.ToolStripMenuItem();
             this.đăngXuấtToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -59,6 +59,27 @@
             this.thôngTinChươngTrìnhToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.hướngDẫnSửDụngToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.pnlSidebar = new System.Windows.Forms.Panel();
+            this.pnlNhomTroGiup = new System.Windows.Forms.Panel();
+            this.btnHuongDanSuDung = new System.Windows.Forms.Button();
+            this.btnThongTinChuongTrinh = new System.Windows.Forms.Button();
+            this.btnTroGiup = new System.Windows.Forms.Button();
+            this.pnlNhomMuonTra = new System.Windows.Forms.Panel();
+            this.btnDanhSachPhieuMuon = new System.Windows.Forms.Button();
+            this.btnTraSach = new System.Windows.Forms.Button();
+            this.btnLapPhieuMuon = new System.Windows.Forms.Button();
+            this.btnMuonTra = new System.Windows.Forms.Button();
+            this.pnlNhomTraCuu = new System.Windows.Forms.Panel();
+            this.btnThongTinDocGia = new System.Windows.Forms.Button();
+            this.btnTimKiemSach = new System.Windows.Forms.Button();
+            this.btnTraCuu = new System.Windows.Forms.Button();
+            this.pnlNhomQuanLy = new System.Windows.Forms.Panel();
+            this.btnQuanLyNhanVien = new System.Windows.Forms.Button();
+            this.btnQuanLyDocGia = new System.Windows.Forms.Button();
+            this.btnQuanLyTacGia = new System.Windows.Forms.Button();
+            this.btnQuanLyTheLoai = new System.Windows.Forms.Button();
+            this.btnQuanLySach = new System.Windows.Forms.Button();
+            this.btnQuanLy = new System.Windows.Forms.Button();
+            this.btnTrangChu = new System.Windows.Forms.Button();
             this.pnlHeader = new System.Windows.Forms.Panel();
             this.lblChucVuNguoiDung = new System.Windows.Forms.Label();
             this.lblHoTenNguoiDung = new System.Windows.Forms.Label();
@@ -126,33 +147,16 @@
             this.lblMoTaTrangChu = new System.Windows.Forms.Label();
             this.lblLoiChao = new System.Windows.Forms.Label();
             this.timerThoiGian = new System.Windows.Forms.Timer(this.components);
-            this.btnTrangChu = new System.Windows.Forms.Button();
-            this.pnlNhomQuanLy = new System.Windows.Forms.Panel();
-            this.btnQuanLy = new System.Windows.Forms.Button();
-            this.btnQuanLySach = new System.Windows.Forms.Button();
-            this.btnQuanLyTheLoai = new System.Windows.Forms.Button();
-            this.btnQuanLyTacGia = new System.Windows.Forms.Button();
-            this.btnQuanLyDocGia = new System.Windows.Forms.Button();
-            this.btnQuanLyNhanVien = new System.Windows.Forms.Button();
-            this.pnlNhomTraCuu = new System.Windows.Forms.Panel();
-            this.btnTraCuu = new System.Windows.Forms.Button();
-            this.btnTimKiemSach = new System.Windows.Forms.Button();
-            this.btnThongTinDocGia = new System.Windows.Forms.Button();
-            this.pnlNhomMuonTra = new System.Windows.Forms.Panel();
-            this.btnMuonTra = new System.Windows.Forms.Button();
-            this.btnLapPhieuMuon = new System.Windows.Forms.Button();
-            this.btnTraSach = new System.Windows.Forms.Button();
-            this.btnDanhSachPhieuMuon = new System.Windows.Forms.Button();
-            this.pnlNhomTroGiup = new System.Windows.Forms.Panel();
-            this.btnTroGiup = new System.Windows.Forms.Button();
-            this.btnThongTinChuongTrinh = new System.Windows.Forms.Button();
-            this.btnHuongDanSuDung = new System.Windows.Forms.Button();
             this.pnlNhomHeThong = new System.Windows.Forms.Panel();
-            this.btnHeThong = new System.Windows.Forms.Button();
-            this.btnDoiMatKhau = new System.Windows.Forms.Button();
+            this.btnThoat = new System.Windows.Forms.Button();
             this.btnDangXuat = new System.Windows.Forms.Button();
+            this.btnHeThong = new System.Windows.Forms.Button();
             this.menuStrip1.SuspendLayout();
             this.pnlSidebar.SuspendLayout();
+            this.pnlNhomTroGiup.SuspendLayout();
+            this.pnlNhomMuonTra.SuspendLayout();
+            this.pnlNhomTraCuu.SuspendLayout();
+            this.pnlNhomQuanLy.SuspendLayout();
             this.pnlHeader.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picDaiDien)).BeginInit();
             this.pnlContent.SuspendLayout();
@@ -182,10 +186,6 @@
             this.pnlCardDangMuon.SuspendLayout();
             this.pnlCardDocGia.SuspendLayout();
             this.pnlCardSach.SuspendLayout();
-            this.pnlNhomQuanLy.SuspendLayout();
-            this.pnlNhomTraCuu.SuspendLayout();
-            this.pnlNhomMuonTra.SuspendLayout();
-            this.pnlNhomTroGiup.SuspendLayout();
             this.pnlNhomHeThong.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -244,35 +244,35 @@
             // quảnLýSáchToolStripMenuItem
             // 
             this.quảnLýSáchToolStripMenuItem.Name = "quảnLýSáchToolStripMenuItem";
-            this.quảnLýSáchToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.quảnLýSáchToolStripMenuItem.Size = new System.Drawing.Size(179, 22);
             this.quảnLýSáchToolStripMenuItem.Text = "Quản lý sách";
             this.quảnLýSáchToolStripMenuItem.Click += new System.EventHandler(this.quảnLýSáchToolStripMenuItem_Click);
             // 
             // quảnLýThểLoạiToolStripMenuItem
             // 
             this.quảnLýThểLoạiToolStripMenuItem.Name = "quảnLýThểLoạiToolStripMenuItem";
-            this.quảnLýThểLoạiToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.quảnLýThểLoạiToolStripMenuItem.Size = new System.Drawing.Size(179, 22);
             this.quảnLýThểLoạiToolStripMenuItem.Text = "Quản lý thể loại";
             this.quảnLýThểLoạiToolStripMenuItem.Click += new System.EventHandler(this.quảnLýThểLoạiToolStripMenuItem_Click);
             // 
             // quảnLýTácGiảToolStripMenuItem
             // 
             this.quảnLýTácGiảToolStripMenuItem.Name = "quảnLýTácGiảToolStripMenuItem";
-            this.quảnLýTácGiảToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.quảnLýTácGiảToolStripMenuItem.Size = new System.Drawing.Size(179, 22);
             this.quảnLýTácGiảToolStripMenuItem.Text = "Quản lý tác giả";
             this.quảnLýTácGiảToolStripMenuItem.Click += new System.EventHandler(this.quảnLýTácGiảToolStripMenuItem_Click);
             // 
             // quảnLýĐộcGiảToolStripMenuItem
             // 
             this.quảnLýĐộcGiảToolStripMenuItem.Name = "quảnLýĐộcGiảToolStripMenuItem";
-            this.quảnLýĐộcGiảToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.quảnLýĐộcGiảToolStripMenuItem.Size = new System.Drawing.Size(179, 22);
             this.quảnLýĐộcGiảToolStripMenuItem.Text = "Quản lý độc giả";
             this.quảnLýĐộcGiảToolStripMenuItem.Click += new System.EventHandler(this.quảnLýĐộcGiảToolStripMenuItem_Click);
             // 
             // quảnLýNhânViênToolStripMenuItem
             // 
             this.quảnLýNhânViênToolStripMenuItem.Name = "quảnLýNhânViênToolStripMenuItem";
-            this.quảnLýNhânViênToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.quảnLýNhânViênToolStripMenuItem.Size = new System.Drawing.Size(179, 22);
             this.quảnLýNhânViênToolStripMenuItem.Text = "Quản lý nhân viên";
             this.quảnLýNhânViênToolStripMenuItem.Click += new System.EventHandler(this.quảnLýNhânViênToolStripMenuItem_Click);
             // 
@@ -288,14 +288,14 @@
             // tìmKiếmSáchToolStripMenuItem
             // 
             this.tìmKiếmSáchToolStripMenuItem.Name = "tìmKiếmSáchToolStripMenuItem";
-            this.tìmKiếmSáchToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.tìmKiếmSáchToolStripMenuItem.Size = new System.Drawing.Size(179, 22);
             this.tìmKiếmSáchToolStripMenuItem.Text = "Tìm kiếm sách";
             this.tìmKiếmSáchToolStripMenuItem.Click += new System.EventHandler(this.tìmKiếmSáchToolStripMenuItem_Click);
             // 
             // thôngTinTácGiảToolStripMenuItem
             // 
             this.thôngTinTácGiảToolStripMenuItem.Name = "thôngTinTácGiảToolStripMenuItem";
-            this.thôngTinTácGiảToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.thôngTinTácGiảToolStripMenuItem.Size = new System.Drawing.Size(179, 22);
             this.thôngTinTácGiảToolStripMenuItem.Text = "Thông tin độc giả";
             this.thôngTinTácGiảToolStripMenuItem.Click += new System.EventHandler(this.thôngTinTácGiảToolStripMenuItem_Click);
             // 
@@ -368,6 +368,311 @@
             this.pnlSidebar.Padding = new System.Windows.Forms.Padding(10);
             this.pnlSidebar.Size = new System.Drawing.Size(275, 903);
             this.pnlSidebar.TabIndex = 1;
+            // 
+            // pnlNhomTroGiup
+            // 
+            this.pnlNhomTroGiup.Controls.Add(this.btnHuongDanSuDung);
+            this.pnlNhomTroGiup.Controls.Add(this.btnThongTinChuongTrinh);
+            this.pnlNhomTroGiup.Controls.Add(this.btnTroGiup);
+            this.pnlNhomTroGiup.Dock = System.Windows.Forms.DockStyle.Top;
+            this.pnlNhomTroGiup.Location = new System.Drawing.Point(10, 520);
+            this.pnlNhomTroGiup.Margin = new System.Windows.Forms.Padding(0);
+            this.pnlNhomTroGiup.Name = "pnlNhomTroGiup";
+            this.pnlNhomTroGiup.Size = new System.Drawing.Size(255, 110);
+            this.pnlNhomTroGiup.TabIndex = 4;
+            // 
+            // btnHuongDanSuDung
+            // 
+            this.btnHuongDanSuDung.Dock = System.Windows.Forms.DockStyle.Top;
+            this.btnHuongDanSuDung.FlatAppearance.BorderSize = 0;
+            this.btnHuongDanSuDung.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnHuongDanSuDung.ForeColor = System.Drawing.Color.LightSteelBlue;
+            this.btnHuongDanSuDung.Location = new System.Drawing.Point(0, 75);
+            this.btnHuongDanSuDung.Name = "btnHuongDanSuDung";
+            this.btnHuongDanSuDung.Padding = new System.Windows.Forms.Padding(30, 0, 0, 0);
+            this.btnHuongDanSuDung.Size = new System.Drawing.Size(255, 35);
+            this.btnHuongDanSuDung.TabIndex = 2;
+            this.btnHuongDanSuDung.Text = "Hướng dẫn sử dụng";
+            this.btnHuongDanSuDung.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnHuongDanSuDung.UseVisualStyleBackColor = true;
+            // 
+            // btnThongTinChuongTrinh
+            // 
+            this.btnThongTinChuongTrinh.Dock = System.Windows.Forms.DockStyle.Top;
+            this.btnThongTinChuongTrinh.FlatAppearance.BorderSize = 0;
+            this.btnThongTinChuongTrinh.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnThongTinChuongTrinh.ForeColor = System.Drawing.Color.LightSteelBlue;
+            this.btnThongTinChuongTrinh.Location = new System.Drawing.Point(0, 40);
+            this.btnThongTinChuongTrinh.Name = "btnThongTinChuongTrinh";
+            this.btnThongTinChuongTrinh.Padding = new System.Windows.Forms.Padding(30, 0, 0, 0);
+            this.btnThongTinChuongTrinh.Size = new System.Drawing.Size(255, 35);
+            this.btnThongTinChuongTrinh.TabIndex = 1;
+            this.btnThongTinChuongTrinh.Text = "Thông tin chương trình";
+            this.btnThongTinChuongTrinh.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnThongTinChuongTrinh.UseVisualStyleBackColor = true;
+            // 
+            // btnTroGiup
+            // 
+            this.btnTroGiup.Dock = System.Windows.Forms.DockStyle.Top;
+            this.btnTroGiup.FlatAppearance.BorderSize = 0;
+            this.btnTroGiup.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnTroGiup.ForeColor = System.Drawing.Color.WhiteSmoke;
+            this.btnTroGiup.Location = new System.Drawing.Point(0, 0);
+            this.btnTroGiup.Name = "btnTroGiup";
+            this.btnTroGiup.Size = new System.Drawing.Size(255, 40);
+            this.btnTroGiup.TabIndex = 0;
+            this.btnTroGiup.Text = "Trợ giúp";
+            this.btnTroGiup.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnTroGiup.UseVisualStyleBackColor = true;
+            // 
+            // pnlNhomMuonTra
+            // 
+            this.pnlNhomMuonTra.Controls.Add(this.btnDanhSachPhieuMuon);
+            this.pnlNhomMuonTra.Controls.Add(this.btnTraSach);
+            this.pnlNhomMuonTra.Controls.Add(this.btnLapPhieuMuon);
+            this.pnlNhomMuonTra.Controls.Add(this.btnMuonTra);
+            this.pnlNhomMuonTra.Dock = System.Windows.Forms.DockStyle.Top;
+            this.pnlNhomMuonTra.Location = new System.Drawing.Point(10, 375);
+            this.pnlNhomMuonTra.Margin = new System.Windows.Forms.Padding(0);
+            this.pnlNhomMuonTra.Name = "pnlNhomMuonTra";
+            this.pnlNhomMuonTra.Size = new System.Drawing.Size(255, 145);
+            this.pnlNhomMuonTra.TabIndex = 3;
+            // 
+            // btnDanhSachPhieuMuon
+            // 
+            this.btnDanhSachPhieuMuon.Dock = System.Windows.Forms.DockStyle.Top;
+            this.btnDanhSachPhieuMuon.FlatAppearance.BorderSize = 0;
+            this.btnDanhSachPhieuMuon.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnDanhSachPhieuMuon.ForeColor = System.Drawing.Color.LightSteelBlue;
+            this.btnDanhSachPhieuMuon.Location = new System.Drawing.Point(0, 110);
+            this.btnDanhSachPhieuMuon.Name = "btnDanhSachPhieuMuon";
+            this.btnDanhSachPhieuMuon.Padding = new System.Windows.Forms.Padding(30, 0, 0, 0);
+            this.btnDanhSachPhieuMuon.Size = new System.Drawing.Size(255, 35);
+            this.btnDanhSachPhieuMuon.TabIndex = 3;
+            this.btnDanhSachPhieuMuon.Text = "Danh sách phiếu mượn";
+            this.btnDanhSachPhieuMuon.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnDanhSachPhieuMuon.UseVisualStyleBackColor = true;
+            // 
+            // btnTraSach
+            // 
+            this.btnTraSach.Dock = System.Windows.Forms.DockStyle.Top;
+            this.btnTraSach.FlatAppearance.BorderSize = 0;
+            this.btnTraSach.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnTraSach.ForeColor = System.Drawing.Color.LightSteelBlue;
+            this.btnTraSach.Location = new System.Drawing.Point(0, 75);
+            this.btnTraSach.Name = "btnTraSach";
+            this.btnTraSach.Padding = new System.Windows.Forms.Padding(30, 0, 0, 0);
+            this.btnTraSach.Size = new System.Drawing.Size(255, 35);
+            this.btnTraSach.TabIndex = 2;
+            this.btnTraSach.Text = "Trả sách";
+            this.btnTraSach.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnTraSach.UseVisualStyleBackColor = true;
+            // 
+            // btnLapPhieuMuon
+            // 
+            this.btnLapPhieuMuon.Dock = System.Windows.Forms.DockStyle.Top;
+            this.btnLapPhieuMuon.FlatAppearance.BorderSize = 0;
+            this.btnLapPhieuMuon.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnLapPhieuMuon.ForeColor = System.Drawing.Color.LightSteelBlue;
+            this.btnLapPhieuMuon.Location = new System.Drawing.Point(0, 40);
+            this.btnLapPhieuMuon.Name = "btnLapPhieuMuon";
+            this.btnLapPhieuMuon.Padding = new System.Windows.Forms.Padding(30, 0, 0, 0);
+            this.btnLapPhieuMuon.Size = new System.Drawing.Size(255, 35);
+            this.btnLapPhieuMuon.TabIndex = 1;
+            this.btnLapPhieuMuon.Text = "Lập phiếu mượn";
+            this.btnLapPhieuMuon.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnLapPhieuMuon.UseVisualStyleBackColor = true;
+            // 
+            // btnMuonTra
+            // 
+            this.btnMuonTra.AutoSize = true;
+            this.btnMuonTra.Dock = System.Windows.Forms.DockStyle.Top;
+            this.btnMuonTra.FlatAppearance.BorderSize = 0;
+            this.btnMuonTra.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnMuonTra.ForeColor = System.Drawing.Color.WhiteSmoke;
+            this.btnMuonTra.Location = new System.Drawing.Point(0, 0);
+            this.btnMuonTra.Name = "btnMuonTra";
+            this.btnMuonTra.Size = new System.Drawing.Size(255, 40);
+            this.btnMuonTra.TabIndex = 0;
+            this.btnMuonTra.Text = "Mượn - Trả";
+            this.btnMuonTra.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnMuonTra.UseVisualStyleBackColor = true;
+            // 
+            // pnlNhomTraCuu
+            // 
+            this.pnlNhomTraCuu.Controls.Add(this.btnThongTinDocGia);
+            this.pnlNhomTraCuu.Controls.Add(this.btnTimKiemSach);
+            this.pnlNhomTraCuu.Controls.Add(this.btnTraCuu);
+            this.pnlNhomTraCuu.Dock = System.Windows.Forms.DockStyle.Top;
+            this.pnlNhomTraCuu.Location = new System.Drawing.Point(10, 265);
+            this.pnlNhomTraCuu.Margin = new System.Windows.Forms.Padding(0);
+            this.pnlNhomTraCuu.Name = "pnlNhomTraCuu";
+            this.pnlNhomTraCuu.Size = new System.Drawing.Size(255, 110);
+            this.pnlNhomTraCuu.TabIndex = 2;
+            // 
+            // btnThongTinDocGia
+            // 
+            this.btnThongTinDocGia.Dock = System.Windows.Forms.DockStyle.Top;
+            this.btnThongTinDocGia.FlatAppearance.BorderSize = 0;
+            this.btnThongTinDocGia.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnThongTinDocGia.ForeColor = System.Drawing.Color.LightSteelBlue;
+            this.btnThongTinDocGia.Location = new System.Drawing.Point(0, 75);
+            this.btnThongTinDocGia.Name = "btnThongTinDocGia";
+            this.btnThongTinDocGia.Padding = new System.Windows.Forms.Padding(30, 0, 0, 0);
+            this.btnThongTinDocGia.Size = new System.Drawing.Size(255, 35);
+            this.btnThongTinDocGia.TabIndex = 2;
+            this.btnThongTinDocGia.Text = "Thông tin độc giả";
+            this.btnThongTinDocGia.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnThongTinDocGia.UseVisualStyleBackColor = true;
+            // 
+            // btnTimKiemSach
+            // 
+            this.btnTimKiemSach.Dock = System.Windows.Forms.DockStyle.Top;
+            this.btnTimKiemSach.FlatAppearance.BorderSize = 0;
+            this.btnTimKiemSach.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnTimKiemSach.ForeColor = System.Drawing.Color.LightSteelBlue;
+            this.btnTimKiemSach.Location = new System.Drawing.Point(0, 40);
+            this.btnTimKiemSach.Name = "btnTimKiemSach";
+            this.btnTimKiemSach.Padding = new System.Windows.Forms.Padding(30, 0, 0, 0);
+            this.btnTimKiemSach.Size = new System.Drawing.Size(255, 35);
+            this.btnTimKiemSach.TabIndex = 1;
+            this.btnTimKiemSach.Text = "Tìm kiếm sách";
+            this.btnTimKiemSach.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnTimKiemSach.UseVisualStyleBackColor = true;
+            // 
+            // btnTraCuu
+            // 
+            this.btnTraCuu.Dock = System.Windows.Forms.DockStyle.Top;
+            this.btnTraCuu.FlatAppearance.BorderSize = 0;
+            this.btnTraCuu.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnTraCuu.ForeColor = System.Drawing.Color.WhiteSmoke;
+            this.btnTraCuu.Location = new System.Drawing.Point(0, 0);
+            this.btnTraCuu.Name = "btnTraCuu";
+            this.btnTraCuu.Size = new System.Drawing.Size(255, 40);
+            this.btnTraCuu.TabIndex = 0;
+            this.btnTraCuu.Text = "♧  Tra cứu";
+            this.btnTraCuu.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnTraCuu.UseVisualStyleBackColor = true;
+            // 
+            // pnlNhomQuanLy
+            // 
+            this.pnlNhomQuanLy.Controls.Add(this.btnQuanLyNhanVien);
+            this.pnlNhomQuanLy.Controls.Add(this.btnQuanLyDocGia);
+            this.pnlNhomQuanLy.Controls.Add(this.btnQuanLyTacGia);
+            this.pnlNhomQuanLy.Controls.Add(this.btnQuanLyTheLoai);
+            this.pnlNhomQuanLy.Controls.Add(this.btnQuanLySach);
+            this.pnlNhomQuanLy.Controls.Add(this.btnQuanLy);
+            this.pnlNhomQuanLy.Dock = System.Windows.Forms.DockStyle.Top;
+            this.pnlNhomQuanLy.Location = new System.Drawing.Point(10, 50);
+            this.pnlNhomQuanLy.Name = "pnlNhomQuanLy";
+            this.pnlNhomQuanLy.Size = new System.Drawing.Size(255, 215);
+            this.pnlNhomQuanLy.TabIndex = 1;
+            // 
+            // btnQuanLyNhanVien
+            // 
+            this.btnQuanLyNhanVien.Dock = System.Windows.Forms.DockStyle.Top;
+            this.btnQuanLyNhanVien.FlatAppearance.BorderSize = 0;
+            this.btnQuanLyNhanVien.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnQuanLyNhanVien.ForeColor = System.Drawing.Color.LightSteelBlue;
+            this.btnQuanLyNhanVien.Location = new System.Drawing.Point(0, 180);
+            this.btnQuanLyNhanVien.Name = "btnQuanLyNhanVien";
+            this.btnQuanLyNhanVien.Padding = new System.Windows.Forms.Padding(30, 0, 0, 0);
+            this.btnQuanLyNhanVien.Size = new System.Drawing.Size(255, 35);
+            this.btnQuanLyNhanVien.TabIndex = 5;
+            this.btnQuanLyNhanVien.Text = "Quản lý nhân viên";
+            this.btnQuanLyNhanVien.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnQuanLyNhanVien.UseVisualStyleBackColor = true;
+            // 
+            // btnQuanLyDocGia
+            // 
+            this.btnQuanLyDocGia.Dock = System.Windows.Forms.DockStyle.Top;
+            this.btnQuanLyDocGia.FlatAppearance.BorderSize = 0;
+            this.btnQuanLyDocGia.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnQuanLyDocGia.ForeColor = System.Drawing.Color.LightSteelBlue;
+            this.btnQuanLyDocGia.Location = new System.Drawing.Point(0, 145);
+            this.btnQuanLyDocGia.Name = "btnQuanLyDocGia";
+            this.btnQuanLyDocGia.Padding = new System.Windows.Forms.Padding(30, 0, 0, 0);
+            this.btnQuanLyDocGia.Size = new System.Drawing.Size(255, 35);
+            this.btnQuanLyDocGia.TabIndex = 4;
+            this.btnQuanLyDocGia.Text = "Quản lý độc giả";
+            this.btnQuanLyDocGia.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnQuanLyDocGia.UseVisualStyleBackColor = true;
+            // 
+            // btnQuanLyTacGia
+            // 
+            this.btnQuanLyTacGia.Dock = System.Windows.Forms.DockStyle.Top;
+            this.btnQuanLyTacGia.FlatAppearance.BorderSize = 0;
+            this.btnQuanLyTacGia.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnQuanLyTacGia.ForeColor = System.Drawing.Color.LightSteelBlue;
+            this.btnQuanLyTacGia.Location = new System.Drawing.Point(0, 110);
+            this.btnQuanLyTacGia.Name = "btnQuanLyTacGia";
+            this.btnQuanLyTacGia.Padding = new System.Windows.Forms.Padding(30, 0, 0, 0);
+            this.btnQuanLyTacGia.Size = new System.Drawing.Size(255, 35);
+            this.btnQuanLyTacGia.TabIndex = 3;
+            this.btnQuanLyTacGia.Text = "Quản lý tác giả";
+            this.btnQuanLyTacGia.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnQuanLyTacGia.UseVisualStyleBackColor = true;
+            // 
+            // btnQuanLyTheLoai
+            // 
+            this.btnQuanLyTheLoai.Dock = System.Windows.Forms.DockStyle.Top;
+            this.btnQuanLyTheLoai.FlatAppearance.BorderSize = 0;
+            this.btnQuanLyTheLoai.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnQuanLyTheLoai.ForeColor = System.Drawing.Color.LightSteelBlue;
+            this.btnQuanLyTheLoai.Location = new System.Drawing.Point(0, 75);
+            this.btnQuanLyTheLoai.Name = "btnQuanLyTheLoai";
+            this.btnQuanLyTheLoai.Padding = new System.Windows.Forms.Padding(30, 0, 0, 0);
+            this.btnQuanLyTheLoai.Size = new System.Drawing.Size(255, 35);
+            this.btnQuanLyTheLoai.TabIndex = 2;
+            this.btnQuanLyTheLoai.Text = "Quản lý thể loại";
+            this.btnQuanLyTheLoai.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnQuanLyTheLoai.UseVisualStyleBackColor = true;
+            // 
+            // btnQuanLySach
+            // 
+            this.btnQuanLySach.Dock = System.Windows.Forms.DockStyle.Top;
+            this.btnQuanLySach.FlatAppearance.BorderSize = 0;
+            this.btnQuanLySach.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnQuanLySach.ForeColor = System.Drawing.Color.LightSteelBlue;
+            this.btnQuanLySach.Location = new System.Drawing.Point(0, 40);
+            this.btnQuanLySach.Name = "btnQuanLySach";
+            this.btnQuanLySach.Padding = new System.Windows.Forms.Padding(30, 0, 0, 0);
+            this.btnQuanLySach.Size = new System.Drawing.Size(255, 35);
+            this.btnQuanLySach.TabIndex = 1;
+            this.btnQuanLySach.Text = "Quản lý sách";
+            this.btnQuanLySach.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnQuanLySach.UseVisualStyleBackColor = true;
+            // 
+            // btnQuanLy
+            // 
+            this.btnQuanLy.Dock = System.Windows.Forms.DockStyle.Top;
+            this.btnQuanLy.FlatAppearance.BorderSize = 0;
+            this.btnQuanLy.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnQuanLy.ForeColor = System.Drawing.Color.WhiteSmoke;
+            this.btnQuanLy.Location = new System.Drawing.Point(0, 0);
+            this.btnQuanLy.Name = "btnQuanLy";
+            this.btnQuanLy.Size = new System.Drawing.Size(255, 40);
+            this.btnQuanLy.TabIndex = 0;
+            this.btnQuanLy.Text = "♧  Quản lý";
+            this.btnQuanLy.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnQuanLy.UseVisualStyleBackColor = true;
+            // 
+            // btnTrangChu
+            // 
+            this.btnTrangChu.BackColor = System.Drawing.Color.DodgerBlue;
+            this.btnTrangChu.Dock = System.Windows.Forms.DockStyle.Top;
+            this.btnTrangChu.FlatAppearance.BorderSize = 0;
+            this.btnTrangChu.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnTrangChu.ForeColor = System.Drawing.Color.White;
+            this.btnTrangChu.Location = new System.Drawing.Point(10, 10);
+            this.btnTrangChu.Name = "btnTrangChu";
+            this.btnTrangChu.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
+            this.btnTrangChu.Size = new System.Drawing.Size(255, 40);
+            this.btnTrangChu.TabIndex = 0;
+            this.btnTrangChu.Text = "Trang chủ";
+            this.btnTrangChu.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnTrangChu.UseVisualStyleBackColor = false;
+            this.btnTrangChu.Click += new System.EventHandler(this.btnTrangChu_Click);
             // 
             // pnlHeader
             // 
@@ -526,14 +831,14 @@
             this.dgvHoatDongGanDay.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dgvHoatDongGanDay.BackgroundColor = System.Drawing.Color.White;
             this.dgvHoatDongGanDay.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            dataGridViewCellStyle29.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle29.BackColor = System.Drawing.Color.AliceBlue;
-            dataGridViewCellStyle29.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle29.ForeColor = System.Drawing.Color.MidnightBlue;
-            dataGridViewCellStyle29.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle29.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle29.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dgvHoatDongGanDay.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle29;
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle3.BackColor = System.Drawing.Color.AliceBlue;
+            dataGridViewCellStyle3.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle3.ForeColor = System.Drawing.Color.MidnightBlue;
+            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dgvHoatDongGanDay.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle3;
             this.dgvHoatDongGanDay.ColumnHeadersHeight = 35;
             this.dgvHoatDongGanDay.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
             this.dgvHoatDongGanDay.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
@@ -541,14 +846,14 @@
             this.colLoaiHoatDong,
             this.colThongTinChiTiet,
             this.colNguoiThucHien});
-            dataGridViewCellStyle30.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle30.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle30.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle30.ForeColor = System.Drawing.Color.MidnightBlue;
-            dataGridViewCellStyle30.SelectionBackColor = System.Drawing.Color.LightSteelBlue;
-            dataGridViewCellStyle30.SelectionForeColor = System.Drawing.Color.MidnightBlue;
-            dataGridViewCellStyle30.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dgvHoatDongGanDay.DefaultCellStyle = dataGridViewCellStyle30;
+            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle4.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle4.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle4.ForeColor = System.Drawing.Color.MidnightBlue;
+            dataGridViewCellStyle4.SelectionBackColor = System.Drawing.Color.LightSteelBlue;
+            dataGridViewCellStyle4.SelectionForeColor = System.Drawing.Color.MidnightBlue;
+            dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dgvHoatDongGanDay.DefaultCellStyle = dataGridViewCellStyle4;
             this.dgvHoatDongGanDay.EnableHeadersVisualStyles = false;
             this.dgvHoatDongGanDay.GridColor = System.Drawing.Color.LightGray;
             this.dgvHoatDongGanDay.Location = new System.Drawing.Point(10, 45);
@@ -979,25 +1284,25 @@
             this.chartMuonTra.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            chartArea29.Name = "ChartArea1";
-            this.chartMuonTra.ChartAreas.Add(chartArea29);
-            legend29.Alignment = System.Drawing.StringAlignment.Center;
-            legend29.Name = "Legend1";
-            this.chartMuonTra.Legends.Add(legend29);
+            chartArea3.Name = "ChartArea1";
+            this.chartMuonTra.ChartAreas.Add(chartArea3);
+            legend3.Alignment = System.Drawing.StringAlignment.Center;
+            legend3.Name = "Legend1";
+            this.chartMuonTra.Legends.Add(legend3);
             this.chartMuonTra.Location = new System.Drawing.Point(10, 45);
             this.chartMuonTra.Name = "chartMuonTra";
-            series43.ChartArea = "ChartArea1";
-            series43.Color = System.Drawing.Color.RoyalBlue;
-            series43.Legend = "Legend1";
-            series43.LegendText = "Số lượt mượn";
-            series43.Name = "SeriesMuon";
-            series44.ChartArea = "ChartArea1";
-            series44.Color = System.Drawing.Color.SeaGreen;
-            series44.Legend = "Legend1";
-            series44.LegendText = "Số lượt trả";
-            series44.Name = "SeriesTra";
-            this.chartMuonTra.Series.Add(series43);
-            this.chartMuonTra.Series.Add(series44);
+            series4.ChartArea = "ChartArea1";
+            series4.Color = System.Drawing.Color.RoyalBlue;
+            series4.Legend = "Legend1";
+            series4.LegendText = "Số lượt mượn";
+            series4.Name = "SeriesMuon";
+            series5.ChartArea = "ChartArea1";
+            series5.Color = System.Drawing.Color.SeaGreen;
+            series5.Legend = "Legend1";
+            series5.LegendText = "Số lượt trả";
+            series5.Name = "SeriesTra";
+            this.chartMuonTra.Series.Add(series4);
+            this.chartMuonTra.Series.Add(series5);
             this.chartMuonTra.Size = new System.Drawing.Size(477, 200);
             this.chartMuonTra.TabIndex = 1;
             this.chartMuonTra.Text = "chart1";
@@ -1029,16 +1334,16 @@
             // 
             // chartTheLoai
             // 
-            chartArea30.Name = "ChartArea1";
-            this.chartTheLoai.ChartAreas.Add(chartArea30);
-            legend30.Name = "Legend1";
-            this.chartTheLoai.Legends.Add(legend30);
+            chartArea4.Name = "ChartArea1";
+            this.chartTheLoai.ChartAreas.Add(chartArea4);
+            legend4.Name = "Legend1";
+            this.chartTheLoai.Legends.Add(legend4);
             this.chartTheLoai.Location = new System.Drawing.Point(0, 0);
             this.chartTheLoai.Name = "chartTheLoai";
-            series45.ChartArea = "ChartArea1";
-            series45.Legend = "Legend1";
-            series45.Name = "Series1";
-            this.chartTheLoai.Series.Add(series45);
+            series6.ChartArea = "ChartArea1";
+            series6.Legend = "Legend1";
+            series6.Name = "Series1";
+            this.chartTheLoai.Series.Add(series6);
             this.chartTheLoai.Size = new System.Drawing.Size(503, 248);
             this.chartTheLoai.TabIndex = 1;
             this.chartTheLoai.Text = "chart1";
@@ -1249,322 +1554,10 @@
             this.timerThoiGian.Interval = 1000;
             this.timerThoiGian.Tick += new System.EventHandler(this.timerThoiGian_Tick);
             // 
-            // btnTrangChu
-            // 
-            this.btnTrangChu.BackColor = System.Drawing.Color.DodgerBlue;
-            this.btnTrangChu.Dock = System.Windows.Forms.DockStyle.Top;
-            this.btnTrangChu.FlatAppearance.BorderSize = 0;
-            this.btnTrangChu.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnTrangChu.ForeColor = System.Drawing.Color.White;
-            this.btnTrangChu.Location = new System.Drawing.Point(10, 10);
-            this.btnTrangChu.Name = "btnTrangChu";
-            this.btnTrangChu.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
-            this.btnTrangChu.Size = new System.Drawing.Size(255, 40);
-            this.btnTrangChu.TabIndex = 0;
-            this.btnTrangChu.Text = "Trang chủ";
-            this.btnTrangChu.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnTrangChu.UseVisualStyleBackColor = false;
-            // 
-            // pnlNhomQuanLy
-            // 
-            this.pnlNhomQuanLy.Controls.Add(this.btnQuanLyNhanVien);
-            this.pnlNhomQuanLy.Controls.Add(this.btnQuanLyDocGia);
-            this.pnlNhomQuanLy.Controls.Add(this.btnQuanLyTacGia);
-            this.pnlNhomQuanLy.Controls.Add(this.btnQuanLyTheLoai);
-            this.pnlNhomQuanLy.Controls.Add(this.btnQuanLySach);
-            this.pnlNhomQuanLy.Controls.Add(this.btnQuanLy);
-            this.pnlNhomQuanLy.Dock = System.Windows.Forms.DockStyle.Top;
-            this.pnlNhomQuanLy.Location = new System.Drawing.Point(10, 50);
-            this.pnlNhomQuanLy.Name = "pnlNhomQuanLy";
-            this.pnlNhomQuanLy.Size = new System.Drawing.Size(255, 215);
-            this.pnlNhomQuanLy.TabIndex = 1;
-            this.pnlNhomQuanLy.Visible = false;
-            // 
-            // btnQuanLy
-            // 
-            this.btnQuanLy.Dock = System.Windows.Forms.DockStyle.Top;
-            this.btnQuanLy.FlatAppearance.BorderSize = 0;
-            this.btnQuanLy.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnQuanLy.ForeColor = System.Drawing.Color.WhiteSmoke;
-            this.btnQuanLy.Location = new System.Drawing.Point(0, 0);
-            this.btnQuanLy.Name = "btnQuanLy";
-            this.btnQuanLy.Size = new System.Drawing.Size(255, 40);
-            this.btnQuanLy.TabIndex = 0;
-            this.btnQuanLy.Text = "♧  Quản lý";
-            this.btnQuanLy.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnQuanLy.UseVisualStyleBackColor = true;
-            this.btnQuanLy.Click += new System.EventHandler(this.btnQuanLy_Click);
-            // 
-            // btnQuanLySach
-            // 
-            this.btnQuanLySach.Dock = System.Windows.Forms.DockStyle.Top;
-            this.btnQuanLySach.FlatAppearance.BorderSize = 0;
-            this.btnQuanLySach.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnQuanLySach.ForeColor = System.Drawing.Color.LightSteelBlue;
-            this.btnQuanLySach.Location = new System.Drawing.Point(0, 40);
-            this.btnQuanLySach.Name = "btnQuanLySach";
-            this.btnQuanLySach.Padding = new System.Windows.Forms.Padding(30, 0, 0, 0);
-            this.btnQuanLySach.Size = new System.Drawing.Size(255, 35);
-            this.btnQuanLySach.TabIndex = 1;
-            this.btnQuanLySach.Text = "Quản lý sách";
-            this.btnQuanLySach.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnQuanLySach.UseVisualStyleBackColor = true;
-            // 
-            // btnQuanLyTheLoai
-            // 
-            this.btnQuanLyTheLoai.Dock = System.Windows.Forms.DockStyle.Top;
-            this.btnQuanLyTheLoai.FlatAppearance.BorderSize = 0;
-            this.btnQuanLyTheLoai.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnQuanLyTheLoai.ForeColor = System.Drawing.Color.LightSteelBlue;
-            this.btnQuanLyTheLoai.Location = new System.Drawing.Point(0, 75);
-            this.btnQuanLyTheLoai.Name = "btnQuanLyTheLoai";
-            this.btnQuanLyTheLoai.Padding = new System.Windows.Forms.Padding(30, 0, 0, 0);
-            this.btnQuanLyTheLoai.Size = new System.Drawing.Size(255, 35);
-            this.btnQuanLyTheLoai.TabIndex = 2;
-            this.btnQuanLyTheLoai.Text = "Quản lý thể loại";
-            this.btnQuanLyTheLoai.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnQuanLyTheLoai.UseVisualStyleBackColor = true;
-            // 
-            // btnQuanLyTacGia
-            // 
-            this.btnQuanLyTacGia.Dock = System.Windows.Forms.DockStyle.Top;
-            this.btnQuanLyTacGia.FlatAppearance.BorderSize = 0;
-            this.btnQuanLyTacGia.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnQuanLyTacGia.ForeColor = System.Drawing.Color.LightSteelBlue;
-            this.btnQuanLyTacGia.Location = new System.Drawing.Point(0, 110);
-            this.btnQuanLyTacGia.Name = "btnQuanLyTacGia";
-            this.btnQuanLyTacGia.Padding = new System.Windows.Forms.Padding(30, 0, 0, 0);
-            this.btnQuanLyTacGia.Size = new System.Drawing.Size(255, 35);
-            this.btnQuanLyTacGia.TabIndex = 3;
-            this.btnQuanLyTacGia.Text = "Quản lý tác giả";
-            this.btnQuanLyTacGia.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnQuanLyTacGia.UseVisualStyleBackColor = true;
-            // 
-            // btnQuanLyDocGia
-            // 
-            this.btnQuanLyDocGia.Dock = System.Windows.Forms.DockStyle.Top;
-            this.btnQuanLyDocGia.FlatAppearance.BorderSize = 0;
-            this.btnQuanLyDocGia.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnQuanLyDocGia.ForeColor = System.Drawing.Color.LightSteelBlue;
-            this.btnQuanLyDocGia.Location = new System.Drawing.Point(0, 145);
-            this.btnQuanLyDocGia.Name = "btnQuanLyDocGia";
-            this.btnQuanLyDocGia.Padding = new System.Windows.Forms.Padding(30, 0, 0, 0);
-            this.btnQuanLyDocGia.Size = new System.Drawing.Size(255, 35);
-            this.btnQuanLyDocGia.TabIndex = 4;
-            this.btnQuanLyDocGia.Text = "Quản lý độc giả";
-            this.btnQuanLyDocGia.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnQuanLyDocGia.UseVisualStyleBackColor = true;
-            // 
-            // btnQuanLyNhanVien
-            // 
-            this.btnQuanLyNhanVien.Dock = System.Windows.Forms.DockStyle.Top;
-            this.btnQuanLyNhanVien.FlatAppearance.BorderSize = 0;
-            this.btnQuanLyNhanVien.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnQuanLyNhanVien.ForeColor = System.Drawing.Color.LightSteelBlue;
-            this.btnQuanLyNhanVien.Location = new System.Drawing.Point(0, 180);
-            this.btnQuanLyNhanVien.Name = "btnQuanLyNhanVien";
-            this.btnQuanLyNhanVien.Padding = new System.Windows.Forms.Padding(30, 0, 0, 0);
-            this.btnQuanLyNhanVien.Size = new System.Drawing.Size(255, 35);
-            this.btnQuanLyNhanVien.TabIndex = 5;
-            this.btnQuanLyNhanVien.Text = "Quản lý nhân viên";
-            this.btnQuanLyNhanVien.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnQuanLyNhanVien.UseVisualStyleBackColor = true;
-            // 
-            // pnlNhomTraCuu
-            // 
-            this.pnlNhomTraCuu.Controls.Add(this.btnThongTinDocGia);
-            this.pnlNhomTraCuu.Controls.Add(this.btnTimKiemSach);
-            this.pnlNhomTraCuu.Controls.Add(this.btnTraCuu);
-            this.pnlNhomTraCuu.Dock = System.Windows.Forms.DockStyle.Top;
-            this.pnlNhomTraCuu.Location = new System.Drawing.Point(10, 265);
-            this.pnlNhomTraCuu.Margin = new System.Windows.Forms.Padding(0);
-            this.pnlNhomTraCuu.Name = "pnlNhomTraCuu";
-            this.pnlNhomTraCuu.Size = new System.Drawing.Size(255, 110);
-            this.pnlNhomTraCuu.TabIndex = 2;
-            this.pnlNhomTraCuu.Visible = false;
-            // 
-            // btnTraCuu
-            // 
-            this.btnTraCuu.Dock = System.Windows.Forms.DockStyle.Top;
-            this.btnTraCuu.FlatAppearance.BorderSize = 0;
-            this.btnTraCuu.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnTraCuu.ForeColor = System.Drawing.Color.WhiteSmoke;
-            this.btnTraCuu.Location = new System.Drawing.Point(0, 0);
-            this.btnTraCuu.Name = "btnTraCuu";
-            this.btnTraCuu.Size = new System.Drawing.Size(255, 40);
-            this.btnTraCuu.TabIndex = 0;
-            this.btnTraCuu.Text = "♧  Tra cứu";
-            this.btnTraCuu.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnTraCuu.UseVisualStyleBackColor = true;
-            this.btnTraCuu.Click += new System.EventHandler(this.btnTraCuu_Click_1);
-            // 
-            // btnTimKiemSach
-            // 
-            this.btnTimKiemSach.Dock = System.Windows.Forms.DockStyle.Top;
-            this.btnTimKiemSach.FlatAppearance.BorderSize = 0;
-            this.btnTimKiemSach.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnTimKiemSach.ForeColor = System.Drawing.Color.LightSteelBlue;
-            this.btnTimKiemSach.Location = new System.Drawing.Point(0, 40);
-            this.btnTimKiemSach.Name = "btnTimKiemSach";
-            this.btnTimKiemSach.Padding = new System.Windows.Forms.Padding(30, 0, 0, 0);
-            this.btnTimKiemSach.Size = new System.Drawing.Size(255, 35);
-            this.btnTimKiemSach.TabIndex = 1;
-            this.btnTimKiemSach.Text = "Tìm kiếm sách";
-            this.btnTimKiemSach.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnTimKiemSach.UseVisualStyleBackColor = true;
-            // 
-            // btnThongTinDocGia
-            // 
-            this.btnThongTinDocGia.Dock = System.Windows.Forms.DockStyle.Top;
-            this.btnThongTinDocGia.FlatAppearance.BorderSize = 0;
-            this.btnThongTinDocGia.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnThongTinDocGia.ForeColor = System.Drawing.Color.LightSteelBlue;
-            this.btnThongTinDocGia.Location = new System.Drawing.Point(0, 75);
-            this.btnThongTinDocGia.Name = "btnThongTinDocGia";
-            this.btnThongTinDocGia.Padding = new System.Windows.Forms.Padding(30, 0, 0, 0);
-            this.btnThongTinDocGia.Size = new System.Drawing.Size(255, 35);
-            this.btnThongTinDocGia.TabIndex = 2;
-            this.btnThongTinDocGia.Text = "Thông tin độc giả";
-            this.btnThongTinDocGia.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnThongTinDocGia.UseVisualStyleBackColor = true;
-            // 
-            // pnlNhomMuonTra
-            // 
-            this.pnlNhomMuonTra.Controls.Add(this.btnDanhSachPhieuMuon);
-            this.pnlNhomMuonTra.Controls.Add(this.btnTraSach);
-            this.pnlNhomMuonTra.Controls.Add(this.btnLapPhieuMuon);
-            this.pnlNhomMuonTra.Controls.Add(this.btnMuonTra);
-            this.pnlNhomMuonTra.Dock = System.Windows.Forms.DockStyle.Top;
-            this.pnlNhomMuonTra.Location = new System.Drawing.Point(10, 375);
-            this.pnlNhomMuonTra.Margin = new System.Windows.Forms.Padding(0);
-            this.pnlNhomMuonTra.Name = "pnlNhomMuonTra";
-            this.pnlNhomMuonTra.Size = new System.Drawing.Size(255, 145);
-            this.pnlNhomMuonTra.TabIndex = 3;
-            this.pnlNhomMuonTra.Visible = false;
-            // 
-            // btnMuonTra
-            // 
-            this.btnMuonTra.AutoSize = true;
-            this.btnMuonTra.Dock = System.Windows.Forms.DockStyle.Top;
-            this.btnMuonTra.FlatAppearance.BorderSize = 0;
-            this.btnMuonTra.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnMuonTra.ForeColor = System.Drawing.Color.WhiteSmoke;
-            this.btnMuonTra.Location = new System.Drawing.Point(0, 0);
-            this.btnMuonTra.Name = "btnMuonTra";
-            this.btnMuonTra.Size = new System.Drawing.Size(255, 40);
-            this.btnMuonTra.TabIndex = 0;
-            this.btnMuonTra.Text = "Mượn - Trả";
-            this.btnMuonTra.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnMuonTra.UseVisualStyleBackColor = true;
-            this.btnMuonTra.Click += new System.EventHandler(this.btnMuonTra_Click_1);
-            // 
-            // btnLapPhieuMuon
-            // 
-            this.btnLapPhieuMuon.Dock = System.Windows.Forms.DockStyle.Top;
-            this.btnLapPhieuMuon.FlatAppearance.BorderSize = 0;
-            this.btnLapPhieuMuon.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnLapPhieuMuon.ForeColor = System.Drawing.Color.LightSteelBlue;
-            this.btnLapPhieuMuon.Location = new System.Drawing.Point(0, 40);
-            this.btnLapPhieuMuon.Name = "btnLapPhieuMuon";
-            this.btnLapPhieuMuon.Padding = new System.Windows.Forms.Padding(30, 0, 0, 0);
-            this.btnLapPhieuMuon.Size = new System.Drawing.Size(255, 35);
-            this.btnLapPhieuMuon.TabIndex = 1;
-            this.btnLapPhieuMuon.Text = "Lập phiếu mượn";
-            this.btnLapPhieuMuon.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnLapPhieuMuon.UseVisualStyleBackColor = true;
-            // 
-            // btnTraSach
-            // 
-            this.btnTraSach.Dock = System.Windows.Forms.DockStyle.Top;
-            this.btnTraSach.FlatAppearance.BorderSize = 0;
-            this.btnTraSach.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnTraSach.ForeColor = System.Drawing.Color.LightSteelBlue;
-            this.btnTraSach.Location = new System.Drawing.Point(0, 75);
-            this.btnTraSach.Name = "btnTraSach";
-            this.btnTraSach.Padding = new System.Windows.Forms.Padding(30, 0, 0, 0);
-            this.btnTraSach.Size = new System.Drawing.Size(255, 35);
-            this.btnTraSach.TabIndex = 2;
-            this.btnTraSach.Text = "Trả sách";
-            this.btnTraSach.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnTraSach.UseVisualStyleBackColor = true;
-            // 
-            // btnDanhSachPhieuMuon
-            // 
-            this.btnDanhSachPhieuMuon.Dock = System.Windows.Forms.DockStyle.Top;
-            this.btnDanhSachPhieuMuon.FlatAppearance.BorderSize = 0;
-            this.btnDanhSachPhieuMuon.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnDanhSachPhieuMuon.ForeColor = System.Drawing.Color.LightSteelBlue;
-            this.btnDanhSachPhieuMuon.Location = new System.Drawing.Point(0, 110);
-            this.btnDanhSachPhieuMuon.Name = "btnDanhSachPhieuMuon";
-            this.btnDanhSachPhieuMuon.Padding = new System.Windows.Forms.Padding(30, 0, 0, 0);
-            this.btnDanhSachPhieuMuon.Size = new System.Drawing.Size(255, 35);
-            this.btnDanhSachPhieuMuon.TabIndex = 3;
-            this.btnDanhSachPhieuMuon.Text = "Danh sách phiếu mượn";
-            this.btnDanhSachPhieuMuon.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnDanhSachPhieuMuon.UseVisualStyleBackColor = true;
-            // 
-            // pnlNhomTroGiup
-            // 
-            this.pnlNhomTroGiup.Controls.Add(this.btnHuongDanSuDung);
-            this.pnlNhomTroGiup.Controls.Add(this.btnThongTinChuongTrinh);
-            this.pnlNhomTroGiup.Controls.Add(this.btnTroGiup);
-            this.pnlNhomTroGiup.Dock = System.Windows.Forms.DockStyle.Top;
-            this.pnlNhomTroGiup.Location = new System.Drawing.Point(10, 520);
-            this.pnlNhomTroGiup.Margin = new System.Windows.Forms.Padding(0);
-            this.pnlNhomTroGiup.Name = "pnlNhomTroGiup";
-            this.pnlNhomTroGiup.Size = new System.Drawing.Size(255, 110);
-            this.pnlNhomTroGiup.TabIndex = 4;
-            this.pnlNhomTroGiup.Visible = false;
-            // 
-            // btnTroGiup
-            // 
-            this.btnTroGiup.Dock = System.Windows.Forms.DockStyle.Top;
-            this.btnTroGiup.FlatAppearance.BorderSize = 0;
-            this.btnTroGiup.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnTroGiup.ForeColor = System.Drawing.Color.WhiteSmoke;
-            this.btnTroGiup.Location = new System.Drawing.Point(0, 0);
-            this.btnTroGiup.Name = "btnTroGiup";
-            this.btnTroGiup.Size = new System.Drawing.Size(255, 40);
-            this.btnTroGiup.TabIndex = 0;
-            this.btnTroGiup.Text = "Trợ giúp";
-            this.btnTroGiup.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnTroGiup.UseVisualStyleBackColor = true;
-            this.btnTroGiup.Click += new System.EventHandler(this.btnTroGiup_Click_1);
-            // 
-            // btnThongTinChuongTrinh
-            // 
-            this.btnThongTinChuongTrinh.Dock = System.Windows.Forms.DockStyle.Top;
-            this.btnThongTinChuongTrinh.FlatAppearance.BorderSize = 0;
-            this.btnThongTinChuongTrinh.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnThongTinChuongTrinh.ForeColor = System.Drawing.Color.LightSteelBlue;
-            this.btnThongTinChuongTrinh.Location = new System.Drawing.Point(0, 40);
-            this.btnThongTinChuongTrinh.Name = "btnThongTinChuongTrinh";
-            this.btnThongTinChuongTrinh.Padding = new System.Windows.Forms.Padding(30, 0, 0, 0);
-            this.btnThongTinChuongTrinh.Size = new System.Drawing.Size(255, 35);
-            this.btnThongTinChuongTrinh.TabIndex = 1;
-            this.btnThongTinChuongTrinh.Text = "Thông tin chương trình";
-            this.btnThongTinChuongTrinh.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnThongTinChuongTrinh.UseVisualStyleBackColor = true;
-            // 
-            // btnHuongDanSuDung
-            // 
-            this.btnHuongDanSuDung.Dock = System.Windows.Forms.DockStyle.Top;
-            this.btnHuongDanSuDung.FlatAppearance.BorderSize = 0;
-            this.btnHuongDanSuDung.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnHuongDanSuDung.ForeColor = System.Drawing.Color.LightSteelBlue;
-            this.btnHuongDanSuDung.Location = new System.Drawing.Point(0, 75);
-            this.btnHuongDanSuDung.Name = "btnHuongDanSuDung";
-            this.btnHuongDanSuDung.Padding = new System.Windows.Forms.Padding(30, 0, 0, 0);
-            this.btnHuongDanSuDung.Size = new System.Drawing.Size(255, 35);
-            this.btnHuongDanSuDung.TabIndex = 2;
-            this.btnHuongDanSuDung.Text = "Hướng dẫn sử dụng";
-            this.btnHuongDanSuDung.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnHuongDanSuDung.UseVisualStyleBackColor = true;
-            // 
             // pnlNhomHeThong
             // 
+            this.pnlNhomHeThong.Controls.Add(this.btnThoat);
             this.pnlNhomHeThong.Controls.Add(this.btnDangXuat);
-            this.pnlNhomHeThong.Controls.Add(this.btnDoiMatKhau);
             this.pnlNhomHeThong.Controls.Add(this.btnHeThong);
             this.pnlNhomHeThong.Dock = System.Windows.Forms.DockStyle.Top;
             this.pnlNhomHeThong.Location = new System.Drawing.Point(10, 630);
@@ -1572,7 +1565,36 @@
             this.pnlNhomHeThong.Name = "pnlNhomHeThong";
             this.pnlNhomHeThong.Size = new System.Drawing.Size(255, 110);
             this.pnlNhomHeThong.TabIndex = 5;
-            this.pnlNhomHeThong.Visible = false;
+            // 
+            // btnThoat
+            // 
+            this.btnThoat.Dock = System.Windows.Forms.DockStyle.Top;
+            this.btnThoat.FlatAppearance.BorderSize = 0;
+            this.btnThoat.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnThoat.ForeColor = System.Drawing.Color.LightSteelBlue;
+            this.btnThoat.Location = new System.Drawing.Point(0, 75);
+            this.btnThoat.Name = "btnThoat";
+            this.btnThoat.Padding = new System.Windows.Forms.Padding(30, 0, 0, 0);
+            this.btnThoat.Size = new System.Drawing.Size(255, 35);
+            this.btnThoat.TabIndex = 2;
+            this.btnThoat.Text = "Thoát";
+            this.btnThoat.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnThoat.UseVisualStyleBackColor = true;
+            // 
+            // btnDangXuat
+            // 
+            this.btnDangXuat.Dock = System.Windows.Forms.DockStyle.Top;
+            this.btnDangXuat.FlatAppearance.BorderSize = 0;
+            this.btnDangXuat.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnDangXuat.ForeColor = System.Drawing.Color.LightSteelBlue;
+            this.btnDangXuat.Location = new System.Drawing.Point(0, 40);
+            this.btnDangXuat.Name = "btnDangXuat";
+            this.btnDangXuat.Padding = new System.Windows.Forms.Padding(30, 0, 0, 0);
+            this.btnDangXuat.Size = new System.Drawing.Size(255, 35);
+            this.btnDangXuat.TabIndex = 1;
+            this.btnDangXuat.Text = "Đăng xuất";
+            this.btnDangXuat.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnDangXuat.UseVisualStyleBackColor = true;
             // 
             // btnHeThong
             // 
@@ -1587,37 +1609,6 @@
             this.btnHeThong.Text = "Hệ thống";
             this.btnHeThong.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnHeThong.UseVisualStyleBackColor = true;
-            this.btnHeThong.Click += new System.EventHandler(this.btnHeThong_Click_1);
-            // 
-            // btnDoiMatKhau
-            // 
-            this.btnDoiMatKhau.Dock = System.Windows.Forms.DockStyle.Top;
-            this.btnDoiMatKhau.FlatAppearance.BorderSize = 0;
-            this.btnDoiMatKhau.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnDoiMatKhau.ForeColor = System.Drawing.Color.LightSteelBlue;
-            this.btnDoiMatKhau.Location = new System.Drawing.Point(0, 40);
-            this.btnDoiMatKhau.Name = "btnDoiMatKhau";
-            this.btnDoiMatKhau.Padding = new System.Windows.Forms.Padding(30, 0, 0, 0);
-            this.btnDoiMatKhau.Size = new System.Drawing.Size(255, 35);
-            this.btnDoiMatKhau.TabIndex = 1;
-            this.btnDoiMatKhau.Text = "Đổi mật khẩu";
-            this.btnDoiMatKhau.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnDoiMatKhau.UseVisualStyleBackColor = true;
-            // 
-            // btnDangXuat
-            // 
-            this.btnDangXuat.Dock = System.Windows.Forms.DockStyle.Top;
-            this.btnDangXuat.FlatAppearance.BorderSize = 0;
-            this.btnDangXuat.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnDangXuat.ForeColor = System.Drawing.Color.LightSteelBlue;
-            this.btnDangXuat.Location = new System.Drawing.Point(0, 75);
-            this.btnDangXuat.Name = "btnDangXuat";
-            this.btnDangXuat.Padding = new System.Windows.Forms.Padding(30, 0, 0, 0);
-            this.btnDangXuat.Size = new System.Drawing.Size(255, 35);
-            this.btnDangXuat.TabIndex = 2;
-            this.btnDangXuat.Text = "Đăng xuất";
-            this.btnDangXuat.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnDangXuat.UseVisualStyleBackColor = true;
             // 
             // FrmMain
             // 
@@ -1643,6 +1634,11 @@
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.pnlSidebar.ResumeLayout(false);
+            this.pnlNhomTroGiup.ResumeLayout(false);
+            this.pnlNhomMuonTra.ResumeLayout(false);
+            this.pnlNhomMuonTra.PerformLayout();
+            this.pnlNhomTraCuu.ResumeLayout(false);
+            this.pnlNhomQuanLy.ResumeLayout(false);
             this.pnlHeader.ResumeLayout(false);
             this.pnlHeader.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picDaiDien)).EndInit();
@@ -1682,11 +1678,6 @@
             this.pnlCardDocGia.PerformLayout();
             this.pnlCardSach.ResumeLayout(false);
             this.pnlCardSach.PerformLayout();
-            this.pnlNhomQuanLy.ResumeLayout(false);
-            this.pnlNhomTraCuu.ResumeLayout(false);
-            this.pnlNhomMuonTra.ResumeLayout(false);
-            this.pnlNhomMuonTra.PerformLayout();
-            this.pnlNhomTroGiup.ResumeLayout(false);
             this.pnlNhomHeThong.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -1805,8 +1796,8 @@
         private System.Windows.Forms.Button btnHuongDanSuDung;
         private System.Windows.Forms.Button btnThongTinChuongTrinh;
         private System.Windows.Forms.Panel pnlNhomHeThong;
-        private System.Windows.Forms.Button btnHeThong;
+        private System.Windows.Forms.Button btnThoat;
         private System.Windows.Forms.Button btnDangXuat;
-        private System.Windows.Forms.Button btnDoiMatKhau;
+        private System.Windows.Forms.Button btnHeThong;
     }
 }

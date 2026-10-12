@@ -100,7 +100,8 @@ namespace DoAnQLTV
 
         private void btnSua_Click(object sender, EventArgs e)
         {
-            if (dgvTheLoai.CurrentRow == null)
+            if (dongDangChon == -1 ||
+    dongDangChon >= dgvTheLoai.Rows.Count)
             {
                 MessageBox.Show(
                     "Vui lòng chọn thể loại cần sửa.",
@@ -164,6 +165,9 @@ namespace DoAnQLTV
                     MessageBoxIcon.Information);
 
                 LoadTheLoai();
+                dongDangChon = -1;
+                dgvTheLoai.ClearSelection();
+                dgvTheLoai.CurrentCell = null;
 
                 txtMaTheLoai.Clear();
                 txtTenTheLoai.Clear();
@@ -194,7 +198,8 @@ namespace DoAnQLTV
 
         private void btnXoa_Click(object sender, EventArgs e)
         {
-            if (dgvTheLoai.CurrentRow == null)
+            if (dongDangChon == -1 ||
+    dongDangChon >= dgvTheLoai.Rows.Count)
             {
                 MessageBox.Show(
                     "Vui lòng chọn thể loại cần xóa.",
@@ -263,6 +268,9 @@ namespace DoAnQLTV
                     MessageBoxIcon.Information);
 
                 LoadTheLoai();
+                dongDangChon = -1;
+                dgvTheLoai.ClearSelection();
+                dgvTheLoai.CurrentCell = null;
 
                 txtMaTheLoai.Clear();
                 txtTenTheLoai.Clear();
@@ -344,8 +352,17 @@ namespace DoAnQLTV
                                     row["TenTheLoai"].ToString());
                             }
 
+
                             if (dt.Rows.Count == 0)
                             {
+                                dongDangChon = -1;
+
+                                txtMaTheLoai.Clear();
+                                txtTenTheLoai.Clear();
+
+                                dgvTheLoai.ClearSelection();
+                                dgvTheLoai.CurrentCell = null;
+
                                 MessageBox.Show(
                                     "Không tìm thấy thể loại phù hợp.",
                                     "Thông báo",
@@ -354,6 +371,7 @@ namespace DoAnQLTV
 
                                 return;
                             }
+
 
 
                             if (dt.Rows.Count == 1)

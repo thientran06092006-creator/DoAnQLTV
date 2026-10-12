@@ -295,6 +295,7 @@ namespace DoAnQLTV
                 return;
 
             dongDangChon = e.RowIndex;
+            dgvSach.CurrentCell = dgvSach.Rows[e.RowIndex].Cells[0];
 
             DataGridViewRow row = dgvSach.Rows[e.RowIndex];
 
@@ -661,6 +662,10 @@ namespace DoAnQLTV
 
                             if (dt.Rows.Count == 0)
                             {
+                                dongDangChon = -1;
+                                dgvSach.ClearSelection();
+                                dgvSach.CurrentCell = null;
+
                                 MessageBox.Show(
                                     "Không tìm thấy sách phù hợp.",
                                     "Thông báo",
