@@ -130,6 +130,9 @@
   <data name="istockphoto-2022468311-612x612" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\istockphoto-2022468311-612x612.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="tìm kiếm" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\tìm kiếm.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="nhân viên" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\nhân viên.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -142,7 +145,7 @@
   <data name="sách" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\sách.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="tìm kiếm" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\tìm kiếm.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="ảnh máy tính" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ảnh máy tính.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

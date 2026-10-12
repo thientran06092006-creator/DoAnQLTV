@@ -73,6 +73,16 @@ namespace DoAnQLTV.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        public static System.Drawing.Bitmap ảnh_máy_tính {
+            get {
+                object obj = ResourceManager.GetObject("ảnh máy tính", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         public static System.Drawing.Bitmap độc_giả {
             get {
                 object obj = ResourceManager.GetObject("độc giả", resourceCulture);

@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Windows.Forms;
-using System.Data;
 
 namespace DoAnQLTV
 {
@@ -27,6 +29,17 @@ namespace DoAnQLTV
             this.BackColor = System.Drawing.Color.White;
         }
 
+        private void TaoAnhHinhTron(PictureBox pic)
+        {
+            if (pic.Width <= 0 || pic.Height <= 0)
+                return;
+
+            using (GraphicsPath path = new GraphicsPath())
+            {
+                path.AddEllipse(0, 0, pic.Width, pic.Height);
+                pic.Region = new Region(path);
+            }
+        }
 
         private void FrmMain_Load(object sender, EventArgs e)
         {
@@ -60,6 +73,18 @@ namespace DoAnQLTV
                 "Phạm Thị D"
             );
             dgvHoatDongGanDay.ClearSelection();
+
+            TaoAnhHinhTron(picDaiDien);
+
+            TaoAnhHinhTron(picQuanLySach);
+            TaoAnhHinhTron(picQuanLyDocGia);
+            TaoAnhHinhTron(picQuanLyNhanVien);
+            TaoAnhHinhTron(picLapPhieuMuon);
+            TaoAnhHinhTron(picTraSach);
+            TaoAnhHinhTron(picTimKiemSach);
+
+            lblThoiGianHienTai.Text = DateTime.Now.ToString("HH:mm:ss");
+            timerThoiGian.Start();
         }
 
 
@@ -237,6 +262,74 @@ namespace DoAnQLTV
             {
                 e.Cancel = true;
             }
+        }
+
+        private void timerThoiGian_Tick(object sender, EventArgs e)
+        {
+            lblThoiGianHienTai.Text = DateTime.Now.ToString("HH:mm:ss");
+        }
+
+        
+        // Tạo nhầm nhưng chưa dùng đến
+        private void pnlTheQuanLyDocGia_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void pnlTheQuanLyNhanVien_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void pnlTheLapPhieuMuon_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void pnlTheTraSach_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void pnlTheTimKiemSach_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        // Truy cập nhanh
+        private void pnlTheQuanLySach_Click(object sender, EventArgs e)
+        {
+            FrmSach frm = new FrmSach();
+            frm.ShowDialog();
+        }
+        private void pnlTheQuanLyDocGia_Click(object sender, EventArgs e)
+        {
+            FrmDocGia frm = new FrmDocGia();
+            frm.ShowDialog();
+        }
+
+        private void pnlTheQuanLyNhanVien_Click(object sender, EventArgs e)
+        {
+            FrmNhanVien frm = new FrmNhanVien();
+            frm.ShowDialog();
+        }
+
+        private void pnlTheLapPhieuMuon_Click(object sender, EventArgs e)
+        {
+            FrmLapPhieuMuon frm = new FrmLapPhieuMuon();
+            frm.ShowDialog();
+        }
+
+        private void pnlTheTraSach_Click(object sender, EventArgs e)
+        {
+            FrmTraSach frm = new FrmTraSach();
+            frm.ShowDialog();
+        }
+
+        private void pnlTheTimKiemSach_Click(object sender, EventArgs e)
+        {
+            FrmTimKiemSach frm = new FrmTimKiemSach();
+            frm.ShowDialog();
         }
     }
 }
