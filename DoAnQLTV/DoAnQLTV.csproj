@@ -68,6 +68,12 @@
     <Compile Include="FrmHuongDanSuDung.Designer.cs">
       <DependentUpon>FrmHuongDanSuDung.cs</DependentUpon>
     </Compile>
+    <Compile Include="FrmKiemTraChart.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmKiemTraChart.Designer.cs">
+      <DependentUpon>FrmKiemTraChart.cs</DependentUpon>
+    </Compile>
     <Compile Include="FrmLapPhieuMuon.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -150,6 +156,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FrmHuongDanSuDung.resx">
       <DependentUpon>FrmHuongDanSuDung.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmKiemTraChart.resx">
+      <DependentUpon>FrmKiemTraChart.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FrmLapPhieuMuon.resx">
       <DependentUpon>FrmLapPhieuMuon.cs</DependentUpon>

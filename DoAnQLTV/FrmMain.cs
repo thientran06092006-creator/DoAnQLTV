@@ -41,38 +41,57 @@ namespace DoAnQLTV
             }
         }
 
+
+
         private void FrmMain_Load(object sender, EventArgs e)
         {
-            dgvHoatDongGanDay.Rows.Clear();
+            if (System.ComponentModel.LicenseManager.UsageMode
+    == System.ComponentModel.LicenseUsageMode.Designtime)
+            {
+                return;
+            }
+            // ==========================================
+            // 1. DỮ LIỆU HOẠT ĐỘNG GẦN ĐÂY
+            // ==========================================
 
-            dgvHoatDongGanDay.Rows.Add(
-                "08:30 12/10/2026",
-                "Mượn sách",
-                "Lập phiếu mượn sách",
-                "Nguyễn Văn A"
-            );
+            if (dgvHoatDongGanDay != null)
+            {
+                dgvHoatDongGanDay.Rows.Clear();
 
-            dgvHoatDongGanDay.Rows.Add(
-                "09:15 12/10/2026",
-                "Thêm sách",
-                "Thêm sách mới vào thư viện",
-                "Trần Thị B"
-            );
+                dgvHoatDongGanDay.Rows.Add(
+                    "08:30 12/10/2026",
+                    "Mượn sách",
+                    "Lập phiếu mượn sách",
+                    "Nguyễn Văn A"
+                );
 
-            dgvHoatDongGanDay.Rows.Add(
-                "10:00 12/10/2026",
-                "Trả sách",
-                "Cập nhật ngày trả sách",
-                "Lê Văn C"
-            );
+                dgvHoatDongGanDay.Rows.Add(
+                    "09:15 12/10/2026",
+                    "Thêm sách",
+                    "Thêm sách mới vào thư viện",
+                    "Trần Thị B"
+                );
 
-            dgvHoatDongGanDay.Rows.Add(
-                "10:30 12/10/2026",
-                "Cập nhật độc giả",
-                "Chỉnh sửa thông tin độc giả",
-                "Phạm Thị D"
-            );
-            dgvHoatDongGanDay.ClearSelection();
+                dgvHoatDongGanDay.Rows.Add(
+                    "10:00 12/10/2026",
+                    "Trả sách",
+                    "Cập nhật ngày trả sách",
+                    "Lê Văn C"
+                );
+
+                dgvHoatDongGanDay.Rows.Add(
+                    "10:30 12/10/2026",
+                    "Cập nhật độc giả",
+                    "Chỉnh sửa thông tin độc giả",
+                    "Phạm Thị D"
+                );
+
+                dgvHoatDongGanDay.ClearSelection();
+            }
+
+            // ==========================================
+            // 2. TẠO ẢNH HÌNH TRÒN
+            // ==========================================
 
             TaoAnhHinhTron(picDaiDien);
 
@@ -83,8 +102,218 @@ namespace DoAnQLTV
             TaoAnhHinhTron(picTraSach);
             TaoAnhHinhTron(picTimKiemSach);
 
-            lblThoiGianHienTai.Text = DateTime.Now.ToString("HH:mm:ss");
-            timerThoiGian.Start();
+            // ==========================================
+            // 3. ĐỒNG HỒ THỜI GIAN
+            // ==========================================
+
+            if (lblThoiGianHienTai != null)
+            {
+                lblThoiGianHienTai.Text =
+                    DateTime.Now.ToString("HH:mm:ss");
+            }
+
+            if (timerThoiGian != null)
+            {
+                timerThoiGian.Start();
+            }
+
+            // ==========================================
+            // 4. BIỂU ĐỒ MƯỢN - TRẢ SÁCH
+            // ==========================================
+
+            if (chartMuonTra != null)
+            {
+                // Xóa Series cũ để tránh lỗi không tìm thấy tên Series.
+                chartMuonTra.Series.Clear();
+
+                // Đảm bảo biểu đồ có ít nhất một ChartArea.
+                if (chartMuonTra.ChartAreas.Count == 0)
+                {
+                    chartMuonTra.ChartAreas.Add("ChartArea1");
+                }
+
+                // Đảm bảo biểu đồ có ít nhất một Legend.
+                if (chartMuonTra.Legends.Count == 0)
+                {
+                    chartMuonTra.Legends.Add("Legend1");
+                }
+
+                // Tạo hai nhóm dữ liệu mới.
+                var seriesMuon =
+                    chartMuonTra.Series.Add("SeriesMuon");
+
+                var seriesTra =
+                    chartMuonTra.Series.Add("SeriesTra");
+
+                // Cấu hình Series mượn.
+                seriesMuon.LegendText = "Số lượt mượn";
+                seriesMuon.Color = Color.RoyalBlue;
+                seriesMuon.ChartType =
+                    System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Column;
+
+                // Cấu hình Series trả.
+                seriesTra.LegendText = "Số lượt trả";
+                seriesTra.Color = Color.SeaGreen;
+                seriesTra.ChartType =
+                    System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Column;
+
+                // Dữ liệu minh họa trong 6 tháng.
+                int[] soLuotMuon = { 24, 28, 28, 34, 37, 44 };
+                int[] soLuotTra = { 20, 26, 23, 29, 34, 42 };
+
+                for (int i = 0; i < 6; i++)
+                {
+                    string thang = "Tháng " + (i + 1);
+
+                    seriesMuon.Points.AddXY(
+                        thang, soLuotMuon[i]);
+
+                    seriesTra.Points.AddXY(
+                        thang, soLuotTra[i]);
+                }
+
+                // Cấu hình trục biểu đồ.
+                var areaMuonTra = chartMuonTra.ChartAreas[0];
+
+                areaMuonTra.AxisX.Interval = 1;
+                areaMuonTra.AxisX.MajorGrid.Enabled = false;
+                areaMuonTra.AxisX.LabelStyle.Angle = 0;
+
+                areaMuonTra.AxisY.Minimum = 0;
+                areaMuonTra.AxisY.Maximum = 50;
+                areaMuonTra.AxisY.Interval = 10;
+                areaMuonTra.AxisY.Title = "Số lượt";
+                areaMuonTra.AxisY.MajorGrid.Enabled = true;
+
+                // Cấu hình chú thích.
+                var legendMuonTra = chartMuonTra.Legends[0];
+
+                legendMuonTra.Enabled = true;
+                legendMuonTra.Docking =
+                    System.Windows.Forms.DataVisualization.Charting.Docking.Right;
+
+                legendMuonTra.Alignment =
+                    System.Drawing.StringAlignment.Center;
+
+                legendMuonTra.Font =
+                    new Font("Segoe UI", 9F, FontStyle.Regular);
+
+                // Tự động căn chỉnh vùng biểu đồ.
+                areaMuonTra.Position.Auto = true;
+                areaMuonTra.InnerPlotPosition.Auto = true;
+
+                chartMuonTra.Visible = true;
+                chartMuonTra.Invalidate();
+            }
+
+            // ==========================================
+            // 5. BIỂU ĐỒ THỂ LOẠI SÁCH
+            // ==========================================
+
+            if (chartTheLoai != null)
+            {
+                // Xóa dữ liệu biểu đồ cũ.
+                chartTheLoai.Series.Clear();
+
+                // Đảm bảo có vùng hiển thị.
+                if (chartTheLoai.ChartAreas.Count == 0)
+                {
+                    chartTheLoai.ChartAreas.Add("ChartArea1");
+                }
+
+                // Đảm bảo có chú thích.
+                if (chartTheLoai.Legends.Count == 0)
+                {
+                    chartTheLoai.Legends.Add("Legend1");
+                }
+
+                // Tạo Series mới.
+                var seriesTheLoai =
+                    chartTheLoai.Series.Add("TheLoai");
+
+                seriesTheLoai.ChartType =
+                    System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Doughnut;
+
+                seriesTheLoai.IsValueShownAsLabel = true;
+                seriesTheLoai.Label = "#PERCENT{P0}";
+                seriesTheLoai.LegendText = "#VALX";
+
+                // Đường viền trắng giữa các phần biểu đồ.
+                seriesTheLoai.BorderWidth = 1;
+                seriesTheLoai.BorderColor = Color.White;
+
+                // Dữ liệu minh họa.
+                seriesTheLoai.Points.AddXY("Văn học", 28);
+                seriesTheLoai.Points.AddXY("Khoa học", 18);
+                seriesTheLoai.Points.AddXY("Lịch sử", 15);
+                seriesTheLoai.Points.AddXY("Kỹ thuật", 12);
+                seriesTheLoai.Points.AddXY("Thiếu nhi", 10);
+                seriesTheLoai.Points.AddXY("Khác", 17);
+
+                // Màu sắc từng thể loại.
+                seriesTheLoai.Points[0].Color = Color.RoyalBlue;
+                seriesTheLoai.Points[1].Color = Color.MediumSeaGreen;
+                seriesTheLoai.Points[2].Color = Color.Orange;
+                seriesTheLoai.Points[3].Color = Color.MediumPurple;
+                seriesTheLoai.Points[4].Color = Color.Gold;
+                seriesTheLoai.Points[5].Color = Color.LightSteelBlue;
+
+                // Cấu hình chú thích bên phải.
+                var legendTheLoai = chartTheLoai.Legends[0];
+
+                legendTheLoai.Enabled = true;
+                legendTheLoai.Docking =
+                    System.Windows.Forms.DataVisualization.Charting.Docking.Right;
+
+                legendTheLoai.Alignment =
+                    System.Drawing.StringAlignment.Center;
+
+                // Căn chỉnh vùng hiển thị.
+                var areaTheLoai = chartTheLoai.ChartAreas[0];
+
+                areaTheLoai.Position.Auto = true;
+                areaTheLoai.InnerPlotPosition.Auto = true;
+
+                chartTheLoai.Visible = true;
+                chartTheLoai.Invalidate();
+            }
+        }
+
+        private void DongMoNhomMenu(Panel nhomDuocChon)
+        {
+            pnlNhomQuanLy.Visible = false;
+            pnlNhomTraCuu.Visible = false;
+            pnlNhomMuonTra.Visible = false;
+            pnlNhomTroGiup.Visible = false;
+            pnlNhomHeThong.Visible = false;
+
+            if (nhomDuocChon != null)
+            {
+                nhomDuocChon.Visible = true;
+            }
+        }
+        private void btnTraCuu_Click(object sender, EventArgs e)
+        {
+            DongMoNhomMenu(
+                pnlNhomTraCuu.Visible ? null : pnlNhomTraCuu);
+        }
+
+        private void btnMuonTra_Click(object sender, EventArgs e)
+        {
+            DongMoNhomMenu(
+                pnlNhomMuonTra.Visible ? null : pnlNhomMuonTra);
+        }
+
+        private void btnTroGiup_Click(object sender, EventArgs e)
+        {
+            DongMoNhomMenu(
+                pnlNhomTroGiup.Visible ? null : pnlNhomTroGiup);
+        }
+
+        private void btnHeThong_Click(object sender, EventArgs e)
+        {
+            DongMoNhomMenu(
+                pnlNhomHeThong.Visible ? null : pnlNhomHeThong);
         }
 
 
@@ -330,6 +559,43 @@ namespace DoAnQLTV
         {
             FrmTimKiemSach frm = new FrmTimKiemSach();
             frm.ShowDialog();
+        }
+
+        private void btnQuanLy_Click_1(object sender, EventArgs e)
+        {
+            pnlNhomQuanLy.Visible = true;
+        }
+
+
+        private void btnTraCuu_Click_1(object sender, EventArgs e)
+        {
+            DongMoNhomMenu(
+                pnlNhomTraCuu.Visible ? null : pnlNhomTraCuu);
+        }
+
+        private void btnMuonTra_Click_1(object sender, EventArgs e)
+        {
+            DongMoNhomMenu(
+                pnlNhomMuonTra.Visible ? null : pnlNhomMuonTra);
+        }
+
+        private void btnTroGiup_Click_1(object sender, EventArgs e)
+        {
+            DongMoNhomMenu(
+                pnlNhomTroGiup.Visible ? null : pnlNhomTroGiup);
+        }
+
+        private void btnHeThong_Click_1(object sender, EventArgs e)
+        {
+            DongMoNhomMenu(
+                pnlNhomHeThong.Visible ? null : pnlNhomHeThong);
+        }
+
+        private void btnQuanLy_Click_1(object sender, EventArgs e)
+        {
+            MessageBox.Show("Đã bấm nút Quản lý");
+
+            pnlNhomQuanLy.Visible = !pnlNhomQuanLy.Visible;
         }
     }
 }
