@@ -18,10 +18,42 @@ namespace DoAnQLTV
         {
             InitializeComponent();
 
+            LoadSach();
+
             LoadDocGia();
             LoadNhanVien();
             LoadPhieuMuon();
         }
+
+
+        private void LoadSach()
+        {
+            try
+            {
+                using (SqlConnection conn = DbConnection.GetConnection())
+                {
+                    conn.Open();
+
+                    string sql = "SELECT MaSach, TenSach FROM Sach ORDER BY TenSach";
+
+                    using (SqlDataAdapter da = new SqlDataAdapter(sql, conn))
+                    {
+                        DataTable dt = new DataTable();
+                        da.Fill(dt);
+
+                        cboSach.DataSource = dt;
+                        cboSach.DisplayMember = "TenSach";
+                        cboSach.ValueMember = "MaSach";
+                        cboSach.SelectedIndex = -1;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Không thể tải danh sách sách: " + ex.Message);
+            }
+        }
+
 
         private void CapNhatThongKeTrangChu()
         {
@@ -183,7 +215,19 @@ namespace DoAnQLTV
             string maPhieu = txtMaPhieu.Text.Trim();
             string docGia = cboDocGia.Text.Trim();
             string nhanVien = cboNhanVien.Text.Trim();
-            string sach = txtSach.Text.Trim();
+            if (cboSach.SelectedIndex == -1)
+            {
+                MessageBox.Show(
+                    "Vui lòng chọn sách.",
+                    "Thông báo",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+
+                cboSach.Focus();
+                return;
+            }
+
+            string maSach = cboSach.SelectedValue.ToString();
 
             if (maPhieu == "")
             {
@@ -221,17 +265,6 @@ namespace DoAnQLTV
                 return;
             }
 
-            if (sach == "")
-            {
-                MessageBox.Show(
-                    "Vui lòng nhập tên sách.",
-                    "Thông báo",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning);
-
-                txtSach.Focus();
-                return;
-            }
 
             if (dtpHanTra.Value.Date < dtpNgayMuon.Value.Date)
             {
@@ -254,24 +287,17 @@ namespace DoAnQLTV
                     conn.Open();
 
                     string sql = @"
-                INSERT INTO PhieuMuon
-                    (MaPhieu, MaDocGia, MaNhanVien, MaSach, NgayMuon, HanTra)
-                SELECT
-                    @MaPhieu,
-                    @MaDocGia,
-                    @MaNhanVien,
-                    s.MaSach,
-                    @NgayMuon,
-                    @HanTra
-                FROM Sach s
-                WHERE s.TenSach = @TenSach";
+    INSERT INTO PhieuMuon
+        (MaPhieu, MaDocGia, MaNhanVien, MaSach, NgayMuon, HanTra)
+    VALUES
+        (@MaPhieu, @MaDocGia, @MaNhanVien, @MaSach, @NgayMuon, @HanTra)";
 
                     using (SqlCommand cmd = new SqlCommand(sql, conn))
                     {
                         cmd.Parameters.AddWithValue("@MaPhieu", maPhieu);
                         cmd.Parameters.AddWithValue("@MaDocGia", maDocGia);
                         cmd.Parameters.AddWithValue("@MaNhanVien", maNhanVien);
-                        cmd.Parameters.AddWithValue("@TenSach", sach);
+                        cmd.Parameters.AddWithValue("@MaSach", maSach);
                         cmd.Parameters.AddWithValue(
                             "@NgayMuon",
                             dtpNgayMuon.Value.Date);
@@ -281,10 +307,10 @@ namespace DoAnQLTV
 
                         int soDong = cmd.ExecuteNonQuery();
 
-                        if (soDong == 0)
+                        if (soDong <= 0)
                         {
                             MessageBox.Show(
-                                "Không tìm thấy sách có tên tương ứng.",
+                                "Không thể thêm phiếu mượn.",
                                 "Thông báo",
                                 MessageBoxButtons.OK,
                                 MessageBoxIcon.Warning);
@@ -304,7 +330,7 @@ namespace DoAnQLTV
                 CapNhatThongKeTrangChu();
 
                 txtMaPhieu.Clear();
-                txtSach.Clear();
+                cboSach.SelectedIndex = -1;
 
                 if (cboDocGia.Items.Count > 0)
                     cboDocGia.SelectedIndex = 0;
@@ -379,8 +405,26 @@ namespace DoAnQLTV
             string hanTra =
                 row.Cells["colHanTra"].Value?.ToString() ?? "";
 
-            txtSach.Text =
-                row.Cells["colSach"].Value?.ToString() ?? "";
+            string maPhieu = row.Cells["colMaPhieu"].Value?.ToString() ?? "";
+
+            using (SqlConnection conn = DbConnection.GetConnection())
+            {
+                conn.Open();
+
+                string sql = "SELECT MaSach FROM PhieuMuon WHERE MaPhieu = @MaPhieu";
+
+                using (SqlCommand cmd = new SqlCommand(sql, conn))
+                {
+                    cmd.Parameters.AddWithValue("@MaPhieu", maPhieu);
+
+                    object result = cmd.ExecuteScalar();
+
+                    if (result != null)
+                        cboSach.SelectedValue = result.ToString();
+                    else
+                        cboSach.SelectedIndex = -1;
+                }
+            }
 
             DateTime ngayMuonValue;
             if (DateTime.TryParse(ngayMuon, out ngayMuonValue))
@@ -414,7 +458,14 @@ namespace DoAnQLTV
             string maPhieu = txtMaPhieu.Text.Trim();
             string docGia = cboDocGia.Text.Trim();
             string nhanVien = cboNhanVien.Text.Trim();
-            string sach = txtSach.Text.Trim();
+            if (cboSach.SelectedIndex == -1)
+            {
+                MessageBox.Show("Vui lòng chọn sách.");
+                cboSach.Focus();
+                return;
+            }
+
+            string maSach = cboSach.SelectedValue.ToString();
 
             if (maPhieu == "")
             {
@@ -449,18 +500,6 @@ namespace DoAnQLTV
                     MessageBoxIcon.Warning);
 
                 cboNhanVien.Focus();
-                return;
-            }
-
-            if (sach == "")
-            {
-                MessageBox.Show(
-                    "Vui lòng nhập tên sách.",
-                    "Thông báo",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning);
-
-                txtSach.Focus();
                 return;
             }
 
@@ -506,11 +545,7 @@ namespace DoAnQLTV
                     MaPhieu = @MaPhieuMoi,
                     MaDocGia = @MaDocGia,
                     MaNhanVien = @MaNhanVien,
-                    MaSach = (
-                        SELECT MaSach
-                        FROM Sach
-                        WHERE TenSach = @TenSach
-                    ),
+                    MaSach = @MaSach,
                     NgayMuon = @NgayMuon,
                     HanTra = @HanTra
                 WHERE MaPhieu = @MaPhieuCu";
@@ -526,8 +561,7 @@ namespace DoAnQLTV
                         cmd.Parameters.AddWithValue(
                             "@MaNhanVien", maNhanVien);
 
-                        cmd.Parameters.AddWithValue(
-                            "@TenSach", sach);
+                        cmd.Parameters.AddWithValue("@MaSach", maSach);
 
                         cmd.Parameters.AddWithValue(
                             "@NgayMuon", dtpNgayMuon.Value.Date);
@@ -563,7 +597,7 @@ namespace DoAnQLTV
                 CapNhatThongKeTrangChu();
 
                 txtMaPhieu.Clear();
-                txtSach.Clear();
+                cboSach.SelectedIndex = -1;
 
                 if (cboDocGia.Items.Count > 0)
                     cboDocGia.SelectedIndex = 0;
@@ -694,7 +728,7 @@ namespace DoAnQLTV
                 LoadPhieuMuon();
 
                 txtMaPhieu.Clear();
-                txtSach.Clear();
+                cboSach.SelectedIndex = -1;
 
                 if (cboDocGia.Items.Count > 0)
                     cboDocGia.SelectedIndex = 0;
@@ -743,7 +777,7 @@ namespace DoAnQLTV
         private void btnLamMoi_Click(object sender, EventArgs e)
         {
             txtMaPhieu.Clear();
-            txtSach.Clear();
+            cboSach.SelectedIndex = -1;
 
             if (cboDocGia.Items.Count > 0)
                 cboDocGia.SelectedIndex = 0;
@@ -763,13 +797,14 @@ namespace DoAnQLTV
             txtMaPhieu.Focus();
         }
 
+
         private void btnLapPhieu_Click(object sender, EventArgs e)
         {
             string maPhieu = txtMaPhieu.Text.Trim();
             string docGia = cboDocGia.Text.Trim();
             string nhanVien = cboNhanVien.Text.Trim();
-            string sach = txtSach.Text.Trim();
 
+            // 1. Kiểm tra mã phiếu
             if (maPhieu == "")
             {
                 MessageBox.Show(
@@ -782,7 +817,8 @@ namespace DoAnQLTV
                 return;
             }
 
-            if (docGia == "")
+            // 2. Kiểm tra độc giả
+            if (cboDocGia.SelectedIndex == -1 || docGia == "")
             {
                 MessageBox.Show(
                     "Vui lòng chọn độc giả.",
@@ -794,7 +830,8 @@ namespace DoAnQLTV
                 return;
             }
 
-            if (nhanVien == "")
+            // 3. Kiểm tra nhân viên
+            if (cboNhanVien.SelectedIndex == -1 || nhanVien == "")
             {
                 MessageBox.Show(
                     "Vui lòng chọn nhân viên.",
@@ -806,18 +843,25 @@ namespace DoAnQLTV
                 return;
             }
 
-            if (sach == "")
+            // 4. Kiểm tra sách
+            if (cboSach.SelectedIndex == -1 || cboSach.SelectedValue == null)
             {
                 MessageBox.Show(
-                    "Vui lòng nhập tên sách.",
+                    "Vui lòng chọn sách.",
                     "Thông báo",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Warning);
 
-                txtSach.Focus();
+                cboSach.Focus();
                 return;
             }
 
+            // Lấy mã độc giả, nhân viên và sách
+            string maDocGia = docGia.Split('-')[0].Trim();
+            string maNhanVien = nhanVien.Split('-')[0].Trim();
+            string maSach = cboSach.SelectedValue.ToString();
+
+            // 5. Kiểm tra ngày mượn và hạn trả
             if (dtpHanTra.Value.Date < dtpNgayMuon.Value.Date)
             {
                 MessageBox.Show(
@@ -826,11 +870,9 @@ namespace DoAnQLTV
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Warning);
 
+                dtpHanTra.Focus();
                 return;
             }
-
-            string maDocGia = docGia.Split('-')[0].Trim();
-            string maNhanVien = nhanVien.Split('-')[0].Trim();
 
             try
             {
@@ -838,79 +880,32 @@ namespace DoAnQLTV
                 {
                     conn.Open();
 
+                    // 6. Thêm phiếu mượn bằng mã sách đã chọn
                     string sql = @"
-    SELECT COUNT(*)
-    FROM Sach
-    WHERE TenSach = @TenSach";
+                INSERT INTO PhieuMuon
+                    (MaPhieu, MaDocGia, MaNhanVien, MaSach,
+                     NgayMuon, HanTra)
+                VALUES
+                    (@MaPhieu, @MaDocGia, @MaNhanVien, @MaSach,
+                     @NgayMuon, @HanTra)";
 
                     using (SqlCommand cmd = new SqlCommand(sql, conn))
                     {
-                        cmd.Parameters.AddWithValue("@TenSach", sach);
-
-                        int soSach = (int)cmd.ExecuteScalar();
-
-                        if (soSach == 0)
-                        {
-                            MessageBox.Show(
-                                "Không tìm thấy sách có tên tương ứng.",
-                                "Thông báo",
-                                MessageBoxButtons.OK,
-                                MessageBoxIcon.Warning);
-                            return;
-                        }
-
-                        if (soSach > 1)
-                        {
-                            MessageBox.Show(
-                                "Có nhiều sách trùng tên. Vui lòng chọn sách theo mã sách.",
-                                "Thông báo",
-                                MessageBoxButtons.OK,
-                                MessageBoxIcon.Warning);
-                            return;
-                        }
-                    }
-
-                    string sqlInsert = @"
-    INSERT INTO PhieuMuon
-        (MaPhieu, MaDocGia, MaNhanVien, MaSach, NgayMuon, HanTra)
-    SELECT
-        @MaPhieu,
-        @MaDocGia,
-        @MaNhanVien,
-        s.MaSach,
-        @NgayMuon,
-        @HanTra
-    FROM Sach s
-    WHERE s.TenSach = @TenSach";
-
-                    using (SqlCommand cmd = new SqlCommand(sqlInsert, conn))
-                    {
+                        cmd.Parameters.AddWithValue("@MaPhieu", maPhieu);
+                        cmd.Parameters.AddWithValue("@MaDocGia", maDocGia);
+                        cmd.Parameters.AddWithValue("@MaNhanVien", maNhanVien);
+                        cmd.Parameters.AddWithValue("@MaSach", maSach);
                         cmd.Parameters.AddWithValue(
-                            "@MaPhieu", maPhieu);
-
+                            "@NgayMuon", dtpNgayMuon.Value.Date);
                         cmd.Parameters.AddWithValue(
-                            "@MaDocGia", maDocGia);
-
-                        cmd.Parameters.AddWithValue(
-                            "@MaNhanVien", maNhanVien);
-
-                        cmd.Parameters.AddWithValue(
-                            "@TenSach", sach);
-
-                        cmd.Parameters.AddWithValue(
-                            "@NgayMuon",
-                            dtpNgayMuon.Value.Date);
-
-                        cmd.Parameters.AddWithValue(
-                            "@HanTra",
-                            dtpHanTra.Value.Date);
+                            "@HanTra", dtpHanTra.Value.Date);
 
                         int soDong = cmd.ExecuteNonQuery();
 
-                        if (soDong == 0)
+                        if (soDong <= 0)
                         {
                             MessageBox.Show(
-                                "Không tìm thấy sách có tên tương ứng.",
+                                "Không thể lập phiếu mượn.",
                                 "Thông báo",
                                 MessageBoxButtons.OK,
                                 MessageBoxIcon.Warning);
@@ -920,16 +915,19 @@ namespace DoAnQLTV
                     }
                 }
 
+                // 7. Thông báo thành công
                 MessageBox.Show(
                     "Lập phiếu mượn thành công.",
                     "Thông báo",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Information);
 
+                // 8. Cập nhật lại danh sách phiếu mượn
                 LoadPhieuMuon();
 
+                // 9. Làm sạch dữ liệu sau khi lập phiếu
                 txtMaPhieu.Clear();
-                txtSach.Clear();
+                cboSach.SelectedIndex = -1;
 
                 if (cboDocGia.Items.Count > 0)
                     cboDocGia.SelectedIndex = 0;
@@ -947,6 +945,7 @@ namespace DoAnQLTV
             }
             catch (SqlException ex)
             {
+                // Trùng khóa chính hoặc khóa duy nhất
                 if (ex.Number == 2627 || ex.Number == 2601)
                 {
                     MessageBox.Show(
@@ -954,11 +953,15 @@ namespace DoAnQLTV
                         "Thông báo",
                         MessageBoxButtons.OK,
                         MessageBoxIcon.Warning);
+
+                    txtMaPhieu.Focus();
                 }
+                // Vi phạm khóa ngoại
                 else if (ex.Number == 547)
                 {
                     MessageBox.Show(
-                        "Dữ liệu độc giả, nhân viên hoặc sách không hợp lệ.",
+                        "Độc giả, nhân viên hoặc sách không hợp lệ. " +
+                        "Vui lòng kiểm tra lại dữ liệu.",
                         "Thông báo",
                         MessageBoxButtons.OK,
                         MessageBoxIcon.Warning);
@@ -981,5 +984,6 @@ namespace DoAnQLTV
                     MessageBoxIcon.Error);
             }
         }
+
     }
 }

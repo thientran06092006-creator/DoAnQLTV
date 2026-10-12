@@ -41,7 +41,6 @@
             this.cboNhanVien = new System.Windows.Forms.ComboBox();
             this.dtpNgayMuon = new System.Windows.Forms.DateTimePicker();
             this.dtpHanTra = new System.Windows.Forms.DateTimePicker();
-            this.txtSach = new System.Windows.Forms.TextBox();
             this.btnThem = new System.Windows.Forms.Button();
             this.btnSua = new System.Windows.Forms.Button();
             this.btnXoa = new System.Windows.Forms.Button();
@@ -55,6 +54,7 @@
             this.colHanTra = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colSach = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.lblTieuDeLapPhieuMuon = new System.Windows.Forms.Label();
+            this.cboSach = new System.Windows.Forms.ComboBox();
             ((System.ComponentModel.ISupportInitialize)(this.dgvPhieuMuon)).BeginInit();
             this.SuspendLayout();
             // 
@@ -176,17 +176,6 @@
             this.dtpHanTra.Name = "dtpHanTra";
             this.dtpHanTra.Size = new System.Drawing.Size(260, 20);
             this.dtpHanTra.TabIndex = 10;
-            // 
-            // txtSach
-            // 
-            this.txtSach.BackColor = System.Drawing.Color.White;
-            this.txtSach.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.txtSach.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtSach.ForeColor = System.Drawing.Color.Black;
-            this.txtSach.Location = new System.Drawing.Point(620, 178);
-            this.txtSach.Name = "txtSach";
-            this.txtSach.Size = new System.Drawing.Size(300, 23);
-            this.txtSach.TabIndex = 11;
             // 
             // btnThem
             // 
@@ -350,12 +339,25 @@
             this.lblTieuDeLapPhieuMuon.Text = "LẬP PHIẾU MƯỢN";
             this.lblTieuDeLapPhieuMuon.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
+            // cboSach
+            // 
+            this.cboSach.BackColor = System.Drawing.Color.White;
+            this.cboSach.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cboSach.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cboSach.ForeColor = System.Drawing.Color.Black;
+            this.cboSach.FormattingEnabled = true;
+            this.cboSach.Location = new System.Drawing.Point(620, 177);
+            this.cboSach.Name = "cboSach";
+            this.cboSach.Size = new System.Drawing.Size(300, 23);
+            this.cboSach.TabIndex = 19;
+            // 
             // FrmLapPhieuMuon
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(984, 661);
+            this.Controls.Add(this.cboSach);
             this.Controls.Add(this.lblTieuDeLapPhieuMuon);
             this.Controls.Add(this.dgvPhieuMuon);
             this.Controls.Add(this.btnLapPhieu);
@@ -363,7 +365,6 @@
             this.Controls.Add(this.btnXoa);
             this.Controls.Add(this.btnSua);
             this.Controls.Add(this.btnThem);
-            this.Controls.Add(this.txtSach);
             this.Controls.Add(this.dtpHanTra);
             this.Controls.Add(this.dtpNgayMuon);
             this.Controls.Add(this.cboNhanVien);
@@ -399,7 +400,6 @@
         private System.Windows.Forms.ComboBox cboNhanVien;
         private System.Windows.Forms.DateTimePicker dtpNgayMuon;
         private System.Windows.Forms.DateTimePicker dtpHanTra;
-        private System.Windows.Forms.TextBox txtSach;
         private System.Windows.Forms.Button btnThem;
         private System.Windows.Forms.Button btnSua;
         private System.Windows.Forms.Button btnXoa;
@@ -413,5 +413,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn colHanTra;
         private System.Windows.Forms.DataGridViewTextBoxColumn colSach;
         private System.Windows.Forms.Label lblTieuDeLapPhieuMuon;
+        private System.Windows.Forms.ComboBox cboSach;
     }
 }
