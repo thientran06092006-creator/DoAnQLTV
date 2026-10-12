@@ -148,6 +148,10 @@ namespace DoAnQLTV
 
                 LoadNhanVien();
 
+                dongDangChon = -1;
+                dgvNhanVien.ClearSelection();
+                dgvNhanVien.CurrentCell = null;
+
                 txtMaNhanVien.Clear();
                 txtTenNhanVien.Clear();
                 txtSoDienThoai.Clear();
@@ -208,7 +212,8 @@ namespace DoAnQLTV
 
         private void btnSua_Click(object sender, EventArgs e)
         {
-            if (dongDangChon == -1)
+            if (dongDangChon == -1 ||
+    dongDangChon >= dgvNhanVien.Rows.Count)
             {
                 MessageBox.Show(
                     "Vui lòng chọn nhân viên cần sửa.",
@@ -339,7 +344,8 @@ namespace DoAnQLTV
 
         private void btnXoa_Click(object sender, EventArgs e)
         {
-            if (dongDangChon == -1)
+            if (dongDangChon == -1 ||
+     dongDangChon >= dgvNhanVien.Rows.Count)
             {
                 MessageBox.Show(
                     "Vui lòng chọn nhân viên cần xóa.",
@@ -511,12 +517,22 @@ namespace DoAnQLTV
 
                             if (dt.Rows.Count == 0)
                             {
+                                dongDangChon = -1;
+
+                                dgvNhanVien.ClearSelection();
+                                dgvNhanVien.CurrentCell = null;
+
+                                txtMaNhanVien.Clear();
+                                txtSoDienThoai.Clear();
+                                txtDiaChi.Clear();
+
                                 MessageBox.Show(
                                     "Không tìm thấy nhân viên phù hợp.",
                                     "Thông báo",
                                     MessageBoxButtons.OK,
                                     MessageBoxIcon.Information);
 
+                                txtTenNhanVien.Focus();
                                 return;
                             }
 
@@ -561,11 +577,11 @@ namespace DoAnQLTV
             txtSoDienThoai.Clear();
             txtDiaChi.Clear();
 
-            dongDangChon = -1;
-
             LoadNhanVien();
 
+            dongDangChon = -1;
             dgvNhanVien.ClearSelection();
+            dgvNhanVien.CurrentCell = null;
 
             txtMaNhanVien.Focus();
         }

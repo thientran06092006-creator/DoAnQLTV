@@ -148,6 +148,9 @@ namespace DoAnQLTV
                                     row["Sach"].ToString());
                             }
 
+                            dgvPhieuMuon.ClearSelection();
+                            dgvPhieuMuon.CurrentCell = null;
+
                             if (dt.Rows.Count == 0)
                             {
                                 MessageBox.Show(
@@ -155,12 +158,7 @@ namespace DoAnQLTV
                                     "Thông báo",
                                     MessageBoxButtons.OK,
                                     MessageBoxIcon.Information);
-
-                                return;
                             }
-
-                            dgvPhieuMuon.ClearSelection();
-                            dgvPhieuMuon.CurrentCell = null;
                         }
                     }
                 }
@@ -182,8 +180,10 @@ namespace DoAnQLTV
             LoadPhieuMuon();
 
             dgvPhieuMuon.ClearSelection();
+            dgvPhieuMuon.CurrentCell = null;
 
             txtTuKhoa.Focus();
+
         }
 
         private void dgvPhieuMuon_CellClick(object sender, DataGridViewCellEventArgs e)

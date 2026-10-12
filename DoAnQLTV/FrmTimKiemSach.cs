@@ -143,6 +143,9 @@ namespace DoAnQLTV
                             // Không tìm thấy kết quả
                             if (dt.Rows.Count == 0)
                             {
+                                dgvKetQua.ClearSelection();
+                                dgvKetQua.CurrentCell = null;
+
                                 MessageBox.Show(
                                     "Không tìm thấy sách phù hợp.",
                                     "Thông báo",
@@ -151,7 +154,6 @@ namespace DoAnQLTV
                                 );
 
                                 txtTuKhoa.Focus();
-
                                 return;
                             }
 

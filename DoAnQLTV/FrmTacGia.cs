@@ -66,6 +66,10 @@ namespace DoAnQLTV
 
                 LoadTacGia();
 
+                dongDangChon = -1;
+                dgvTacGia.ClearSelection();
+                dgvTacGia.CurrentCell = null;
+
                 txtMaTacGia.Clear();
                 txtTenTacGia.Clear();
                 txtMaTacGia.Focus();
@@ -114,10 +118,11 @@ namespace DoAnQLTV
 
         private void btnSua_Click(object sender, EventArgs e)
         {
-            if (dgvTacGia.CurrentRow == null)
+            if (dongDangChon == -1 ||
+    dongDangChon >= dgvTacGia.Rows.Count)
             {
                 MessageBox.Show(
-                    "Vui lòng chọn tác giả cần sửa.",
+                    "Vui lòng chọn tác giả cần thao tác.",
                     "Thông báo",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Warning);
@@ -179,6 +184,10 @@ namespace DoAnQLTV
 
                 LoadTacGia();
 
+                dongDangChon = -1;
+                dgvTacGia.ClearSelection();
+                dgvTacGia.CurrentCell = null;
+
                 txtMaTacGia.Clear();
                 txtTenTacGia.Clear();
                 txtMaTacGia.Focus();
@@ -195,10 +204,11 @@ namespace DoAnQLTV
 
         private void btnXoa_Click(object sender, EventArgs e)
         {
-            if (dgvTacGia.CurrentRow == null)
+            if (dongDangChon == -1 ||
+     dongDangChon >= dgvTacGia.Rows.Count)
             {
                 MessageBox.Show(
-                    "Vui lòng chọn tác giả cần xóa.",
+                    "Vui lòng chọn tác giả cần thao tác.",
                     "Thông báo",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Warning);
@@ -264,6 +274,10 @@ namespace DoAnQLTV
                     MessageBoxIcon.Information);
 
                 LoadTacGia();
+
+                dongDangChon = -1;
+                dgvTacGia.ClearSelection();
+                dgvTacGia.CurrentCell = null;
 
                 txtMaTacGia.Clear();
                 txtTenTacGia.Clear();
@@ -347,6 +361,14 @@ namespace DoAnQLTV
 
                             if (dt.Rows.Count == 0)
                             {
+                                dongDangChon = -1;
+
+                                txtMaTacGia.Clear();
+                                txtTenTacGia.Clear();
+
+                                dgvTacGia.ClearSelection();
+                                dgvTacGia.CurrentCell = null;
+
                                 MessageBox.Show(
                                     "Không tìm thấy tác giả phù hợp.",
                                     "Thông báo",
@@ -386,7 +408,9 @@ namespace DoAnQLTV
 
             LoadTacGia();
 
+            dongDangChon = -1;
             dgvTacGia.ClearSelection();
+            dgvTacGia.CurrentCell = null;
 
             txtMaTacGia.Focus();
         }

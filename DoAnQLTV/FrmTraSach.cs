@@ -13,11 +13,6 @@ namespace DoAnQLTV
 {
     public partial class FrmTraSach : Form
     {
-        private void CapNhatThongKeTrangChu()
-        {
-            // Không còn cập nhật thống kê trên FrmMain.
-        }
-
         public FrmTraSach()
         {
             InitializeComponent();
@@ -250,6 +245,9 @@ namespace DoAnQLTV
                                             .ToString("dd/MM/yyyy"));
                             }
 
+                            dgvTraSach.ClearSelection();
+                            dgvTraSach.CurrentCell = null;
+
                             if (dt.Rows.Count == 0)
                             {
                                 MessageBox.Show(
@@ -257,12 +255,7 @@ namespace DoAnQLTV
                                     "Thông báo",
                                     MessageBoxButtons.OK,
                                     MessageBoxIcon.Information);
-
-                                return;
                             }
-
-                            dgvTraSach.ClearSelection();
-                            dgvTraSach.CurrentCell = null;
                         }
                     }
                 }
@@ -400,7 +393,6 @@ namespace DoAnQLTV
                     MessageBoxIcon.Information);
 
                 LoadTraSach();
-                CapNhatThongKeTrangChu();
 
                 txtMaPhieu.Clear();
 
@@ -457,6 +449,7 @@ namespace DoAnQLTV
             LoadTraSach();
 
             dgvTraSach.ClearSelection();
+            dgvTraSach.CurrentCell = null;
 
             txtMaPhieu.Focus();
         }

@@ -131,12 +131,16 @@ namespace DoAnQLTV
 
                             if (dt.Rows.Count == 0)
                             {
+                                dgvKetQua.ClearSelection();
+                                dgvKetQua.CurrentCell = null;
+
                                 MessageBox.Show(
                                     "Không tìm thấy độc giả phù hợp.",
                                     "Thông báo",
                                     MessageBoxButtons.OK,
                                     MessageBoxIcon.Information);
 
+                                txtTuKhoa.Focus();
                                 return;
                             }
 
@@ -163,24 +167,22 @@ namespace DoAnQLTV
             LoadDocGia();
 
             dgvKetQua.ClearSelection();
+            dgvKetQua.CurrentCell = null;
 
             txtTuKhoa.Focus();
         }
 
-        private void dgvKetQua_CellClick(object sender, DataGridViewCellEventArgs e)
+        private void dgvKetQua_CellClick(
+    object sender,
+    DataGridViewCellEventArgs e)
         {
             if (e.RowIndex < 0)
                 return;
 
             DataGridViewRow row = dgvKetQua.Rows[e.RowIndex];
 
-            string maDocGia =
-                row.Cells["colMaDocGia"].Value?.ToString() ?? "";
-
-            string tenDocGia =
+            txtTuKhoa.Text =
                 row.Cells["colTenDocGia"].Value?.ToString() ?? "";
-
-            txtTuKhoa.Text = tenDocGia;
         }
     }
 }

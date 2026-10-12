@@ -156,6 +156,10 @@ namespace DoAnQLTV
                 LoadDocGia();
                 CapNhatThongKeTrangChu();
 
+                dongDangChon = -1;
+                dgvDocGia.ClearSelection();
+                dgvDocGia.CurrentCell = null;
+
                 txtMaDocGia.Clear();
                 txtTenDocGia.Clear();
                 txtDiaChi.Clear();
@@ -220,10 +224,11 @@ namespace DoAnQLTV
 
         private void btnSua_Click(object sender, EventArgs e)
         {
-            if (dongDangChon == -1)
+            if (dongDangChon == -1 ||
+    dongDangChon >= dgvDocGia.Rows.Count)
             {
                 MessageBox.Show(
-                    "Vui lòng chọn độc giả cần sửa.",
+                    "Vui lòng chọn độc giả cần thao tác.",
                     "Thông báo",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Warning);
@@ -357,7 +362,8 @@ namespace DoAnQLTV
 
         private void btnXoa_Click(object sender, EventArgs e)
         {
-            if (dongDangChon == -1)
+            if (dongDangChon == -1 ||
+    dongDangChon >= dgvDocGia.Rows.Count)
             {
                 MessageBox.Show(
                     "Vui lòng chọn độc giả cần xóa.",
@@ -541,11 +547,7 @@ namespace DoAnQLTV
                             txtSoDienThoai.Clear();
                             dtpNgaySinh.Value = DateTime.Now;
 
-                            dgvDocGia.BeginInvoke(new Action(() =>
-                            {
-                                dgvDocGia.ClearSelection();
-                                dgvDocGia.CurrentCell = null;
-                            }));
+                      
 
                             if (dt.Rows.Count == 0)
                             {
@@ -613,11 +615,11 @@ namespace DoAnQLTV
 
             dtpNgaySinh.Value = DateTime.Now;
 
-            dongDangChon = -1;
-
             LoadDocGia();
 
+            dongDangChon = -1;
             dgvDocGia.ClearSelection();
+            dgvDocGia.CurrentCell = null;
 
             txtMaDocGia.Focus();
         }

@@ -29,15 +29,15 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea3 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend3 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series4 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.Series series5 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea4 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend4 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series6 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend2 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series3 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.menuStripMain = new System.Windows.Forms.ToolStripMenuItem();
             this.đăngXuấtToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -59,6 +59,10 @@
             this.thôngTinChươngTrìnhToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.hướngDẫnSửDụngToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.pnlSidebar = new System.Windows.Forms.Panel();
+            this.pnlNhomHeThong = new System.Windows.Forms.Panel();
+            this.btnThoat = new System.Windows.Forms.Button();
+            this.btnDangXuat = new System.Windows.Forms.Button();
+            this.btnHeThong = new System.Windows.Forms.Button();
             this.pnlNhomTroGiup = new System.Windows.Forms.Panel();
             this.btnHuongDanSuDung = new System.Windows.Forms.Button();
             this.btnThongTinChuongTrinh = new System.Windows.Forms.Button();
@@ -147,12 +151,9 @@
             this.lblMoTaTrangChu = new System.Windows.Forms.Label();
             this.lblLoiChao = new System.Windows.Forms.Label();
             this.timerThoiGian = new System.Windows.Forms.Timer(this.components);
-            this.pnlNhomHeThong = new System.Windows.Forms.Panel();
-            this.btnThoat = new System.Windows.Forms.Button();
-            this.btnDangXuat = new System.Windows.Forms.Button();
-            this.btnHeThong = new System.Windows.Forms.Button();
             this.menuStrip1.SuspendLayout();
             this.pnlSidebar.SuspendLayout();
+            this.pnlNhomHeThong.SuspendLayout();
             this.pnlNhomTroGiup.SuspendLayout();
             this.pnlNhomMuonTra.SuspendLayout();
             this.pnlNhomTraCuu.SuspendLayout();
@@ -186,7 +187,6 @@
             this.pnlCardDangMuon.SuspendLayout();
             this.pnlCardDocGia.SuspendLayout();
             this.pnlCardSach.SuspendLayout();
-            this.pnlNhomHeThong.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -368,6 +368,62 @@
             this.pnlSidebar.Padding = new System.Windows.Forms.Padding(10);
             this.pnlSidebar.Size = new System.Drawing.Size(275, 903);
             this.pnlSidebar.TabIndex = 1;
+            // 
+            // pnlNhomHeThong
+            // 
+            this.pnlNhomHeThong.Controls.Add(this.btnThoat);
+            this.pnlNhomHeThong.Controls.Add(this.btnDangXuat);
+            this.pnlNhomHeThong.Controls.Add(this.btnHeThong);
+            this.pnlNhomHeThong.Dock = System.Windows.Forms.DockStyle.Top;
+            this.pnlNhomHeThong.Location = new System.Drawing.Point(10, 630);
+            this.pnlNhomHeThong.Margin = new System.Windows.Forms.Padding(0);
+            this.pnlNhomHeThong.Name = "pnlNhomHeThong";
+            this.pnlNhomHeThong.Size = new System.Drawing.Size(255, 110);
+            this.pnlNhomHeThong.TabIndex = 5;
+            // 
+            // btnThoat
+            // 
+            this.btnThoat.Dock = System.Windows.Forms.DockStyle.Top;
+            this.btnThoat.FlatAppearance.BorderSize = 0;
+            this.btnThoat.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnThoat.ForeColor = System.Drawing.Color.LightSteelBlue;
+            this.btnThoat.Location = new System.Drawing.Point(0, 75);
+            this.btnThoat.Name = "btnThoat";
+            this.btnThoat.Padding = new System.Windows.Forms.Padding(30, 0, 0, 0);
+            this.btnThoat.Size = new System.Drawing.Size(255, 35);
+            this.btnThoat.TabIndex = 2;
+            this.btnThoat.Text = "Thoát";
+            this.btnThoat.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnThoat.UseVisualStyleBackColor = true;
+            // 
+            // btnDangXuat
+            // 
+            this.btnDangXuat.Dock = System.Windows.Forms.DockStyle.Top;
+            this.btnDangXuat.FlatAppearance.BorderSize = 0;
+            this.btnDangXuat.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnDangXuat.ForeColor = System.Drawing.Color.LightSteelBlue;
+            this.btnDangXuat.Location = new System.Drawing.Point(0, 40);
+            this.btnDangXuat.Name = "btnDangXuat";
+            this.btnDangXuat.Padding = new System.Windows.Forms.Padding(30, 0, 0, 0);
+            this.btnDangXuat.Size = new System.Drawing.Size(255, 35);
+            this.btnDangXuat.TabIndex = 1;
+            this.btnDangXuat.Text = "Đăng xuất";
+            this.btnDangXuat.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnDangXuat.UseVisualStyleBackColor = true;
+            // 
+            // btnHeThong
+            // 
+            this.btnHeThong.Dock = System.Windows.Forms.DockStyle.Top;
+            this.btnHeThong.FlatAppearance.BorderSize = 0;
+            this.btnHeThong.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnHeThong.ForeColor = System.Drawing.Color.WhiteSmoke;
+            this.btnHeThong.Location = new System.Drawing.Point(0, 0);
+            this.btnHeThong.Name = "btnHeThong";
+            this.btnHeThong.Size = new System.Drawing.Size(255, 40);
+            this.btnHeThong.TabIndex = 0;
+            this.btnHeThong.Text = "Hệ thống";
+            this.btnHeThong.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnHeThong.UseVisualStyleBackColor = true;
             // 
             // pnlNhomTroGiup
             // 
@@ -831,14 +887,14 @@
             this.dgvHoatDongGanDay.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dgvHoatDongGanDay.BackgroundColor = System.Drawing.Color.White;
             this.dgvHoatDongGanDay.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle3.BackColor = System.Drawing.Color.AliceBlue;
-            dataGridViewCellStyle3.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle3.ForeColor = System.Drawing.Color.MidnightBlue;
-            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dgvHoatDongGanDay.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = System.Drawing.Color.AliceBlue;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle1.ForeColor = System.Drawing.Color.MidnightBlue;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dgvHoatDongGanDay.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             this.dgvHoatDongGanDay.ColumnHeadersHeight = 35;
             this.dgvHoatDongGanDay.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
             this.dgvHoatDongGanDay.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
@@ -846,14 +902,14 @@
             this.colLoaiHoatDong,
             this.colThongTinChiTiet,
             this.colNguoiThucHien});
-            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle4.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle4.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle4.ForeColor = System.Drawing.Color.MidnightBlue;
-            dataGridViewCellStyle4.SelectionBackColor = System.Drawing.Color.LightSteelBlue;
-            dataGridViewCellStyle4.SelectionForeColor = System.Drawing.Color.MidnightBlue;
-            dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dgvHoatDongGanDay.DefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle2.ForeColor = System.Drawing.Color.MidnightBlue;
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.Color.LightSteelBlue;
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.Color.MidnightBlue;
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dgvHoatDongGanDay.DefaultCellStyle = dataGridViewCellStyle2;
             this.dgvHoatDongGanDay.EnableHeadersVisualStyles = false;
             this.dgvHoatDongGanDay.GridColor = System.Drawing.Color.LightGray;
             this.dgvHoatDongGanDay.Location = new System.Drawing.Point(10, 45);
@@ -1284,25 +1340,25 @@
             this.chartMuonTra.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            chartArea3.Name = "ChartArea1";
-            this.chartMuonTra.ChartAreas.Add(chartArea3);
-            legend3.Alignment = System.Drawing.StringAlignment.Center;
-            legend3.Name = "Legend1";
-            this.chartMuonTra.Legends.Add(legend3);
+            chartArea1.Name = "ChartArea1";
+            this.chartMuonTra.ChartAreas.Add(chartArea1);
+            legend1.Alignment = System.Drawing.StringAlignment.Center;
+            legend1.Name = "Legend1";
+            this.chartMuonTra.Legends.Add(legend1);
             this.chartMuonTra.Location = new System.Drawing.Point(10, 45);
             this.chartMuonTra.Name = "chartMuonTra";
-            series4.ChartArea = "ChartArea1";
-            series4.Color = System.Drawing.Color.RoyalBlue;
-            series4.Legend = "Legend1";
-            series4.LegendText = "Số lượt mượn";
-            series4.Name = "SeriesMuon";
-            series5.ChartArea = "ChartArea1";
-            series5.Color = System.Drawing.Color.SeaGreen;
-            series5.Legend = "Legend1";
-            series5.LegendText = "Số lượt trả";
-            series5.Name = "SeriesTra";
-            this.chartMuonTra.Series.Add(series4);
-            this.chartMuonTra.Series.Add(series5);
+            series1.ChartArea = "ChartArea1";
+            series1.Color = System.Drawing.Color.RoyalBlue;
+            series1.Legend = "Legend1";
+            series1.LegendText = "Số lượt mượn";
+            series1.Name = "SeriesMuon";
+            series2.ChartArea = "ChartArea1";
+            series2.Color = System.Drawing.Color.SeaGreen;
+            series2.Legend = "Legend1";
+            series2.LegendText = "Số lượt trả";
+            series2.Name = "SeriesTra";
+            this.chartMuonTra.Series.Add(series1);
+            this.chartMuonTra.Series.Add(series2);
             this.chartMuonTra.Size = new System.Drawing.Size(477, 200);
             this.chartMuonTra.TabIndex = 1;
             this.chartMuonTra.Text = "chart1";
@@ -1334,16 +1390,16 @@
             // 
             // chartTheLoai
             // 
-            chartArea4.Name = "ChartArea1";
-            this.chartTheLoai.ChartAreas.Add(chartArea4);
-            legend4.Name = "Legend1";
-            this.chartTheLoai.Legends.Add(legend4);
+            chartArea2.Name = "ChartArea1";
+            this.chartTheLoai.ChartAreas.Add(chartArea2);
+            legend2.Name = "Legend1";
+            this.chartTheLoai.Legends.Add(legend2);
             this.chartTheLoai.Location = new System.Drawing.Point(0, 0);
             this.chartTheLoai.Name = "chartTheLoai";
-            series6.ChartArea = "ChartArea1";
-            series6.Legend = "Legend1";
-            series6.Name = "Series1";
-            this.chartTheLoai.Series.Add(series6);
+            series3.ChartArea = "ChartArea1";
+            series3.Legend = "Legend1";
+            series3.Name = "Series1";
+            this.chartTheLoai.Series.Add(series3);
             this.chartTheLoai.Size = new System.Drawing.Size(503, 248);
             this.chartTheLoai.TabIndex = 1;
             this.chartTheLoai.Text = "chart1";
@@ -1554,62 +1610,6 @@
             this.timerThoiGian.Interval = 1000;
             this.timerThoiGian.Tick += new System.EventHandler(this.timerThoiGian_Tick);
             // 
-            // pnlNhomHeThong
-            // 
-            this.pnlNhomHeThong.Controls.Add(this.btnThoat);
-            this.pnlNhomHeThong.Controls.Add(this.btnDangXuat);
-            this.pnlNhomHeThong.Controls.Add(this.btnHeThong);
-            this.pnlNhomHeThong.Dock = System.Windows.Forms.DockStyle.Top;
-            this.pnlNhomHeThong.Location = new System.Drawing.Point(10, 630);
-            this.pnlNhomHeThong.Margin = new System.Windows.Forms.Padding(0);
-            this.pnlNhomHeThong.Name = "pnlNhomHeThong";
-            this.pnlNhomHeThong.Size = new System.Drawing.Size(255, 110);
-            this.pnlNhomHeThong.TabIndex = 5;
-            // 
-            // btnThoat
-            // 
-            this.btnThoat.Dock = System.Windows.Forms.DockStyle.Top;
-            this.btnThoat.FlatAppearance.BorderSize = 0;
-            this.btnThoat.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnThoat.ForeColor = System.Drawing.Color.LightSteelBlue;
-            this.btnThoat.Location = new System.Drawing.Point(0, 75);
-            this.btnThoat.Name = "btnThoat";
-            this.btnThoat.Padding = new System.Windows.Forms.Padding(30, 0, 0, 0);
-            this.btnThoat.Size = new System.Drawing.Size(255, 35);
-            this.btnThoat.TabIndex = 2;
-            this.btnThoat.Text = "Thoát";
-            this.btnThoat.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnThoat.UseVisualStyleBackColor = true;
-            // 
-            // btnDangXuat
-            // 
-            this.btnDangXuat.Dock = System.Windows.Forms.DockStyle.Top;
-            this.btnDangXuat.FlatAppearance.BorderSize = 0;
-            this.btnDangXuat.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnDangXuat.ForeColor = System.Drawing.Color.LightSteelBlue;
-            this.btnDangXuat.Location = new System.Drawing.Point(0, 40);
-            this.btnDangXuat.Name = "btnDangXuat";
-            this.btnDangXuat.Padding = new System.Windows.Forms.Padding(30, 0, 0, 0);
-            this.btnDangXuat.Size = new System.Drawing.Size(255, 35);
-            this.btnDangXuat.TabIndex = 1;
-            this.btnDangXuat.Text = "Đăng xuất";
-            this.btnDangXuat.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnDangXuat.UseVisualStyleBackColor = true;
-            // 
-            // btnHeThong
-            // 
-            this.btnHeThong.Dock = System.Windows.Forms.DockStyle.Top;
-            this.btnHeThong.FlatAppearance.BorderSize = 0;
-            this.btnHeThong.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnHeThong.ForeColor = System.Drawing.Color.WhiteSmoke;
-            this.btnHeThong.Location = new System.Drawing.Point(0, 0);
-            this.btnHeThong.Name = "btnHeThong";
-            this.btnHeThong.Size = new System.Drawing.Size(255, 40);
-            this.btnHeThong.TabIndex = 0;
-            this.btnHeThong.Text = "Hệ thống";
-            this.btnHeThong.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnHeThong.UseVisualStyleBackColor = true;
-            // 
             // FrmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
@@ -1629,11 +1629,13 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "HỆ THỐNG QUẢN LÝ THƯ VIỆN";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
+            this.Activated += new System.EventHandler(this.FrmMain_Activated);
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FrmMain_FormClosing);
             this.Load += new System.EventHandler(this.FrmMain_Load);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.pnlSidebar.ResumeLayout(false);
+            this.pnlNhomHeThong.ResumeLayout(false);
             this.pnlNhomTroGiup.ResumeLayout(false);
             this.pnlNhomMuonTra.ResumeLayout(false);
             this.pnlNhomMuonTra.PerformLayout();
@@ -1678,7 +1680,6 @@
             this.pnlCardDocGia.PerformLayout();
             this.pnlCardSach.ResumeLayout(false);
             this.pnlCardSach.PerformLayout();
-            this.pnlNhomHeThong.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 

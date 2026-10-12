@@ -5,6 +5,7 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Windows.Forms;
+using System.Data.SqlClient;
 
 namespace DoAnQLTV
 {
@@ -12,7 +13,6 @@ namespace DoAnQLTV
     {
         private bool dangDangXuat = false;
         private bool dangXacNhanThoat = false;
-        private int soFormDaMo = 0;
 
         public FrmMain()
         {
@@ -28,6 +28,59 @@ namespace DoAnQLTV
             // Màu nền vùng nội dung.
             this.BackColor = System.Drawing.Color.White;
         }
+
+
+        private void CapNhatThongKe()
+        {
+            try
+            {
+                using (SqlConnection conn = DbConnection.GetConnection())
+                {
+                    conn.Open();
+
+                    string sql = @"
+                SELECT
+                    (SELECT COUNT(*) FROM Sach) AS TongSach,
+                    (SELECT COUNT(*) FROM DocGia) AS TongDocGia,
+                    (SELECT COUNT(*)
+                     FROM PhieuMuon
+                     WHERE NgayTra IS NULL) AS TongDangMuon,
+                    (SELECT COUNT(*)
+                     FROM PhieuMuon
+                     WHERE NgayTra IS NULL
+                       AND HanTra < CAST(GETDATE() AS DATE))
+                     AS TongQuaHan";
+
+                    using (SqlCommand cmd = new SqlCommand(sql, conn))
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            lblSoSach.Text =
+                                reader["TongSach"].ToString();
+
+                            lblSoDocGia.Text =
+                                reader["TongDocGia"].ToString();
+
+                            lblSoDangMuon.Text =
+                                reader["TongDangMuon"].ToString();
+
+                            lblSoQuaHan.Text =
+                                reader["TongQuaHan"].ToString();
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    "Không thể tải số liệu thống kê.\n\n" + ex.Message,
+                    "Lỗi thống kê",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+            }
+        }
+
 
         private void TaoAnhHinhTron(PictureBox pic)
         {
@@ -45,6 +98,7 @@ namespace DoAnQLTV
 
         private void FrmMain_Load(object sender, EventArgs e)
         {
+            CapNhatThongKe();
             if (System.ComponentModel.LicenseManager.UsageMode
        == System.ComponentModel.LicenseUsageMode.Designtime)
             {
@@ -280,6 +334,7 @@ namespace DoAnQLTV
         }
 
 
+
         private void MoFormChucNang(Form form)
         {
             Form formDangMo = Application.OpenForms
@@ -303,10 +358,18 @@ namespace DoAnQLTV
             form.StartPosition = FormStartPosition.CenterScreen;
 
             form.FormClosed += (s, e) =>
-                soFormDaMo = Math.Max(0, soFormDaMo - 1);
+            {
+                if (!IsDisposed && !Disposing)
+                    CapNhatThongKe();
+            };
 
-            soFormDaMo++;
             form.Show();
+        }
+
+
+        private void FrmMain_Activated(object sender, EventArgs e)
+        {
+            CapNhatThongKe();
         }
 
         private void quảnLýSáchToolStripMenuItem_Click(

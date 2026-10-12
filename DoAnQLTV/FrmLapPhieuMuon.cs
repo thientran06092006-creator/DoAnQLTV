@@ -399,7 +399,8 @@ namespace DoAnQLTV
 
         private void btnSua_Click(object sender, EventArgs e)
         {
-            if (dongDangChon < 0)
+            if (dongDangChon < 0 ||
+    dongDangChon >= dgvPhieuMuon.Rows.Count)
             {
                 MessageBox.Show(
                     "Vui lòng chọn phiếu mượn cần sửa.",
@@ -617,7 +618,8 @@ namespace DoAnQLTV
 
         private void btnXoa_Click(object sender, EventArgs e)
         {
-            if (dongDangChon < 0)
+            if (dongDangChon < 0 ||
+    dongDangChon >= dgvPhieuMuon.Rows.Count)
             {
                 MessageBox.Show(
                     "Vui lòng chọn phiếu mượn cần xóa.",
@@ -752,11 +754,11 @@ namespace DoAnQLTV
             dtpNgayMuon.Value = DateTime.Now;
             dtpHanTra.Value = DateTime.Now.AddDays(7);
 
-            dongDangChon = -1;
-
             LoadPhieuMuon();
 
+            dongDangChon = -1;
             dgvPhieuMuon.ClearSelection();
+            dgvPhieuMuon.CurrentCell = null;
 
             txtMaPhieu.Focus();
         }
@@ -837,19 +839,51 @@ namespace DoAnQLTV
                     conn.Open();
 
                     string sql = @"
-                INSERT INTO PhieuMuon
-                    (MaPhieu, MaDocGia, MaNhanVien, MaSach, NgayMuon, HanTra)
-                SELECT
-                    @MaPhieu,
-                    @MaDocGia,
-                    @MaNhanVien,
-                    s.MaSach,
-                    @NgayMuon,
-                    @HanTra
-                FROM Sach s
-                WHERE s.TenSach = @TenSach";
+    SELECT COUNT(*)
+    FROM Sach
+    WHERE TenSach = @TenSach";
 
                     using (SqlCommand cmd = new SqlCommand(sql, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@TenSach", sach);
+
+                        int soSach = (int)cmd.ExecuteScalar();
+
+                        if (soSach == 0)
+                        {
+                            MessageBox.Show(
+                                "Không tìm thấy sách có tên tương ứng.",
+                                "Thông báo",
+                                MessageBoxButtons.OK,
+                                MessageBoxIcon.Warning);
+                            return;
+                        }
+
+                        if (soSach > 1)
+                        {
+                            MessageBox.Show(
+                                "Có nhiều sách trùng tên. Vui lòng chọn sách theo mã sách.",
+                                "Thông báo",
+                                MessageBoxButtons.OK,
+                                MessageBoxIcon.Warning);
+                            return;
+                        }
+                    }
+
+                    string sqlInsert = @"
+    INSERT INTO PhieuMuon
+        (MaPhieu, MaDocGia, MaNhanVien, MaSach, NgayMuon, HanTra)
+    SELECT
+        @MaPhieu,
+        @MaDocGia,
+        @MaNhanVien,
+        s.MaSach,
+        @NgayMuon,
+        @HanTra
+    FROM Sach s
+    WHERE s.TenSach = @TenSach";
+
+                    using (SqlCommand cmd = new SqlCommand(sqlInsert, conn))
                     {
                         cmd.Parameters.AddWithValue(
                             "@MaPhieu", maPhieu);
