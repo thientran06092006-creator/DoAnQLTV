@@ -232,6 +232,22 @@ namespace DoAnQLTV
             return true;
         }
 
+        /// <summary>
+        /// Sách này đang nằm trong phiếu mượn nào chưa trả? Trả về mã phiếu đó, hoặc null nếu sách đang rảnh.
+        /// boQuaMaPhieu: bỏ qua phiếu này (dùng khi sửa chính phiếu đó).
+        /// </summary>
+        private string TimPhieuDangMuonSach(string maSach, string boQuaMaPhieu)
+        {
+            return DbConnection.ExecuteScalar<string>(@"
+                SELECT TOP 1 MaPhieu
+                FROM PhieuMuon
+                WHERE MaSach = @MaSach
+                  AND NgayTra IS NULL
+                  AND (@BoQua IS NULL OR MaPhieu <> @BoQua)",
+                DbConnection.Param("@MaSach", maSach),
+                DbConnection.Param("@BoQua", boQuaMaPhieu));
+        }
+
         // ================= SỰ KIỆN (giữ nguyên tên để Designer không bị lỗi) =================
 
         private void dgvPhieuMuon_CellClick(object sender, DataGridViewCellEventArgs e)
@@ -288,15 +304,29 @@ namespace DoAnQLTV
 
             try
             {
+                string maSach = cboSach.SelectedValue.ToString();
+
+                // Mỗi đầu sách chỉ có 1 bản: đang có người mượn chưa trả thì không cho lập phiếu mới
+                string phieuDangMuon = TimPhieuDangMuonSach(maSach, null);
+                if (phieuDangMuon != null)
+                {
+                    AppTheme.Warning("Sách \"" + cboSach.Text + "\" đang được mượn (phiếu " + phieuDangMuon +
+                                     ") và chưa trả.\nVui lòng chọn sách khác.");
+                    cboSach.Focus();
+                    return;
+                }
+
                 DbConnection.ExecuteNonQuery(@"
                     INSERT INTO PhieuMuon (MaPhieu, MaDocGia, MaNhanVien, MaSach, NgayMuon, HanTra)
                     VALUES (@MaPhieu, @MaDocGia, @MaNhanVien, @MaSach, @NgayMuon, @HanTra)",
                     DbConnection.Param("@MaPhieu", txtMaPhieu.Text.Trim()),
                     DbConnection.Param("@MaDocGia", LayMa(cboDocGia.Text)),
                     DbConnection.Param("@MaNhanVien", LayMa(cboNhanVien.Text)),
-                    DbConnection.Param("@MaSach", cboSach.SelectedValue.ToString()),
+                    DbConnection.Param("@MaSach", maSach),
                     DbConnection.Param("@NgayMuon", dtpNgayMuon.Value.Date),
                     DbConnection.Param("@HanTra", dtpHanTra.Value.Date));
+
+                NhatKy.Ghi("Mượn sách", "Mượn sách \"" + cboSach.Text + "\" - Mã DG: " + LayMa(cboDocGia.Text));
 
                 AppTheme.Info("Lập phiếu mượn thành công!");
                 LoadPhieuMuon();
@@ -339,6 +369,26 @@ namespace DoAnQLTV
 
             try
             {
+                string maSach = cboSach.SelectedValue.ToString();
+
+                // Chỉ kiểm tra khi phiếu này CHƯA TRẢ. Phiếu đã trả là lịch sử cũ,
+                // sửa nó không được bị chặn chỉ vì sách đó đang cho người khác mượn.
+                int soPhieuMo = DbConnection.ExecuteScalar<int>(
+                    "SELECT COUNT(*) FROM PhieuMuon WHERE MaPhieu = @MaPhieu AND NgayTra IS NULL",
+                    DbConnection.Param("@MaPhieu", maDangChon));
+
+                if (soPhieuMo > 0)
+                {
+                    string phieuKhac = TimPhieuDangMuonSach(maSach, maDangChon);
+                    if (phieuKhac != null)
+                    {
+                        AppTheme.Warning("Sách \"" + cboSach.Text + "\" đang được mượn ở phiếu " + phieuKhac +
+                                         " và chưa trả.\nVui lòng chọn sách khác.");
+                        cboSach.Focus();
+                        return;
+                    }
+                }
+
                 int soDong = DbConnection.ExecuteNonQuery(@"
                     UPDATE PhieuMuon
                     SET MaDocGia = @MaDocGia,
@@ -349,7 +399,7 @@ namespace DoAnQLTV
                     WHERE MaPhieu = @MaPhieu",
                     DbConnection.Param("@MaDocGia", LayMa(cboDocGia.Text)),
                     DbConnection.Param("@MaNhanVien", LayMa(cboNhanVien.Text)),
-                    DbConnection.Param("@MaSach", cboSach.SelectedValue.ToString()),
+                    DbConnection.Param("@MaSach", maSach),
                     DbConnection.Param("@NgayMuon", dtpNgayMuon.Value.Date),
                     DbConnection.Param("@HanTra", dtpHanTra.Value.Date),
                     DbConnection.Param("@MaPhieu", maDangChon));
@@ -359,6 +409,8 @@ namespace DoAnQLTV
                     AppTheme.Warning("Không tìm thấy phiếu mượn cần sửa.");
                     return;
                 }
+
+                NhatKy.Ghi("Sửa phiếu mượn", "Sửa phiếu mượn " + maDangChon + " - Mã DG: " + LayMa(cboDocGia.Text));
 
                 AppTheme.Info("Cập nhật phiếu mượn thành công!");
                 LoadPhieuMuon();
@@ -396,6 +448,8 @@ namespace DoAnQLTV
                     AppTheme.Warning("Không tìm thấy phiếu mượn cần xóa.");
                     return;
                 }
+
+                NhatKy.Ghi("Xóa phiếu mượn", "Xóa phiếu mượn " + maDangChon + " - Mã DG: " + LayMa(cboDocGia.Text));
 
                 AppTheme.Info("Xóa phiếu mượn thành công!");
                 LoadPhieuMuon();

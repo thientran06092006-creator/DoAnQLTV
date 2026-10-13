@@ -191,6 +191,8 @@ namespace DoAnQLTV
                     DbConnection.Param("@MaTheLoai", cboTheLoai.SelectedValue),
                     DbConnection.Param("@MaTacGia", cboTacGia.SelectedValue));
 
+                NhatKy.Ghi("Thêm sách", "Thêm sách \"" + txtTenSach.Text.Trim() + "\" - Mã sách: " + txtMaSach.Text.Trim());
+
                 AppTheme.Info("Thêm sách thành công.");
                 LoadSach();
                 XoaForm();
@@ -234,6 +236,8 @@ namespace DoAnQLTV
                     return;
                 }
 
+                NhatKy.Ghi("Sửa sách", "Sửa sách \"" + txtTenSach.Text.Trim() + "\" - Mã sách: " + maSachDangChon);
+
                 AppTheme.Info("Sửa thông tin sách thành công.");
                 LoadSach();
                 XoaForm();
@@ -266,6 +270,8 @@ namespace DoAnQLTV
                     AppTheme.Warning("Không tìm thấy sách cần xóa.");
                     return;
                 }
+
+                NhatKy.Ghi("Xóa sách", "Xóa sách \"" + txtTenSach.Text.Trim() + "\" - Mã sách: " + maSachDangChon);
 
                 AppTheme.Info("Xóa sách thành công.");
                 LoadSach();

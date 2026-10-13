@@ -148,6 +148,7 @@
     <Compile Include="FrmTraSach.Designer.cs">
       <DependentUpon>FrmTraSach.cs</DependentUpon>
     </Compile>
+    <Compile Include="NhatKy.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="FrmDanhSachPhieuMuon.resx">

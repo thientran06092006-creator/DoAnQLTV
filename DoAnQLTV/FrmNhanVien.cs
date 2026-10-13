@@ -2,6 +2,7 @@
 using System.Data;
 using System.Data.SqlClient;
 using System.Drawing;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
 namespace DoAnQLTV
@@ -134,9 +135,17 @@ namespace DoAnQLTV
                 return false;
             }
 
-            if (txtSoDienThoai.Text.Trim() == "")
+            string sdt = txtSoDienThoai.Text.Trim();
+            if (sdt == "")
             {
                 AppTheme.Warning("Vui lòng nhập số điện thoại.");
+                txtSoDienThoai.Focus();
+                return false;
+            }
+
+            if (!Regex.IsMatch(sdt, @"^\d{9,11}$"))
+            {
+                AppTheme.Warning("Số điện thoại chỉ gồm chữ số, dài từ 9 đến 11 số.");
                 txtSoDienThoai.Focus();
                 return false;
             }

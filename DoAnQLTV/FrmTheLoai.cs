@@ -80,14 +80,20 @@ namespace DoAnQLTV
 
         // ================= HÀM DÙNG CHUNG TRÊN FORM =================
 
+        /// <summary>Khóa/mở ô mã và đổi màu nền theo trạng thái (xám nhạt = đang khóa).</summary>
+        private void KhoaMa(bool khoa)
+        {
+            txtMaTheLoai.ReadOnly = khoa;
+            txtMaTheLoai.BackColor = khoa ? ColorTranslator.FromHtml("#F1F5F9") : Color.White;
+        }
+
         private void DoLenForm(string maTheLoai, string tenTheLoai)
         {
             txtMaTheLoai.Text = maTheLoai;
             txtTenTheLoai.Text = tenTheLoai;
 
             maDangChon = maTheLoai;
-            txtMaTheLoai.ReadOnly = true;
-            txtMaTheLoai.BackColor = ColorTranslator.FromHtml("#F1F5F9");   // <-- thêm: xám nhạt = đang khóa
+            KhoaMa(true);
         }
 
         private void XoaForm()
@@ -96,8 +102,7 @@ namespace DoAnQLTV
             txtTenTheLoai.Clear();
 
             maDangChon = null;
-            txtMaTheLoai.ReadOnly = false;
-            txtMaTheLoai.BackColor = Color.White;                            // <-- thêm: trả về trắng
+            KhoaMa(false);
 
             dgvTheLoai.ClearSelection();
             dgvTheLoai.CurrentCell = null;
@@ -257,7 +262,7 @@ namespace DoAnQLTV
                 if (dt.Rows.Count == 0)
                 {
                     maDangChon = null;
-                    txtMaTheLoai.ReadOnly = false;
+                    KhoaMa(false);   // trước đây chỉ mở khóa mà quên trả màu nền về trắng
                     AppTheme.Info("Không tìm thấy thể loại phù hợp.");
                 }
                 else if (dt.Rows.Count == 1)

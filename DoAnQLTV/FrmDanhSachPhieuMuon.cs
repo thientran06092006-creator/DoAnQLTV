@@ -1,27 +1,26 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Data.SqlClient;
 
 namespace DoAnQLTV
 {
     public partial class FrmDanhSachPhieuMuon : Form
     {
+        private const string DinhDangNgay = "dd/MM/yyyy";
+
         public FrmDanhSachPhieuMuon()
         {
             InitializeComponent();
 
             AppTheme.ApplyForm(this);
             ApDungGiaoDien();
+            ThemCotTrangThai();
 
-            LoadPhieuMuon();
+            LoadPhieuMuon(null);
         }
+
+        // ================= GIAO DIỆN =================
 
         private void ApDungGiaoDien()
         {
@@ -39,63 +38,107 @@ namespace DoAnQLTV
                 AppTheme.TextDark);
         }
 
-        private void LoadPhieuMuon()
+        /// <summary>Thêm cột "Trạng thái" bằng code, không cần sửa Designer.</summary>
+        private void ThemCotTrangThai()
+        {
+            if (dgvPhieuMuon.Columns.Contains("colTrangThai")) return;
+
+            DataGridViewTextBoxColumn col = new DataGridViewTextBoxColumn();
+            col.Name = "colTrangThai";
+            col.HeaderText = "Trạng thái";
+            col.FillWeight = 80F;
+            col.ReadOnly = true;
+            dgvPhieuMuon.Columns.Add(col);
+        }
+
+        // ================= NẠP DỮ LIỆU =================
+
+        /// <summary>Lấy danh sách phiếu mượn; tuKhoa rỗng/null = lấy tất cả.</summary>
+        private DataTable TruyVanPhieuMuon(string tuKhoa)
+        {
+            const string sql = @"
+                SELECT pm.MaPhieu,
+                       pm.MaDocGia + ' - ' + dg.TenDocGia AS DocGia,
+                       pm.MaNhanVien + ' - ' + nv.TenNhanVien AS NhanVien,
+                       pm.NgayMuon,
+                       pm.HanTra,
+                       s.MaSach + ' - ' + s.TenSach AS Sach,
+                       pm.NgayTra
+                FROM PhieuMuon pm
+                INNER JOIN DocGia dg ON pm.MaDocGia = dg.MaDocGia
+                INNER JOIN NhanVien nv ON pm.MaNhanVien = nv.MaNhanVien
+                INNER JOIN Sach s ON pm.MaSach = s.MaSach
+                WHERE (@TuKhoa IS NULL
+                       OR pm.MaPhieu LIKE @TuKhoa
+                       OR pm.MaDocGia LIKE @TuKhoa
+                       OR dg.TenDocGia LIKE @TuKhoa
+                       OR nv.TenNhanVien LIKE @TuKhoa
+                       OR s.MaSach LIKE @TuKhoa
+                       OR s.TenSach LIKE @TuKhoa)
+                ORDER BY pm.MaPhieu";
+
+            object tuKhoaLike = string.IsNullOrEmpty(tuKhoa) ? null : "%" + tuKhoa + "%";
+            return DbConnection.ExecuteQuery(sql, DbConnection.Param("@TuKhoa", tuKhoaLike));
+        }
+
+        private void LoadPhieuMuon(string tuKhoa)
         {
             try
             {
-                using (SqlConnection conn = DbConnection.GetConnection())
-                {
-                    conn.Open();
-
-                    string sql = @"
-                SELECT
-                    pm.MaPhieu,
-                    pm.MaDocGia + ' - ' + dg.TenDocGia AS DocGia,
-                    pm.MaNhanVien + ' - ' + nv.TenNhanVien AS NhanVien,
-                    pm.NgayMuon,
-                    pm.HanTra,
-                    s.MaSach + ' - ' + s.TenSach AS Sach
-                FROM PhieuMuon pm
-                INNER JOIN DocGia dg
-                    ON pm.MaDocGia = dg.MaDocGia
-                INNER JOIN NhanVien nv
-                    ON pm.MaNhanVien = nv.MaNhanVien
-                INNER JOIN Sach s
-                    ON pm.MaSach = s.MaSach
-                ORDER BY pm.MaPhieu";
-
-                    using (SqlDataAdapter adapter =
-                        new SqlDataAdapter(sql, conn))
-                    {
-                        DataTable dt = new DataTable();
-                        adapter.Fill(dt);
-
-                        dgvPhieuMuon.Rows.Clear();
-
-                        foreach (DataRow row in dt.Rows)
-                        {
-                            dgvPhieuMuon.Rows.Add(
-                                row["MaPhieu"].ToString(),
-                                row["DocGia"].ToString(),
-                                row["NhanVien"].ToString(),
-                                Convert.ToDateTime(
-                                    row["NgayMuon"]).ToString("dd/MM/yyyy"),
-                                Convert.ToDateTime(
-                                    row["HanTra"]).ToString("dd/MM/yyyy"),
-                                row["Sach"].ToString());
-                        }
-                    }
-                }
+                HienThiLuoi(TruyVanPhieuMuon(tuKhoa));
             }
             catch (Exception ex)
             {
-                MessageBox.Show(
-                    "Không thể tải dữ liệu phiếu mượn.\n\n" + ex.Message,
-                    "Lỗi",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
+                AppTheme.Error("Không thể tải dữ liệu phiếu mượn.\n\n" + ex.Message);
             }
         }
+
+        private void HienThiLuoi(DataTable dt)
+        {
+            dgvPhieuMuon.Rows.Clear();
+
+            foreach (DataRow r in dt.Rows)
+            {
+                DateTime hanTra = Convert.ToDateTime(r["HanTra"]).Date;
+
+                string trangThai;
+                Color mau;
+                if (r["NgayTra"] != DBNull.Value)
+                {
+                    trangThai = "Đã trả";
+                    mau = AppTheme.Success;
+                }
+                else if (hanTra < DateTime.Today)
+                {
+                    trangThai = "Quá hạn " + (DateTime.Today - hanTra).Days + " ngày";
+                    mau = AppTheme.Danger;
+                }
+                else
+                {
+                    trangThai = "Đang mượn";
+                    mau = AppTheme.Accent;
+                }
+
+                int idx = dgvPhieuMuon.Rows.Add(
+                    r["MaPhieu"],
+                    r["DocGia"],
+                    r["NhanVien"],
+                    Convert.ToDateTime(r["NgayMuon"]).ToString(DinhDangNgay),
+                    hanTra.ToString(DinhDangNgay),
+                    r["Sach"],
+                    trangThai);
+
+                DataGridViewCell o = dgvPhieuMuon.Rows[idx].Cells["colTrangThai"];
+                o.Style.ForeColor = mau;
+                o.Style.SelectionForeColor = mau;
+                o.Style.Font = AppTheme.Bold;
+            }
+
+            dgvPhieuMuon.ClearSelection();
+            dgvPhieuMuon.CurrentCell = null;
+        }
+
+        // ================= SỰ KIỆN (giữ nguyên tên để Designer không bị lỗi) =================
 
         private void btnTimKiem_Click(object sender, EventArgs e)
         {
@@ -103,117 +146,38 @@ namespace DoAnQLTV
 
             if (tuKhoa == "")
             {
-                MessageBox.Show(
-                    "Vui lòng nhập từ khóa cần tìm.",
-                    "Thông báo",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning);
-
+                AppTheme.Warning("Vui lòng nhập từ khóa cần tìm.");
                 txtTuKhoa.Focus();
                 return;
             }
 
             try
             {
-                using (SqlConnection conn = DbConnection.GetConnection())
-                {
-                    conn.Open();
+                DataTable dt = TruyVanPhieuMuon(tuKhoa);
+                HienThiLuoi(dt);
 
-                    string sql = @"
-                SELECT
-                    pm.MaPhieu,
-                    pm.MaDocGia + ' - ' + dg.TenDocGia AS DocGia,
-                    pm.MaNhanVien + ' - ' + nv.TenNhanVien AS NhanVien,
-                    pm.NgayMuon,
-                    pm.HanTra,
-                    s.MaSach + ' - ' + s.TenSach AS Sach
-                FROM PhieuMuon pm
-                INNER JOIN DocGia dg
-                    ON pm.MaDocGia = dg.MaDocGia
-                INNER JOIN NhanVien nv
-                    ON pm.MaNhanVien = nv.MaNhanVien
-                INNER JOIN Sach s
-                    ON pm.MaSach = s.MaSach
-                WHERE pm.MaPhieu LIKE @TuKhoa
-                   OR dg.TenDocGia LIKE @TuKhoa
-                   OR nv.TenNhanVien LIKE @TuKhoa
-                   OR s.TenSach LIKE @TuKhoa
-                ORDER BY pm.MaPhieu";
-
-                    using (SqlCommand cmd = new SqlCommand(sql, conn))
-                    {
-                        cmd.Parameters.AddWithValue(
-                            "@TuKhoa",
-                            "%" + tuKhoa + "%");
-
-                        using (SqlDataAdapter adapter =
-                            new SqlDataAdapter(cmd))
-                        {
-                            DataTable dt = new DataTable();
-                            adapter.Fill(dt);
-
-                            dgvPhieuMuon.Rows.Clear();
-
-                            foreach (DataRow row in dt.Rows)
-                            {
-                                dgvPhieuMuon.Rows.Add(
-                                    row["MaPhieu"].ToString(),
-                                    row["DocGia"].ToString(),
-                                    row["NhanVien"].ToString(),
-                                    Convert.ToDateTime(
-                                        row["NgayMuon"]).ToString("dd/MM/yyyy"),
-                                    Convert.ToDateTime(
-                                        row["HanTra"]).ToString("dd/MM/yyyy"),
-                                    row["Sach"].ToString());
-                            }
-
-                            dgvPhieuMuon.ClearSelection();
-                            dgvPhieuMuon.CurrentCell = null;
-
-                            if (dt.Rows.Count == 0)
-                            {
-                                MessageBox.Show(
-                                    "Không tìm thấy phiếu mượn phù hợp.",
-                                    "Thông báo",
-                                    MessageBoxButtons.OK,
-                                    MessageBoxIcon.Information);
-                            }
-                        }
-                    }
-                }
+                if (dt.Rows.Count == 0)
+                    AppTheme.Info("Không tìm thấy phiếu mượn phù hợp.");
             }
             catch (Exception ex)
             {
-                MessageBox.Show(
-                    "Không thể tìm kiếm phiếu mượn.\n\n" + ex.Message,
-                    "Lỗi",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
+                AppTheme.Error("Không thể tìm kiếm phiếu mượn.\n\n" + ex.Message);
             }
         }
 
         private void btnLamMoi_Click(object sender, EventArgs e)
         {
             txtTuKhoa.Clear();
-
-            LoadPhieuMuon();
-
-            dgvPhieuMuon.ClearSelection();
-            dgvPhieuMuon.CurrentCell = null;
-
+            LoadPhieuMuon(null);
             txtTuKhoa.Focus();
-
         }
 
         private void dgvPhieuMuon_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (e.RowIndex < 0)
-                return;
+            if (e.RowIndex < 0) return;
 
             DataGridViewRow row = dgvPhieuMuon.Rows[e.RowIndex];
-
-            txtTuKhoa.Text =
-                row.Cells["colMaPhieu"].Value?.ToString() ?? "";
+            txtTuKhoa.Text = row.Cells["colMaPhieu"].Value?.ToString() ?? "";
         }
     }
 }

@@ -3,6 +3,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Drawing;
 using System.Globalization;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
 namespace DoAnQLTV
@@ -155,6 +156,13 @@ namespace DoAnQLTV
                 return false;
             }
 
+            if (dtpNgaySinh.Value.Date > DateTime.Today)
+            {
+                AppTheme.Warning("Ngày sinh không được sau ngày hôm nay.");
+                dtpNgaySinh.Focus();
+                return false;
+            }
+
             if (txtDiaChi.Text.Trim() == "")
             {
                 AppTheme.Warning("Vui lòng nhập địa chỉ.");
@@ -162,9 +170,17 @@ namespace DoAnQLTV
                 return false;
             }
 
-            if (txtSoDienThoai.Text.Trim() == "")
+            string sdt = txtSoDienThoai.Text.Trim();
+            if (sdt == "")
             {
                 AppTheme.Warning("Vui lòng nhập số điện thoại.");
+                txtSoDienThoai.Focus();
+                return false;
+            }
+
+            if (!Regex.IsMatch(sdt, @"^\d{9,11}$"))
+            {
+                AppTheme.Warning("Số điện thoại chỉ gồm chữ số, dài từ 9 đến 11 số.");
                 txtSoDienThoai.Focus();
                 return false;
             }
@@ -220,6 +236,8 @@ namespace DoAnQLTV
                     DbConnection.Param("@DiaChi", txtDiaChi.Text.Trim()),
                     DbConnection.Param("@SoDienThoai", txtSoDienThoai.Text.Trim()));
 
+                NhatKy.Ghi("Thêm độc giả", "Thêm độc giả \"" + txtTenDocGia.Text.Trim() + "\" - Mã DG: " + txtMaDocGia.Text.Trim());
+
                 AppTheme.Info("Thêm độc giả thành công!");
                 LoadDocGia();
                 XoaForm();
@@ -265,6 +283,8 @@ namespace DoAnQLTV
                     return;
                 }
 
+                NhatKy.Ghi("Sửa độc giả", "Sửa độc giả \"" + txtTenDocGia.Text.Trim() + "\" - Mã DG: " + maDangChon);
+
                 AppTheme.Info("Cập nhật độc giả thành công!");
                 LoadDocGia();
                 XoaForm();
@@ -297,6 +317,8 @@ namespace DoAnQLTV
                     AppTheme.Warning("Không tìm thấy độc giả cần xóa.");
                     return;
                 }
+
+                NhatKy.Ghi("Xóa độc giả", "Xóa độc giả \"" + txtTenDocGia.Text.Trim() + "\" - Mã DG: " + maDangChon);
 
                 AppTheme.Info("Xóa độc giả thành công!");
                 LoadDocGia();
