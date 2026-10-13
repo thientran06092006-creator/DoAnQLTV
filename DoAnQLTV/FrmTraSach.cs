@@ -17,9 +17,31 @@ namespace DoAnQLTV
         {
             InitializeComponent();
 
+            AppTheme.ApplyForm(this);   // <-- thêm
+            ApDungGiaoDien();
+
             LoadDocGia();
             LoadSach();
             LoadTraSach();
+        }
+
+        private void ApDungGiaoDien()
+        {
+            AppTheme.StyleCard(pnlThongTin);
+            AppTheme.StyleCard(pnlDanhSach);
+
+            AppTheme.StyleGrid(dgvTraSach);
+
+            AppTheme.StyleTextBox(txtMaPhieu);
+            AppTheme.StyleComboBox(cboDocGia);
+            AppTheme.StyleComboBox(cboSach);
+
+            AppTheme.StylePrimaryButton(btnTraSach);
+            AppTheme.StyleSuccessButton(btnTimKiem);
+            AppTheme.StyleButton(btnLamMoi,
+                ColorTranslator.FromHtml("#E2E8F0"),
+                ColorTranslator.FromHtml("#CBD5E1"),
+                AppTheme.TextDark);
         }
 
         private void LoadDocGia()
