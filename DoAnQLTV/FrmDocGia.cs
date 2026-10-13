@@ -1,627 +1,361 @@
-﻿using System.Data.SqlClient;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
+﻿using System;
 using System.Data;
+using System.Data.SqlClient;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Globalization;
 using System.Windows.Forms;
 
 namespace DoAnQLTV
 {
     public partial class FrmDocGia : Form
     {
-        private void CapNhatThongKeTrangChu()
-        {
-            // Không còn cập nhật thống kê trên FrmMain.
-        }
+        private const string DinhDangNgay = "dd/MM/yyyy";
 
-        private int dongDangChon = -1;
+        // Mã độc giả đang được chọn để sửa/xóa. null = đang ở chế độ nhập mới.
+        private string maDangChon = null;
+
         public FrmDocGia()
         {
             InitializeComponent();
-
+            AppTheme.ApplyForm(this);
+            ApDungGiaoDien();
             LoadDocGia();
+        }
+
+        // ================= GIAO DIỆN =================
+
+        private void ApDungGiaoDien()
+        {
+            AppTheme.StyleCard(pnlThongTin);
+            AppTheme.StyleCard(pnlDanhSach);
+
+            AppTheme.StyleGrid(dgvDocGia);
+
+            AppTheme.StyleTextBox(txtMaDocGia);
+            AppTheme.StyleTextBox(txtTenDocGia);
+            AppTheme.StyleTextBox(txtDiaChi);
+            AppTheme.StyleTextBox(txtSoDienThoai);
+
+            dtpNgaySinh.Font = new Font("Segoe UI", 11F);
+            dtpNgaySinh.Format = DateTimePickerFormat.Custom;
+            dtpNgaySinh.CustomFormat = DinhDangNgay;
+
+            AppTheme.StylePrimaryButton(btnThem);
+            AppTheme.StyleButton(btnSua, AppTheme.Amber, ColorTranslator.FromHtml("#D97706"));
+            AppTheme.StyleDangerButton(btnXoa);
+            AppTheme.StyleSuccessButton(btnTimKiem);
+            AppTheme.StyleButton(btnLamMoi,
+                ColorTranslator.FromHtml("#E2E8F0"),
+                ColorTranslator.FromHtml("#CBD5E1"),
+                AppTheme.TextDark);
+        }
+
+        // ================= NẠP DỮ LIỆU =================
+
+        /// <summary>Lấy danh sách độc giả; tuKhoa rỗng/null = lấy tất cả.</summary>
+        private DataTable TruyVanDocGia(string tuKhoa)
+        {
+            const string sql = @"
+                SELECT MaDocGia, TenDocGia, NgaySinh, DiaChi, SoDienThoai
+                FROM DocGia
+                WHERE (@TuKhoa IS NULL
+                       OR MaDocGia LIKE @TuKhoa
+                       OR TenDocGia LIKE @TuKhoa
+                       OR SoDienThoai LIKE @TuKhoa)
+                ORDER BY MaDocGia";
+
+            object tuKhoaLike = string.IsNullOrEmpty(tuKhoa) ? null : "%" + tuKhoa + "%";
+            return DbConnection.ExecuteQuery(sql, DbConnection.Param("@TuKhoa", tuKhoaLike));
         }
 
         private void LoadDocGia()
         {
             try
             {
-                using (SqlConnection conn = DbConnection.GetConnection())
-                {
-                    conn.Open();
-
-                    string sql = @"
-                SELECT MaDocGia, TenDocGia, NgaySinh, DiaChi, SoDienThoai
-                FROM DocGia
-                ORDER BY MaDocGia";
-
-                    using (SqlDataAdapter adapter = new SqlDataAdapter(sql, conn))
-                    {
-                        DataTable dt = new DataTable();
-                        adapter.Fill(dt);
-
-                        dgvDocGia.Rows.Clear();
-
-                        foreach (DataRow row in dt.Rows)
-                        {
-                            dgvDocGia.Rows.Add(
-                                row["MaDocGia"].ToString(),
-                                row["TenDocGia"].ToString(),
-                                Convert.ToDateTime(row["NgaySinh"]).ToString("dd/MM/yyyy"),
-                                row["DiaChi"].ToString(),
-                                row["SoDienThoai"].ToString());
-                        }
-                    }
-                }
+                HienThiLuoi(TruyVanDocGia(null));
             }
             catch (Exception ex)
             {
-                MessageBox.Show(
-                    "Không thể tải dữ liệu độc giả.\n\n" + ex.Message,
-                    "Lỗi",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
+                AppTheme.Error("Không thể tải dữ liệu độc giả.\n\n" + ex.Message);
             }
         }
-        private void btnThem_Click(object sender, EventArgs e)
+
+        private void HienThiLuoi(DataTable dt)
         {
-            string maDocGia = txtMaDocGia.Text.Trim();
-            string tenDocGia = txtTenDocGia.Text.Trim();
-            DateTime ngaySinh = dtpNgaySinh.Value;
-            string diaChi = txtDiaChi.Text.Trim();
-            string soDienThoai = txtSoDienThoai.Text.Trim();
-
-            if (maDocGia == "")
+            dgvDocGia.Rows.Clear();
+            foreach (DataRow r in dt.Rows)
             {
-                MessageBox.Show(
-                    "Vui lòng nhập mã độc giả.",
-                    "Thông báo",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning);
+                string ngaySinh = r["NgaySinh"] == DBNull.Value
+                    ? ""
+                    : Convert.ToDateTime(r["NgaySinh"]).ToString(DinhDangNgay);
 
-                txtMaDocGia.Focus();
-                return;
+                dgvDocGia.Rows.Add(
+                    r["MaDocGia"],
+                    r["TenDocGia"],
+                    ngaySinh,
+                    r["DiaChi"],
+                    r["SoDienThoai"]);
             }
 
-            if (tenDocGia == "")
-            {
-                MessageBox.Show(
-                    "Vui lòng nhập tên độc giả.",
-                    "Thông báo",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning);
-
-                txtTenDocGia.Focus();
-                return;
-            }
-
-            if (diaChi == "")
-            {
-                MessageBox.Show(
-                    "Vui lòng nhập địa chỉ.",
-                    "Thông báo",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning);
-
-                txtDiaChi.Focus();
-                return;
-            }
-
-            if (soDienThoai == "")
-            {
-                MessageBox.Show(
-                    "Vui lòng nhập số điện thoại.",
-                    "Thông báo",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning);
-
-                txtSoDienThoai.Focus();
-                return;
-            }
-
-            try
-            {
-                using (SqlConnection conn = DbConnection.GetConnection())
-                {
-                    conn.Open();
-
-                    string sql = @"
-                INSERT INTO DocGia
-                    (MaDocGia, TenDocGia, NgaySinh, DiaChi, SoDienThoai)
-                VALUES
-                    (@MaDocGia, @TenDocGia, @NgaySinh, @DiaChi, @SoDienThoai)";
-
-                    using (SqlCommand cmd = new SqlCommand(sql, conn))
-                    {
-                        cmd.Parameters.AddWithValue("@MaDocGia", maDocGia);
-                        cmd.Parameters.AddWithValue("@TenDocGia", tenDocGia);
-                        cmd.Parameters.AddWithValue("@NgaySinh", ngaySinh);
-                        cmd.Parameters.AddWithValue("@DiaChi", diaChi);
-                        cmd.Parameters.AddWithValue("@SoDienThoai", soDienThoai);
-
-                        cmd.ExecuteNonQuery();
-                    }
-                }
-
-                MessageBox.Show(
-                    "Thêm độc giả thành công.",
-                    "Thông báo",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Information);
-
-                LoadDocGia();
-                CapNhatThongKeTrangChu();
-
-                dongDangChon = -1;
-                dgvDocGia.ClearSelection();
-                dgvDocGia.CurrentCell = null;
-
-                txtMaDocGia.Clear();
-                txtTenDocGia.Clear();
-                txtDiaChi.Clear();
-                txtSoDienThoai.Clear();
-
-                dtpNgaySinh.Value = DateTime.Now;
-
-                txtMaDocGia.Focus();
-            }
-            catch (SqlException ex)
-            {
-                if (ex.Number == 2627 || ex.Number == 2601)
-                {
-                    MessageBox.Show(
-                        "Mã độc giả đã tồn tại.",
-                        "Thông báo",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Warning);
-                }
-                else
-                {
-                    MessageBox.Show(
-                        "Không thể thêm độc giả.\n\n" + ex.Message,
-                        "Lỗi",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Error);
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(
-                    "Đã xảy ra lỗi.\n\n" + ex.Message,
-                    "Lỗi",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-            }
+            dgvDocGia.ClearSelection();
+            dgvDocGia.CurrentCell = null;
         }
 
-        private void dgvDocGia_CellClick(object sender, DataGridViewCellEventArgs e)
+        // ================= HÀM DÙNG CHUNG TRÊN FORM =================
+
+        private void KhoaMa(bool khoa)
         {
-            if (e.RowIndex < 0)
-                return;
-
-            dongDangChon = e.RowIndex;
-
-            DataGridViewRow row = dgvDocGia.Rows[e.RowIndex];
-
-            txtMaDocGia.Text = row.Cells["colMaDocGia"].Value?.ToString();
-            txtTenDocGia.Text = row.Cells["colTenDocGia"].Value?.ToString();
-
-            DateTime ngaySinh;
-            if (DateTime.TryParse(
-                row.Cells["colNgaySinh"].Value?.ToString(),
-                out ngaySinh))
-            {
-                dtpNgaySinh.Value = ngaySinh;
-            }
-
-            txtDiaChi.Text = row.Cells["colDiaChi"].Value?.ToString();
-            txtSoDienThoai.Text = row.Cells["colSoDienThoai"].Value?.ToString();
+            txtMaDocGia.ReadOnly = khoa;
+            // Xám nhạt = đang khóa (không cho đổi mã vì là khóa chính)
+            txtMaDocGia.BackColor = khoa ? ColorTranslator.FromHtml("#F1F5F9") : Color.White;
         }
 
-        private void btnSua_Click(object sender, EventArgs e)
+        private void DoLenForm(string maDocGia, string tenDocGia, DateTime? ngaySinh,
+                               string diaChi, string soDienThoai)
         {
-            if (dongDangChon == -1 ||
-    dongDangChon >= dgvDocGia.Rows.Count)
-            {
-                MessageBox.Show(
-                    "Vui lòng chọn độc giả cần thao tác.",
-                    "Thông báo",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning);
+            txtMaDocGia.Text = maDocGia;
+            txtTenDocGia.Text = tenDocGia;
+            dtpNgaySinh.Value = ngaySinh ?? DateTime.Today;
+            txtDiaChi.Text = diaChi;
+            txtSoDienThoai.Text = soDienThoai;
 
-                return;
-            }
-
-            string maDocGia = txtMaDocGia.Text.Trim();
-            string tenDocGia = txtTenDocGia.Text.Trim();
-            DateTime ngaySinh = dtpNgaySinh.Value;
-            string diaChi = txtDiaChi.Text.Trim();
-            string soDienThoai = txtSoDienThoai.Text.Trim();
-
-            if (maDocGia == "")
-            {
-                MessageBox.Show(
-                    "Vui lòng nhập mã độc giả.",
-                    "Thông báo",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning);
-
-                txtMaDocGia.Focus();
-                return;
-            }
-
-            if (tenDocGia == "")
-            {
-                MessageBox.Show(
-                    "Vui lòng nhập tên độc giả.",
-                    "Thông báo",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning);
-
-                txtTenDocGia.Focus();
-                return;
-            }
-
-            if (diaChi == "")
-            {
-                MessageBox.Show(
-                    "Vui lòng nhập địa chỉ.",
-                    "Thông báo",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning);
-
-                txtDiaChi.Focus();
-                return;
-            }
-
-            if (soDienThoai == "")
-            {
-                MessageBox.Show(
-                    "Vui lòng nhập số điện thoại.",
-                    "Thông báo",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning);
-
-                txtSoDienThoai.Focus();
-                return;
-            }
-
-            try
-            {
-                using (SqlConnection conn = DbConnection.GetConnection())
-                {
-                    conn.Open();
-
-                    string sql = @"
-                UPDATE DocGia
-                SET
-                    TenDocGia = @TenDocGia,
-                    NgaySinh = @NgaySinh,
-                    DiaChi = @DiaChi,
-                    SoDienThoai = @SoDienThoai
-                WHERE MaDocGia = @MaDocGia";
-
-                    using (SqlCommand cmd = new SqlCommand(sql, conn))
-                    {
-                        cmd.Parameters.AddWithValue("@TenDocGia", tenDocGia);
-                        cmd.Parameters.AddWithValue("@NgaySinh", ngaySinh);
-                        cmd.Parameters.AddWithValue("@DiaChi", diaChi);
-                        cmd.Parameters.AddWithValue("@SoDienThoai", soDienThoai);
-                        cmd.Parameters.AddWithValue("@MaDocGia", maDocGia);
-
-                        int soDong = cmd.ExecuteNonQuery();
-
-                        if (soDong == 0)
-                        {
-                            MessageBox.Show(
-                                "Không tìm thấy mã độc giả cần sửa.",
-                                "Thông báo",
-                                MessageBoxButtons.OK,
-                                MessageBoxIcon.Warning);
-
-                            return;
-                        }
-                    }
-                }
-
-                MessageBox.Show(
-                    "Sửa thông tin độc giả thành công.",
-                    "Thông báo",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Information);
-
-                LoadDocGia();
-                CapNhatThongKeTrangChu();
-
-                txtMaDocGia.Clear();
-                txtTenDocGia.Clear();
-                txtDiaChi.Clear();
-                txtSoDienThoai.Clear();
-
-                dtpNgaySinh.Value = DateTime.Now;
-
-                dongDangChon = -1;
-
-                dgvDocGia.ClearSelection();
-
-                txtMaDocGia.Focus();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(
-                    "Không thể cập nhật độc giả.\n\n" + ex.Message,
-                    "Lỗi",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-            }
+            maDangChon = maDocGia;
+            KhoaMa(true);
         }
 
-        private void btnXoa_Click(object sender, EventArgs e)
-        {
-            if (dongDangChon == -1 ||
-    dongDangChon >= dgvDocGia.Rows.Count)
-            {
-                MessageBox.Show(
-                    "Vui lòng chọn độc giả cần xóa.",
-                    "Thông báo",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning);
-
-                return;
-            }
-
-            string maDocGia = txtMaDocGia.Text.Trim();
-
-            if (maDocGia == "")
-            {
-                MessageBox.Show(
-                    "Vui lòng chọn độc giả cần xóa.",
-                    "Thông báo",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning);
-
-                return;
-            }
-
-            DialogResult result = MessageBox.Show(
-                "Bạn có chắc chắn muốn xóa độc giả này không?",
-                "Xác nhận xóa",
-                MessageBoxButtons.YesNo,
-                MessageBoxIcon.Question);
-
-            if (result != DialogResult.Yes)
-            {
-                return;
-            }
-
-            try
-            {
-                using (SqlConnection conn = DbConnection.GetConnection())
-                {
-                    conn.Open();
-
-                    string sql = @"
-                DELETE FROM DocGia
-                WHERE MaDocGia = @MaDocGia";
-
-                    using (SqlCommand cmd = new SqlCommand(sql, conn))
-                    {
-                        cmd.Parameters.AddWithValue("@MaDocGia", maDocGia);
-
-                        int soDong = cmd.ExecuteNonQuery();
-
-                        if (soDong == 0)
-                        {
-                            MessageBox.Show(
-                                "Không tìm thấy độc giả cần xóa.",
-                                "Thông báo",
-                                MessageBoxButtons.OK,
-                                MessageBoxIcon.Warning);
-
-                            return;
-                        }
-                    }
-                }
-
-                MessageBox.Show(
-                    "Xóa độc giả thành công.",
-                    "Thông báo",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Information);
-
-                LoadDocGia();
-                CapNhatThongKeTrangChu();
-
-                txtMaDocGia.Clear();
-                txtTenDocGia.Clear();
-                txtDiaChi.Clear();
-                txtSoDienThoai.Clear();
-
-                dtpNgaySinh.Value = DateTime.Now;
-
-                dongDangChon = -1;
-
-                dgvDocGia.ClearSelection();
-
-                txtMaDocGia.Focus();
-            }
-            catch (SqlException ex)
-            {
-                if (ex.Number == 547)
-                {
-                    MessageBox.Show(
-                        "Không thể xóa độc giả này vì đang được sử dụng trong phiếu mượn.",
-                        "Thông báo",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Warning);
-                }
-                else
-                {
-                    MessageBox.Show(
-                        "Không thể xóa độc giả.\n\n" + ex.Message,
-                        "Lỗi",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Error);
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(
-                    "Đã xảy ra lỗi.\n\n" + ex.Message,
-                    "Lỗi",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-            }
-        }
-
-        private void btnTimKiem_Click(object sender, EventArgs e)
-        {
-            string tuKhoa = txtTenDocGia.Text.Trim();
-
-            if (tuKhoa == "")
-            {
-                MessageBox.Show(
-                    "Vui lòng nhập từ khóa cần tìm.",
-                    "Thông báo",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning);
-
-                txtTenDocGia.Focus();
-                return;
-            }
-
-            try
-            {
-                using (SqlConnection conn = DbConnection.GetConnection())
-                {
-                    conn.Open();
-
-                    string sql = @"
-                SELECT
-                    MaDocGia,
-                    TenDocGia,
-                    NgaySinh,
-                    DiaChi,
-                    SoDienThoai
-                FROM DocGia
-                WHERE MaDocGia LIKE @TuKhoa
-                   OR TenDocGia LIKE @TuKhoa
-                   OR SoDienThoai LIKE @TuKhoa
-                ORDER BY MaDocGia";
-
-                    using (SqlCommand cmd = new SqlCommand(sql, conn))
-                    {
-                        cmd.Parameters.AddWithValue(
-                            "@TuKhoa",
-                            "%" + tuKhoa + "%");
-
-                        using (SqlDataAdapter adapter = new SqlDataAdapter(cmd))
-                        {
-                            DataTable dt = new DataTable();
-                            adapter.Fill(dt);
-
-                            dgvDocGia.Rows.Clear();
-
-                            foreach (DataRow row in dt.Rows)
-                            {
-                                dgvDocGia.Rows.Add(
-                                    row["MaDocGia"].ToString(),
-                                    row["TenDocGia"].ToString(),
-                                    Convert.ToDateTime(row["NgaySinh"])
-                                        .ToString("dd/MM/yyyy"),
-                                    row["DiaChi"].ToString(),
-                                    row["SoDienThoai"].ToString());
-                            }
-
-                            dgvDocGia.ClearSelection();
-                            dgvDocGia.CurrentCell = null;
-                            dongDangChon = -1;
-
-                            txtMaDocGia.Clear();
-                            txtTenDocGia.Text = tuKhoa;
-                            txtDiaChi.Clear();
-                            txtSoDienThoai.Clear();
-                            dtpNgaySinh.Value = DateTime.Now;
-
-                      
-
-                            if (dt.Rows.Count == 0)
-                            {
-                                dongDangChon = -1;
-                                dgvDocGia.ClearSelection();
-                                dgvDocGia.CurrentCell = null;
-
-                                txtMaDocGia.Clear();
-                                txtDiaChi.Clear();
-                                txtSoDienThoai.Clear();
-                                dtpNgaySinh.Value = DateTime.Now;
-
-                                MessageBox.Show(
-                                    "Không tìm thấy độc giả phù hợp.",
-                                    "Thông báo",
-                                    MessageBoxButtons.OK,
-                                    MessageBoxIcon.Information);
-
-                                txtTenDocGia.Focus();
-                                return;
-                            }
-
-                            if (dt.Rows.Count == 1)
-                            {
-                                txtMaDocGia.Text =
-                                dt.Rows[0]["MaDocGia"].ToString();
-
-                                txtTenDocGia.Text =
-                                    dt.Rows[0]["TenDocGia"].ToString();
-
-                                dtpNgaySinh.Value =
-                                    Convert.ToDateTime(dt.Rows[0]["NgaySinh"]);
-
-                                txtDiaChi.Text =
-                                    dt.Rows[0]["DiaChi"].ToString();
-
-                                txtSoDienThoai.Text =
-                                    dt.Rows[0]["SoDienThoai"].ToString();
-
-                            }
-
-                            dgvDocGia.ClearSelection();
-                            dgvDocGia.CurrentCell = null;
-                            dongDangChon = -1;
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(
-                    "Không thể tìm kiếm độc giả.\n\n" + ex.Message,
-                    "Lỗi",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-            }
-        }
-
-        private void btnLamMoi_Click(object sender, EventArgs e)
+        private void XoaForm()
         {
             txtMaDocGia.Clear();
             txtTenDocGia.Clear();
             txtDiaChi.Clear();
             txtSoDienThoai.Clear();
+            dtpNgaySinh.Value = DateTime.Today;
 
-            dtpNgaySinh.Value = DateTime.Now;
+            maDangChon = null;
+            KhoaMa(false);
 
-            LoadDocGia();
-
-            dongDangChon = -1;
             dgvDocGia.ClearSelection();
             dgvDocGia.CurrentCell = null;
-
             txtMaDocGia.Focus();
+        }
+
+        private bool KiemTraDuLieu()
+        {
+            if (txtMaDocGia.Text.Trim() == "")
+            {
+                AppTheme.Warning("Vui lòng nhập mã độc giả.");
+                txtMaDocGia.Focus();
+                return false;
+            }
+
+            if (txtTenDocGia.Text.Trim() == "")
+            {
+                AppTheme.Warning("Vui lòng nhập tên độc giả.");
+                txtTenDocGia.Focus();
+                return false;
+            }
+
+            if (txtDiaChi.Text.Trim() == "")
+            {
+                AppTheme.Warning("Vui lòng nhập địa chỉ.");
+                txtDiaChi.Focus();
+                return false;
+            }
+
+            if (txtSoDienThoai.Text.Trim() == "")
+            {
+                AppTheme.Warning("Vui lòng nhập số điện thoại.");
+                txtSoDienThoai.Focus();
+                return false;
+            }
+
+            return true;
+        }
+
+        private static DateTime? DocNgay(object giaTri)
+        {
+            if (giaTri == null || giaTri == DBNull.Value) return null;
+
+            DateTime kq;
+            if (giaTri is DateTime) return (DateTime)giaTri;
+            if (DateTime.TryParseExact(giaTri.ToString(), DinhDangNgay,
+                    CultureInfo.InvariantCulture, DateTimeStyles.None, out kq))
+                return kq;
+            return null;
+        }
+
+        // ================= SỰ KIỆN (giữ nguyên tên để Designer không bị lỗi) =================
+
+        private void dgvDocGia_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex < 0) return;
+
+            DataGridViewRow row = dgvDocGia.Rows[e.RowIndex];
+            DoLenForm(
+                row.Cells["colMaDocGia"].Value?.ToString(),
+                row.Cells["colTenDocGia"].Value?.ToString(),
+                DocNgay(row.Cells["colNgaySinh"].Value),
+                row.Cells["colDiaChi"].Value?.ToString(),
+                row.Cells["colSoDienThoai"].Value?.ToString());
+        }
+
+        private void btnThem_Click(object sender, EventArgs e)
+        {
+            if (maDangChon != null)
+            {
+                AppTheme.Warning("Bạn đang chọn một độc giả có sẵn.\nBấm \"Làm mới\" để nhập độc giả mới.");
+                return;
+            }
+
+            if (!KiemTraDuLieu()) return;
+
+            try
+            {
+                DbConnection.ExecuteNonQuery(@"
+                    INSERT INTO DocGia (MaDocGia, TenDocGia, NgaySinh, DiaChi, SoDienThoai)
+                    VALUES (@MaDocGia, @TenDocGia, @NgaySinh, @DiaChi, @SoDienThoai)",
+                    DbConnection.Param("@MaDocGia", txtMaDocGia.Text.Trim()),
+                    DbConnection.Param("@TenDocGia", txtTenDocGia.Text.Trim()),
+                    DbConnection.Param("@NgaySinh", dtpNgaySinh.Value.Date),
+                    DbConnection.Param("@DiaChi", txtDiaChi.Text.Trim()),
+                    DbConnection.Param("@SoDienThoai", txtSoDienThoai.Text.Trim()));
+
+                AppTheme.Info("Thêm độc giả thành công!");
+                LoadDocGia();
+                XoaForm();
+            }
+            catch (SqlException ex) when (ex.Number == 2627 || ex.Number == 2601)
+            {
+                AppTheme.Warning("Mã độc giả đã tồn tại.");
+            }
+            catch (Exception ex)
+            {
+                AppTheme.Error("Không thể thêm độc giả.\n\n" + ex.Message);
+            }
+        }
+
+        private void btnSua_Click(object sender, EventArgs e)
+        {
+            if (maDangChon == null)
+            {
+                AppTheme.Warning("Vui lòng chọn độc giả cần sửa.");
+                return;
+            }
+
+            if (!KiemTraDuLieu()) return;
+
+            try
+            {
+                int soDong = DbConnection.ExecuteNonQuery(@"
+                    UPDATE DocGia
+                    SET TenDocGia = @TenDocGia,
+                        NgaySinh = @NgaySinh,
+                        DiaChi = @DiaChi,
+                        SoDienThoai = @SoDienThoai
+                    WHERE MaDocGia = @MaDocGia",
+                    DbConnection.Param("@TenDocGia", txtTenDocGia.Text.Trim()),
+                    DbConnection.Param("@NgaySinh", dtpNgaySinh.Value.Date),
+                    DbConnection.Param("@DiaChi", txtDiaChi.Text.Trim()),
+                    DbConnection.Param("@SoDienThoai", txtSoDienThoai.Text.Trim()),
+                    DbConnection.Param("@MaDocGia", maDangChon));
+
+                if (soDong == 0)
+                {
+                    AppTheme.Warning("Không tìm thấy mã độc giả cần sửa.");
+                    return;
+                }
+
+                AppTheme.Info("Cập nhật độc giả thành công!");
+                LoadDocGia();
+                XoaForm();
+            }
+            catch (Exception ex)
+            {
+                AppTheme.Error("Không thể cập nhật độc giả.\n\n" + ex.Message);
+            }
+        }
+
+        private void btnXoa_Click(object sender, EventArgs e)
+        {
+            if (maDangChon == null)
+            {
+                AppTheme.Warning("Vui lòng chọn độc giả cần xóa.");
+                return;
+            }
+
+            if (!AppTheme.Confirm("Bạn có chắc chắn muốn xóa độc giả này không?"))
+                return;
+
+            try
+            {
+                int soDong = DbConnection.ExecuteNonQuery(
+                    "DELETE FROM DocGia WHERE MaDocGia = @MaDocGia",
+                    DbConnection.Param("@MaDocGia", maDangChon));
+
+                if (soDong == 0)
+                {
+                    AppTheme.Warning("Không tìm thấy độc giả cần xóa.");
+                    return;
+                }
+
+                AppTheme.Info("Xóa độc giả thành công!");
+                LoadDocGia();
+                XoaForm();
+            }
+            catch (SqlException ex) when (ex.Number == 547)
+            {
+                AppTheme.Warning("Không thể xóa độc giả này vì đang được sử dụng trong phiếu mượn.");
+            }
+            catch (Exception ex)
+            {
+                AppTheme.Error("Không thể xóa độc giả.\n\n" + ex.Message);
+            }
+        }
+
+        private void btnTimKiem_Click(object sender, EventArgs e)
+        {
+            // Tìm theo mã, tên hoặc số điện thoại; từ khóa lấy từ ô Tên độc giả.
+            string tuKhoa = txtTenDocGia.Text.Trim();
+            if (tuKhoa == "")
+            {
+                AppTheme.Warning("Vui lòng nhập từ khóa cần tìm.");
+                txtTenDocGia.Focus();
+                return;
+            }
+
+            try
+            {
+                DataTable dt = TruyVanDocGia(tuKhoa);
+                HienThiLuoi(dt);
+
+                if (dt.Rows.Count == 0)
+                {
+                    maDangChon = null;
+                    KhoaMa(false);
+                    AppTheme.Info("Không tìm thấy độc giả phù hợp.");
+                    txtTenDocGia.Focus();
+                }
+                else if (dt.Rows.Count == 1)
+                {
+                    DataRow r = dt.Rows[0];
+                    DoLenForm(
+                        r["MaDocGia"].ToString(),
+                        r["TenDocGia"].ToString(),
+                        DocNgay(r["NgaySinh"]),
+                        r["DiaChi"].ToString(),
+                        r["SoDienThoai"].ToString());
+                }
+            }
+            catch (Exception ex)
+            {
+                AppTheme.Error("Không thể tìm kiếm độc giả.\n\n" + ex.Message);
+            }
+        }
+
+        private void btnLamMoi_Click(object sender, EventArgs e)
+        {
+            LoadDocGia();
+            XoaForm();
         }
     }
 }
