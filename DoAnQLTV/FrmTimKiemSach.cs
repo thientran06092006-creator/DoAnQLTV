@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Data;
-using System.Data.SqlClient;
+using System.Drawing;
 using System.Windows.Forms;
 
 namespace DoAnQLTV
@@ -10,186 +10,108 @@ namespace DoAnQLTV
         public FrmTimKiemSach()
         {
             InitializeComponent();
-
+            AppTheme.ApplyForm(this);
+            ApDungGiaoDien();
             LoadSach();
         }
 
-        // ==============================
-        // TẢI DANH SÁCH SÁCH
-        // ==============================
+        // ================= GIAO DIỆN =================
+
+        private void ApDungGiaoDien()
+        {
+            AppTheme.StyleCard(pnlThongTin);
+            AppTheme.StyleCard(pnlDanhSach);
+
+            AppTheme.StyleGrid(dgvKetQua);
+            AppTheme.StyleTextBox(txtTuKhoa);
+
+            AppTheme.StyleSuccessButton(btnTimKiem);
+            AppTheme.StyleButton(btnLamMoi,
+                ColorTranslator.FromHtml("#E2E8F0"),
+                ColorTranslator.FromHtml("#CBD5E1"),
+                AppTheme.TextDark);
+
+            // Nhấn Enter trong ô từ khóa = bấm Tìm kiếm
+            AcceptButton = btnTimKiem;
+        }
+
+        // ================= NẠP DỮ LIỆU =================
+
+        /// <summary>Lấy danh sách sách; tuKhoa rỗng/null = lấy tất cả.</summary>
+        private DataTable TruyVanSach(string tuKhoa)
+        {
+            const string sql = @"
+                SELECT s.MaSach, s.TenSach, tl.TenTheLoai, tg.TenTacGia
+                FROM Sach s
+                INNER JOIN TheLoai tl ON s.MaTheLoai = tl.MaTheLoai
+                INNER JOIN TacGia tg ON s.MaTacGia = tg.MaTacGia
+                WHERE (@TuKhoa IS NULL
+                       OR s.MaSach LIKE @TuKhoa
+                       OR s.TenSach LIKE @TuKhoa
+                       OR tl.TenTheLoai LIKE @TuKhoa
+                       OR tg.TenTacGia LIKE @TuKhoa)
+                ORDER BY s.MaSach";
+
+            object tuKhoaLike = string.IsNullOrEmpty(tuKhoa) ? null : "%" + tuKhoa + "%";
+            return DbConnection.ExecuteQuery(sql, DbConnection.Param("@TuKhoa", tuKhoaLike));
+        }
+
         private void LoadSach()
         {
             try
             {
-                using (SqlConnection conn = DbConnection.GetConnection())
-                {
-                    conn.Open();
-
-                    string sql = @"
-                        SELECT
-                            s.MaSach,
-                            s.TenSach,
-                            tl.TenTheLoai,
-                            tg.TenTacGia
-                        FROM Sach s
-                        INNER JOIN TheLoai tl
-                            ON s.MaTheLoai = tl.MaTheLoai
-                        INNER JOIN TacGia tg
-                            ON s.MaTacGia = tg.MaTacGia
-                        ORDER BY s.MaSach";
-
-                    using (SqlDataAdapter adapter =
-                        new SqlDataAdapter(sql, conn))
-                    {
-                        DataTable dt = new DataTable();
-
-                        adapter.Fill(dt);
-
-                        dgvKetQua.Rows.Clear();
-
-                        foreach (DataRow row in dt.Rows)
-                        {
-                            dgvKetQua.Rows.Add(
-                                row["MaSach"].ToString(),
-                                row["TenSach"].ToString(),
-                                row["TenTheLoai"].ToString(),
-                                row["TenTacGia"].ToString()
-                            );
-                        }
-                    }
-                }
+                HienThiLuoi(TruyVanSach(null));
             }
             catch (Exception ex)
             {
-                MessageBox.Show(
-                    "Không thể tải dữ liệu sách.\n\n" + ex.Message,
-                    "Lỗi",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error
-                );
+                AppTheme.Error("Không thể tải dữ liệu sách.\n\n" + ex.Message);
             }
         }
 
-        // ==============================
-        // TÌM KIẾM SÁCH
-        // ==============================
+        private void HienThiLuoi(DataTable dt)
+        {
+            dgvKetQua.Rows.Clear();
+            foreach (DataRow r in dt.Rows)
+                dgvKetQua.Rows.Add(r["MaSach"], r["TenSach"], r["TenTheLoai"], r["TenTacGia"]);
+
+            dgvKetQua.ClearSelection();
+            dgvKetQua.CurrentCell = null;
+        }
+
+        // ================= SỰ KIỆN =================
+
         private void btnTimKiem_Click(object sender, EventArgs e)
         {
             string tuKhoa = txtTuKhoa.Text.Trim();
-
             if (tuKhoa == "")
             {
-                MessageBox.Show(
-                    "Vui lòng nhập từ khóa cần tìm.",
-                    "Thông báo",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning
-                );
-
+                AppTheme.Warning("Vui lòng nhập từ khóa cần tìm.");
                 txtTuKhoa.Focus();
                 return;
             }
 
             try
             {
-                using (SqlConnection conn = DbConnection.GetConnection())
+                DataTable dt = TruyVanSach(tuKhoa);
+                HienThiLuoi(dt);
+
+                if (dt.Rows.Count == 0)
                 {
-                    conn.Open();
-
-                    string sql = @"
-                        SELECT
-                            s.MaSach,
-                            s.TenSach,
-                            tl.TenTheLoai,
-                            tg.TenTacGia
-                        FROM Sach s
-                        INNER JOIN TheLoai tl
-                            ON s.MaTheLoai = tl.MaTheLoai
-                        INNER JOIN TacGia tg
-                            ON s.MaTacGia = tg.MaTacGia
-                        WHERE s.MaSach LIKE @TuKhoa
-                           OR s.TenSach LIKE @TuKhoa
-                           OR tl.TenTheLoai LIKE @TuKhoa
-                           OR tg.TenTacGia LIKE @TuKhoa
-                        ORDER BY s.MaSach";
-
-                    using (SqlCommand cmd =
-                        new SqlCommand(sql, conn))
-                    {
-                        cmd.Parameters.AddWithValue(
-                            "@TuKhoa",
-                            "%" + tuKhoa + "%"
-                        );
-
-                        using (SqlDataAdapter adapter =
-                            new SqlDataAdapter(cmd))
-                        {
-                            DataTable dt = new DataTable();
-
-                            adapter.Fill(dt);
-
-                            dgvKetQua.Rows.Clear();
-
-                            foreach (DataRow row in dt.Rows)
-                            {
-                                dgvKetQua.Rows.Add(
-                                    row["MaSach"].ToString(),
-                                    row["TenSach"].ToString(),
-                                    row["TenTheLoai"].ToString(),
-                                    row["TenTacGia"].ToString()
-                                );
-                            }
-
-                            // Không tìm thấy kết quả
-                            if (dt.Rows.Count == 0)
-                            {
-                                dgvKetQua.ClearSelection();
-                                dgvKetQua.CurrentCell = null;
-
-                                MessageBox.Show(
-                                    "Không tìm thấy sách phù hợp.",
-                                    "Thông báo",
-                                    MessageBoxButtons.OK,
-                                    MessageBoxIcon.Information
-                                );
-
-                                txtTuKhoa.Focus();
-                                return;
-                            }
-
-                            // Không tự chọn dòng sau khi tìm kiếm
-                            dgvKetQua.ClearSelection();
-                            dgvKetQua.CurrentCell = null;
-                        }
-                    }
+                    AppTheme.Info("Không tìm thấy sách phù hợp.");
+                    txtTuKhoa.Focus();
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show(
-                    "Không thể tìm kiếm sách.\n\n" + ex.Message,
-                    "Lỗi",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error
-                );
+                AppTheme.Error("Không thể tìm kiếm sách.\n\n" + ex.Message);
             }
         }
-
-        // ==============================
-        // LÀM MỚI
-        // ==============================
 
         private void btnLamMoi_Click(object sender, EventArgs e)
         {
             txtTuKhoa.Clear();
-
             LoadSach();
-
-            dgvKetQua.ClearSelection();
-            dgvKetQua.CurrentCell = null;
-
             txtTuKhoa.Focus();
         }
-
     }
 }
