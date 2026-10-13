@@ -11,6 +11,15 @@ namespace DoAnQLTV
 {
     public partial class FrmMain : Form
     {
+
+
+        private FrmSach frmSach;
+        private FrmTheLoai frmTheLoai;
+        private FrmTacGia frmTacGia;
+        private FrmDocGia frmDocGia;
+        private FrmNhanVien frmNhanVien;
+
+
         private bool dangDangXuat = false;
         private bool dangXacNhanThoat = false;
 
@@ -497,9 +506,12 @@ namespace DoAnQLTV
             }
         }
 
+
         private void FrmMain_FormClosing(
             object sender, FormClosingEventArgs e)
         {
+            // Nếu đang đăng xuất hoặc đã xác nhận thoát,
+            // cho phép đóng mà không hỏi thêm.
             if (dangDangXuat || dangXacNhanThoat)
                 return;
 
@@ -512,12 +524,14 @@ namespace DoAnQLTV
             if (ketQua == DialogResult.Yes)
             {
                 dangXacNhanThoat = true;
+                DongTatCaFormChucNang();
             }
             else
             {
                 e.Cancel = true;
             }
         }
+
 
         private void timerThoiGian_Tick(object sender, EventArgs e)
         {
@@ -607,6 +621,266 @@ namespace DoAnQLTV
         private void btnTrangChu_Click(object sender, EventArgs e)
         {
             DongTatCaFormCon();
+        }
+
+
+        private void btnQuanLySach_Click(object sender, EventArgs e)
+        {
+            if (frmSach == null || frmSach.IsDisposed)
+            {
+                frmSach = new FrmSach();
+                frmSach.FormClosed += (s, args) => frmSach = null;
+                frmSach.Show();
+            }
+            else
+            {
+                frmSach.Activate();
+            }
+        }
+
+        private void btnQuanLyTheLoai_Click(object sender, EventArgs e)
+        {
+            if (frmTheLoai == null || frmTheLoai.IsDisposed)
+            {
+                frmTheLoai = new FrmTheLoai();
+                frmTheLoai.FormClosed += (s, args) => frmTheLoai = null;
+                frmTheLoai.Show();
+            }
+            else
+            {
+                frmTheLoai.Activate();
+            }
+        }
+
+        private void btnQuanLyTacGia_Click(object sender, EventArgs e)
+        {
+            if (frmTacGia == null || frmTacGia.IsDisposed)
+            {
+                frmTacGia = new FrmTacGia();
+                frmTacGia.FormClosed += (s, args) => frmTacGia = null;
+                frmTacGia.Show();
+            }
+            else
+            {
+                frmTacGia.Activate();
+            }
+        }
+
+        private void btnQuanLyDocGia_Click(object sender, EventArgs e)
+        {
+            if (frmDocGia == null || frmDocGia.IsDisposed)
+            {
+                frmDocGia = new FrmDocGia();
+                frmDocGia.FormClosed += (s, args) => frmDocGia = null;
+                frmDocGia.Show();
+            }
+            else
+            {
+                frmDocGia.Activate();
+            }
+        }
+
+        private void btnQuanLyNhanVien_Click(object sender, EventArgs e)
+        {
+            if (frmNhanVien == null || frmNhanVien.IsDisposed)
+            {
+                frmNhanVien = new FrmNhanVien();
+                frmNhanVien.FormClosed += (s, args) => frmNhanVien = null;
+                frmNhanVien.Show();
+            }
+            else
+            {
+                frmNhanVien.Activate();
+            }
+        }
+
+
+        private FrmTimKiemSach frmTimKiemSach;
+        private FrmThongTinDocGia frmThongTinDocGia;
+
+        private void btnTimKiemSach_Click(object sender, EventArgs e)
+        {
+            if (frmTimKiemSach == null || frmTimKiemSach.IsDisposed)
+            {
+                frmTimKiemSach = new FrmTimKiemSach();
+                frmTimKiemSach.FormClosed += (s, args) => frmTimKiemSach = null;
+                frmTimKiemSach.Show();
+            }
+            else
+            {
+                frmTimKiemSach.Activate();
+            }
+        }
+
+        private void btnThongTinDocGia_Click(object sender, EventArgs e)
+        {
+            if (frmThongTinDocGia == null || frmThongTinDocGia.IsDisposed)
+            {
+                frmThongTinDocGia = new FrmThongTinDocGia();
+                frmThongTinDocGia.FormClosed += (s, args) => frmThongTinDocGia = null;
+                frmThongTinDocGia.Show();
+            }
+            else
+            {
+                frmThongTinDocGia.Activate();
+            }
+        }
+
+
+
+        private FrmLapPhieuMuon frmLapPhieuMuon;
+        private FrmTraSach frmTraSach;
+        private FrmDanhSachPhieuMuon frmDanhSachPhieuMuon;
+
+
+
+        private void btnLapPhieuMuon_Click(object sender, EventArgs e)
+        {
+            if (frmLapPhieuMuon == null || frmLapPhieuMuon.IsDisposed)
+            {
+                frmLapPhieuMuon = new FrmLapPhieuMuon();
+                frmLapPhieuMuon.FormClosed += (s, args) => frmLapPhieuMuon = null;
+                frmLapPhieuMuon.Show();
+            }
+            else
+            {
+                frmLapPhieuMuon.Activate();
+            }
+        }
+
+        private void btnTraSach_Click(object sender, EventArgs e)
+        {
+            if (frmTraSach == null || frmTraSach.IsDisposed)
+            {
+                frmTraSach = new FrmTraSach();
+                frmTraSach.FormClosed += (s, args) => frmTraSach = null;
+                frmTraSach.Show();
+            }
+            else
+            {
+                frmTraSach.Activate();
+            }
+        }
+
+        private void btnDanhSachPhieuMuon_Click(object sender, EventArgs e)
+        {
+            if (frmDanhSachPhieuMuon == null || frmDanhSachPhieuMuon.IsDisposed)
+            {
+                frmDanhSachPhieuMuon = new FrmDanhSachPhieuMuon();
+                frmDanhSachPhieuMuon.FormClosed += (s, args) => frmDanhSachPhieuMuon = null;
+                frmDanhSachPhieuMuon.Show();
+            }
+            else
+            {
+                frmDanhSachPhieuMuon.Activate();
+            }
+        }
+
+
+
+        private FrmThongTinChuongTrinh frmThongTinChuongTrinh;
+        private FrmHuongDanSuDung frmHuongDanSuDung;
+
+
+
+        private void btnThongTinChuongTrinh_Click(object sender, EventArgs e)
+        {
+            if (frmThongTinChuongTrinh == null ||
+                frmThongTinChuongTrinh.IsDisposed)
+            {
+                frmThongTinChuongTrinh = new FrmThongTinChuongTrinh();
+
+                frmThongTinChuongTrinh.FormClosed +=
+                    (s, args) => frmThongTinChuongTrinh = null;
+
+                frmThongTinChuongTrinh.Show();
+            }
+            else
+            {
+                frmThongTinChuongTrinh.Activate();
+            }
+        }
+
+        private void btnHuongDanSuDung_Click(object sender, EventArgs e)
+        {
+            if (frmHuongDanSuDung == null ||
+                frmHuongDanSuDung.IsDisposed)
+            {
+                frmHuongDanSuDung = new FrmHuongDanSuDung();
+
+                frmHuongDanSuDung.FormClosed +=
+                    (s, args) => frmHuongDanSuDung = null;
+
+                frmHuongDanSuDung.Show();
+            }
+            else
+            {
+                frmHuongDanSuDung.Activate();
+            }
+        }
+
+
+
+        private void btnDangXuat_Click(object sender, EventArgs e)
+        {
+            DialogResult ketQua = MessageBox.Show(
+                "Bạn có chắc chắn muốn đăng xuất không?",
+                "Xác nhận đăng xuất",
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Question);
+
+            if (ketQua != DialogResult.Yes)
+                return;
+
+            FrmLogin frmLogin = this.Tag as FrmLogin;
+
+            if (frmLogin == null || frmLogin.IsDisposed)
+            {
+                MessageBox.Show(
+                    "Không tìm thấy màn hình đăng nhập.",
+                    "Thông báo",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+                return;
+            }
+
+            // Đánh dấu đang đăng xuất để FormClosing không hỏi thoát.
+            dangDangXuat = true;
+
+            // Đóng các form chức năng đang mở.
+            DongTatCaFormChucNang();
+
+            // Hiện lại màn hình đăng nhập.
+            frmLogin.Show();
+            frmLogin.Activate();
+
+            // Đóng màn hình chính.
+            this.Close();
+        }
+
+
+
+
+
+        private void btnThoat_Click(object sender, EventArgs e)
+        {
+            DialogResult ketQua = MessageBox.Show(
+                "Bạn có chắc chắn muốn thoát toàn bộ chương trình không?",
+                "Xác nhận thoát",
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Question);
+
+            if (ketQua != DialogResult.Yes)
+                return;
+
+            // Cho phép đóng FrmMain mà không hỏi xác nhận lần nữa.
+            dangXacNhanThoat = true;
+
+            // Đóng các form chức năng đang mở.
+            DongTatCaFormChucNang();
+
+            // Đóng toàn bộ ứng dụng.
+            Application.Exit();
         }
 
     }
