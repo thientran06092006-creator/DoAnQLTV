@@ -1,188 +1,135 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Data.SqlClient;
 
 namespace DoAnQLTV
 {
     public partial class FrmThongTinDocGia : Form
     {
+        private const string DinhDangNgay = "dd/MM/yyyy";
+
         public FrmThongTinDocGia()
         {
             InitializeComponent();
-
+            AppTheme.ApplyForm(this);
+            ApDungGiaoDien();
             LoadDocGia();
+        }
+
+        // ================= GIAO DIỆN =================
+
+        private void ApDungGiaoDien()
+        {
+            AppTheme.StyleCard(pnlThongTin);
+            AppTheme.StyleCard(pnlDanhSach);
+
+            AppTheme.StyleGrid(dgvKetQua);
+            AppTheme.StyleTextBox(txtTuKhoa);
+
+            AppTheme.StyleSuccessButton(btnTimKiem);
+            AppTheme.StyleButton(btnLamMoi,
+                ColorTranslator.FromHtml("#E2E8F0"),
+                ColorTranslator.FromHtml("#CBD5E1"),
+                AppTheme.TextDark);
+
+            // Nhấn Enter trong ô từ khóa = bấm Tìm kiếm
+            AcceptButton = btnTimKiem;
+        }
+
+        // ================= NẠP DỮ LIỆU =================
+
+        /// <summary>Lấy danh sách độc giả; tuKhoa rỗng/null = lấy tất cả.</summary>
+        private DataTable TruyVanDocGia(string tuKhoa)
+        {
+            const string sql = @"
+                SELECT MaDocGia, TenDocGia, NgaySinh, DiaChi, SoDienThoai
+                FROM DocGia
+                WHERE (@TuKhoa IS NULL
+                       OR MaDocGia LIKE @TuKhoa
+                       OR TenDocGia LIKE @TuKhoa
+                       OR SoDienThoai LIKE @TuKhoa)
+                ORDER BY MaDocGia";
+
+            object tuKhoaLike = string.IsNullOrEmpty(tuKhoa) ? null : "%" + tuKhoa + "%";
+            return DbConnection.ExecuteQuery(sql, DbConnection.Param("@TuKhoa", tuKhoaLike));
         }
 
         private void LoadDocGia()
         {
             try
             {
-                using (SqlConnection conn = DbConnection.GetConnection())
-                {
-                    conn.Open();
-
-                    string sql = @"
-                SELECT
-                    MaDocGia,
-                    TenDocGia,
-                    NgaySinh,
-                    DiaChi,
-                    SoDienThoai
-                FROM DocGia
-                ORDER BY MaDocGia";
-
-                    using (SqlDataAdapter adapter =
-                        new SqlDataAdapter(sql, conn))
-                    {
-                        DataTable dt = new DataTable();
-                        adapter.Fill(dt);
-
-                        dgvKetQua.Rows.Clear();
-
-                        foreach (DataRow row in dt.Rows)
-                        {
-                            dgvKetQua.Rows.Add(
-                                row["MaDocGia"].ToString(),
-                                row["TenDocGia"].ToString(),
-                                Convert.ToDateTime(
-                                    row["NgaySinh"]).ToString("dd/MM/yyyy"),
-                                row["DiaChi"].ToString(),
-                                row["SoDienThoai"].ToString());
-                        }
-                    }
-                }
+                HienThiLuoi(TruyVanDocGia(null));
             }
             catch (Exception ex)
             {
-                MessageBox.Show(
-                    "Không thể tải dữ liệu độc giả.\n\n" + ex.Message,
-                    "Lỗi",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
+                AppTheme.Error("Không thể tải dữ liệu độc giả.\n\n" + ex.Message);
             }
         }
+
+        private void HienThiLuoi(DataTable dt)
+        {
+            dgvKetQua.Rows.Clear();
+            foreach (DataRow r in dt.Rows)
+            {
+                string ngaySinh = r["NgaySinh"] == DBNull.Value
+                    ? ""
+                    : Convert.ToDateTime(r["NgaySinh"]).ToString(DinhDangNgay);
+
+                dgvKetQua.Rows.Add(
+                    r["MaDocGia"],
+                    r["TenDocGia"],
+                    ngaySinh,
+                    r["DiaChi"],
+                    r["SoDienThoai"]);
+            }
+
+            dgvKetQua.ClearSelection();
+            dgvKetQua.CurrentCell = null;
+        }
+
+        // ================= SỰ KIỆN =================
 
         private void btnTimKiem_Click(object sender, EventArgs e)
         {
             string tuKhoa = txtTuKhoa.Text.Trim();
-
             if (tuKhoa == "")
             {
-                MessageBox.Show(
-                    "Vui lòng nhập từ khóa cần tìm.",
-                    "Thông báo",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning);
-
+                AppTheme.Warning("Vui lòng nhập từ khóa cần tìm.");
                 txtTuKhoa.Focus();
                 return;
             }
 
             try
             {
-                using (SqlConnection conn = DbConnection.GetConnection())
+                DataTable dt = TruyVanDocGia(tuKhoa);
+                HienThiLuoi(dt);
+
+                if (dt.Rows.Count == 0)
                 {
-                    conn.Open();
-
-                    string sql = @"
-                SELECT
-                    MaDocGia,
-                    TenDocGia,
-                    NgaySinh,
-                    DiaChi,
-                    SoDienThoai
-                FROM DocGia
-                WHERE MaDocGia LIKE @TuKhoa
-                   OR TenDocGia LIKE @TuKhoa
-                   OR SoDienThoai LIKE @TuKhoa
-                ORDER BY MaDocGia";
-
-                    using (SqlCommand cmd = new SqlCommand(sql, conn))
-                    {
-                        cmd.Parameters.AddWithValue(
-                            "@TuKhoa",
-                            "%" + tuKhoa + "%");
-
-                        using (SqlDataAdapter adapter =
-                            new SqlDataAdapter(cmd))
-                        {
-                            DataTable dt = new DataTable();
-                            adapter.Fill(dt);
-
-                            dgvKetQua.Rows.Clear();
-
-                            foreach (DataRow row in dt.Rows)
-                            {
-                                dgvKetQua.Rows.Add(
-                                    row["MaDocGia"].ToString(),
-                                    row["TenDocGia"].ToString(),
-                                    Convert.ToDateTime(
-                                        row["NgaySinh"]).ToString("dd/MM/yyyy"),
-                                    row["DiaChi"].ToString(),
-                                    row["SoDienThoai"].ToString());
-                            }
-
-                            if (dt.Rows.Count == 0)
-                            {
-                                dgvKetQua.ClearSelection();
-                                dgvKetQua.CurrentCell = null;
-
-                                MessageBox.Show(
-                                    "Không tìm thấy độc giả phù hợp.",
-                                    "Thông báo",
-                                    MessageBoxButtons.OK,
-                                    MessageBoxIcon.Information);
-
-                                txtTuKhoa.Focus();
-                                return;
-                            }
-
-                            dgvKetQua.ClearSelection();
-                            dgvKetQua.CurrentCell = null;
-                        }
-                    }
+                    AppTheme.Info("Không tìm thấy độc giả phù hợp.");
+                    txtTuKhoa.Focus();
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show(
-                    "Không thể tìm kiếm độc giả.\n\n" + ex.Message,
-                    "Lỗi",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
+                AppTheme.Error("Không thể tìm kiếm độc giả.\n\n" + ex.Message);
             }
         }
 
         private void btnLamMoi_Click(object sender, EventArgs e)
         {
             txtTuKhoa.Clear();
-
             LoadDocGia();
-
-            dgvKetQua.ClearSelection();
-            dgvKetQua.CurrentCell = null;
-
             txtTuKhoa.Focus();
         }
 
-        private void dgvKetQua_CellClick(
-    object sender,
-    DataGridViewCellEventArgs e)
+        private void dgvKetQua_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (e.RowIndex < 0)
-                return;
+            if (e.RowIndex < 0) return;
 
             DataGridViewRow row = dgvKetQua.Rows[e.RowIndex];
-
-            txtTuKhoa.Text =
-                row.Cells["colTenDocGia"].Value?.ToString() ?? "";
+            txtTuKhoa.Text = row.Cells["colTenDocGia"].Value?.ToString() ?? "";
         }
     }
 }
