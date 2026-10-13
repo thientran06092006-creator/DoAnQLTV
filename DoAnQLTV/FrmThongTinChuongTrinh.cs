@@ -1,11 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace DoAnQLTV
@@ -15,6 +9,19 @@ namespace DoAnQLTV
         public FrmThongTinChuongTrinh()
         {
             InitializeComponent();
+
+            AppTheme.ApplyForm(this);
+            ApDungGiaoDien();
+        }
+
+        private void ApDungGiaoDien()
+        {
+            AppTheme.StyleCard(pnlThongTin);
+
+            AppTheme.StyleButton(btnDong,
+                ColorTranslator.FromHtml("#E2E8F0"),
+                ColorTranslator.FromHtml("#CBD5E1"),
+                AppTheme.TextDark);
         }
 
         private void btnDong_Click(object sender, EventArgs e)
