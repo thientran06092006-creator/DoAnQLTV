@@ -1,108 +1,96 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 using System.Data.SqlClient;
+using System.Drawing;
+using System.Globalization;
+using System.Windows.Forms;
 
 namespace DoAnQLTV
 {
     public partial class FrmLapPhieuMuon : Form
     {
-        private int dongDangChon = -1;
+        private const string DinhDangNgay = "dd/MM/yyyy";
+        private const int SoNgayMuonMacDinh = 7;
+
+        // Mã phiếu đang được chọn để sửa/xóa. null = đang ở chế độ lập phiếu mới.
+        private string maDangChon = null;
+
         public FrmLapPhieuMuon()
         {
             InitializeComponent();
+            AppTheme.ApplyForm(this);
+            ApDungGiaoDien();
 
             LoadSach();
-
             LoadDocGia();
             LoadNhanVien();
             LoadPhieuMuon();
+            DatLaiGiaTriMacDinh();
         }
 
+        // ================= GIAO DIỆN =================
+
+        private void ApDungGiaoDien()
+        {
+            AppTheme.StyleCard(pnlThongTin);
+            AppTheme.StyleCard(pnlDanhSach);
+
+            AppTheme.StyleGrid(dgvPhieuMuon);
+
+            AppTheme.StyleTextBox(txtMaPhieu);
+            AppTheme.StyleComboBox(cboDocGia);
+            AppTheme.StyleComboBox(cboNhanVien);
+            AppTheme.StyleComboBox(cboSach);
+
+            foreach (DateTimePicker dtp in new[] { dtpNgayMuon, dtpHanTra })
+            {
+                dtp.Font = new Font("Segoe UI", 11F);
+                dtp.Format = DateTimePickerFormat.Custom;
+                dtp.CustomFormat = DinhDangNgay;
+            }
+
+            AppTheme.StylePrimaryButton(btnThem);
+            AppTheme.StyleButton(btnSua, AppTheme.Amber, ColorTranslator.FromHtml("#D97706"));
+            AppTheme.StyleDangerButton(btnXoa);
+            AppTheme.StyleSuccessButton(btnLapPhieu);
+            AppTheme.StyleButton(btnLamMoi,
+                ColorTranslator.FromHtml("#E2E8F0"),
+                ColorTranslator.FromHtml("#CBD5E1"),
+                AppTheme.TextDark);
+        }
+
+        // ================= NẠP DỮ LIỆU =================
 
         private void LoadSach()
         {
             try
             {
-                using (SqlConnection conn = DbConnection.GetConnection())
-                {
-                    conn.Open();
-
-                    string sql = "SELECT MaSach, TenSach FROM Sach ORDER BY TenSach";
-
-                    using (SqlDataAdapter da = new SqlDataAdapter(sql, conn))
-                    {
-                        DataTable dt = new DataTable();
-                        da.Fill(dt);
-
-                        cboSach.DataSource = dt;
-                        cboSach.DisplayMember = "TenSach";
-                        cboSach.ValueMember = "MaSach";
-                        cboSach.SelectedIndex = -1;
-                    }
-                }
+                cboSach.DataSource = DbConnection.ExecuteQuery(
+                    "SELECT MaSach, TenSach FROM Sach ORDER BY TenSach");
+                cboSach.DisplayMember = "TenSach";
+                cboSach.ValueMember = "MaSach";
+                cboSach.SelectedIndex = -1;
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Không thể tải danh sách sách: " + ex.Message);
+                AppTheme.Error("Không thể tải danh sách sách.\n\n" + ex.Message);
             }
-        }
-
-
-        private void CapNhatThongKeTrangChu()
-        {
-            // Không còn cập nhật thống kê trên FrmMain.
         }
 
         private void LoadDocGia()
         {
             try
             {
-                using (SqlConnection conn = DbConnection.GetConnection())
-                {
-                    conn.Open();
+                DataTable dt = DbConnection.ExecuteQuery(
+                    "SELECT MaDocGia, TenDocGia FROM DocGia ORDER BY MaDocGia");
 
-                    string sql = @"
-                SELECT MaDocGia, TenDocGia
-                FROM DocGia
-                ORDER BY MaDocGia";
-
-                    using (SqlDataAdapter adapter =
-                        new SqlDataAdapter(sql, conn))
-                    {
-                        DataTable dt = new DataTable();
-                        adapter.Fill(dt);
-
-                        cboDocGia.Items.Clear();
-
-                        foreach (DataRow row in dt.Rows)
-                        {
-                            cboDocGia.Items.Add(
-                                row["MaDocGia"].ToString()
-                                + " - "
-                                + row["TenDocGia"].ToString());
-                        }
-
-                        if (cboDocGia.Items.Count > 0)
-                        {
-                            cboDocGia.SelectedIndex = 0;
-                        }
-                    }
-                }
+                cboDocGia.Items.Clear();
+                foreach (DataRow r in dt.Rows)
+                    cboDocGia.Items.Add(r["MaDocGia"] + " - " + r["TenDocGia"]);
             }
             catch (Exception ex)
             {
-                MessageBox.Show(
-                    "Không thể tải danh sách độc giả.\n\n" + ex.Message,
-                    "Lỗi",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
+                AppTheme.Error("Không thể tải danh sách độc giả.\n\n" + ex.Message);
             }
         }
 
@@ -110,45 +98,16 @@ namespace DoAnQLTV
         {
             try
             {
-                using (SqlConnection conn = DbConnection.GetConnection())
-                {
-                    conn.Open();
+                DataTable dt = DbConnection.ExecuteQuery(
+                    "SELECT MaNhanVien, TenNhanVien FROM NhanVien ORDER BY MaNhanVien");
 
-                    string sql = @"
-                SELECT MaNhanVien, TenNhanVien
-                FROM NhanVien
-                ORDER BY MaNhanVien";
-
-                    using (SqlDataAdapter adapter =
-                        new SqlDataAdapter(sql, conn))
-                    {
-                        DataTable dt = new DataTable();
-                        adapter.Fill(dt);
-
-                        cboNhanVien.Items.Clear();
-
-                        foreach (DataRow row in dt.Rows)
-                        {
-                            cboNhanVien.Items.Add(
-                                row["MaNhanVien"].ToString()
-                                + " - "
-                                + row["TenNhanVien"].ToString());
-                        }
-
-                        if (cboNhanVien.Items.Count > 0)
-                        {
-                            cboNhanVien.SelectedIndex = 0;
-                        }
-                    }
-                }
+                cboNhanVien.Items.Clear();
+                foreach (DataRow r in dt.Rows)
+                    cboNhanVien.Items.Add(r["MaNhanVien"] + " - " + r["TenNhanVien"]);
             }
             catch (Exception ex)
             {
-                MessageBox.Show(
-                    "Không thể tải danh sách nhân viên.\n\n" + ex.Message,
-                    "Lỗi",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
+                AppTheme.Error("Không thể tải danh sách nhân viên.\n\n" + ex.Message);
             }
         }
 
@@ -156,834 +115,306 @@ namespace DoAnQLTV
         {
             try
             {
-                using (SqlConnection conn = DbConnection.GetConnection())
+                DataTable dt = DbConnection.ExecuteQuery(@"
+                    SELECT pm.MaPhieu,
+                           pm.MaDocGia + ' - ' + dg.TenDocGia AS DocGia,
+                           pm.MaNhanVien + ' - ' + nv.TenNhanVien AS NhanVien,
+                           pm.NgayMuon,
+                           pm.HanTra,
+                           s.TenSach
+                    FROM PhieuMuon pm
+                    INNER JOIN DocGia dg ON pm.MaDocGia = dg.MaDocGia
+                    INNER JOIN NhanVien nv ON pm.MaNhanVien = nv.MaNhanVien
+                    INNER JOIN Sach s ON pm.MaSach = s.MaSach
+                    ORDER BY pm.MaPhieu");
+
+                dgvPhieuMuon.Rows.Clear();
+                foreach (DataRow r in dt.Rows)
                 {
-                    conn.Open();
-
-                    string sql = @"
-                SELECT
-                    pm.MaPhieu,
-                    pm.MaDocGia + ' - ' + dg.TenDocGia AS DocGia,
-                    pm.MaNhanVien + ' - ' + nv.TenNhanVien AS NhanVien,
-                    pm.NgayMuon,
-                    pm.HanTra,
-                    s.TenSach
-                FROM PhieuMuon pm
-                INNER JOIN DocGia dg
-                    ON pm.MaDocGia = dg.MaDocGia
-                INNER JOIN NhanVien nv
-                    ON pm.MaNhanVien = nv.MaNhanVien
-                INNER JOIN Sach s
-                    ON pm.MaSach = s.MaSach
-                ORDER BY pm.MaPhieu";
-
-                    using (SqlDataAdapter adapter =
-                        new SqlDataAdapter(sql, conn))
-                    {
-                        DataTable dt = new DataTable();
-                        adapter.Fill(dt);
-
-                        dgvPhieuMuon.Rows.Clear();
-
-                        foreach (DataRow row in dt.Rows)
-                        {
-                            dgvPhieuMuon.Rows.Add(
-                                row["MaPhieu"].ToString(),
-                                row["DocGia"].ToString(),
-                                row["NhanVien"].ToString(),
-                                Convert.ToDateTime(
-                                    row["NgayMuon"]).ToString("dd/MM/yyyy"),
-                                Convert.ToDateTime(
-                                    row["HanTra"]).ToString("dd/MM/yyyy"),
-                                row["TenSach"].ToString());
-                        }
-                    }
+                    dgvPhieuMuon.Rows.Add(
+                        r["MaPhieu"],
+                        r["DocGia"],
+                        r["NhanVien"],
+                        Convert.ToDateTime(r["NgayMuon"]).ToString(DinhDangNgay),
+                        Convert.ToDateTime(r["HanTra"]).ToString(DinhDangNgay),
+                        r["TenSach"]);
                 }
+
+                dgvPhieuMuon.ClearSelection();
+                dgvPhieuMuon.CurrentCell = null;
             }
             catch (Exception ex)
             {
-                MessageBox.Show(
-                    "Không thể tải dữ liệu phiếu mượn.\n\n" + ex.Message,
-                    "Lỗi",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
+                AppTheme.Error("Không thể tải dữ liệu phiếu mượn.\n\n" + ex.Message);
+            }
+        }
+
+        // ================= HÀM DÙNG CHUNG TRÊN FORM =================
+
+        private void KhoaMa(bool khoa)
+        {
+            txtMaPhieu.ReadOnly = khoa;
+            // Xám nhạt = đang khóa (không cho đổi mã vì là khóa chính)
+            txtMaPhieu.BackColor = khoa ? ColorTranslator.FromHtml("#F1F5F9") : Color.White;
+        }
+
+        private void DatLaiGiaTriMacDinh()
+        {
+            txtMaPhieu.Clear();
+            cboSach.SelectedIndex = -1;
+            cboDocGia.SelectedIndex = cboDocGia.Items.Count > 0 ? 0 : -1;
+            cboNhanVien.SelectedIndex = cboNhanVien.Items.Count > 0 ? 0 : -1;
+            dtpNgayMuon.Value = DateTime.Today;
+            dtpHanTra.Value = DateTime.Today.AddDays(SoNgayMuonMacDinh);
+        }
+
+        private void XoaForm()
+        {
+            DatLaiGiaTriMacDinh();
+
+            maDangChon = null;
+            KhoaMa(false);
+
+            dgvPhieuMuon.ClearSelection();
+            dgvPhieuMuon.CurrentCell = null;
+            txtMaPhieu.Focus();
+        }
+
+        /// <summary>Lấy mã từ chuỗi dạng "MA001 - Nguyễn Văn A".</summary>
+        private static string LayMa(string chuoi)
+        {
+            int viTri = chuoi.IndexOf(" - ", StringComparison.Ordinal);
+            return (viTri >= 0 ? chuoi.Substring(0, viTri) : chuoi).Trim();
+        }
+
+        private static void ChonTheoChuoi(ComboBox cbo, string chuoi)
+        {
+            cbo.SelectedIndex = cbo.FindStringExact(chuoi ?? "");
+        }
+
+        private bool KiemTraDuLieu()
+        {
+            if (txtMaPhieu.Text.Trim() == "")
+            {
+                AppTheme.Warning("Vui lòng nhập mã phiếu.");
+                txtMaPhieu.Focus();
+                return false;
+            }
+
+            if (cboDocGia.SelectedIndex == -1)
+            {
+                AppTheme.Warning("Vui lòng chọn độc giả.");
+                cboDocGia.Focus();
+                return false;
+            }
+
+            if (cboNhanVien.SelectedIndex == -1)
+            {
+                AppTheme.Warning("Vui lòng chọn nhân viên.");
+                cboNhanVien.Focus();
+                return false;
+            }
+
+            if (cboSach.SelectedIndex == -1 || cboSach.SelectedValue == null)
+            {
+                AppTheme.Warning("Vui lòng chọn sách.");
+                cboSach.Focus();
+                return false;
+            }
+
+            if (dtpHanTra.Value.Date < dtpNgayMuon.Value.Date)
+            {
+                AppTheme.Warning("Hạn trả không được trước ngày mượn.");
+                dtpHanTra.Focus();
+                return false;
+            }
+
+            return true;
+        }
+
+        // ================= SỰ KIỆN (giữ nguyên tên để Designer không bị lỗi) =================
+
+        private void dgvPhieuMuon_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex < 0) return;
+
+            DataGridViewRow row = dgvPhieuMuon.Rows[e.RowIndex];
+            string maPhieu = row.Cells["colMaPhieu"].Value?.ToString() ?? "";
+
+            txtMaPhieu.Text = maPhieu;
+            ChonTheoChuoi(cboDocGia, row.Cells["colDocGia"].Value?.ToString());
+            ChonTheoChuoi(cboNhanVien, row.Cells["colNhanVien"].Value?.ToString());
+
+            DateTime ngay;
+            if (DateTime.TryParseExact(row.Cells["colNgayMuon"].Value?.ToString(), DinhDangNgay,
+                    CultureInfo.InvariantCulture, DateTimeStyles.None, out ngay))
+                dtpNgayMuon.Value = ngay;
+
+            if (DateTime.TryParseExact(row.Cells["colHanTra"].Value?.ToString(), DinhDangNgay,
+                    CultureInfo.InvariantCulture, DateTimeStyles.None, out ngay))
+                dtpHanTra.Value = ngay;
+
+            try
+            {
+                // Lấy mã sách của phiếu (bảng chỉ hiện tên sách)
+                string maSach = DbConnection.ExecuteScalar<string>(
+                    "SELECT MaSach FROM PhieuMuon WHERE MaPhieu = @MaPhieu",
+                    DbConnection.Param("@MaPhieu", maPhieu));
+
+                if (maSach != null)
+                    cboSach.SelectedValue = maSach;
+                else
+                    cboSach.SelectedIndex = -1;
+            }
+            catch (Exception ex)
+            {
+                AppTheme.Error("Không thể tải thông tin sách của phiếu.\n\n" + ex.Message);
+            }
+
+            maDangChon = maPhieu;
+            KhoaMa(true);
+        }
+
+        /// <summary>Dùng chung cho nút Thêm và nút Lập phiếu (hai nút làm cùng một việc).</summary>
+        private void LapPhieuMoi()
+        {
+            if (maDangChon != null)
+            {
+                AppTheme.Warning("Bạn đang chọn một phiếu có sẵn.\nBấm \"Làm mới\" để lập phiếu mới.");
+                return;
+            }
+
+            if (!KiemTraDuLieu()) return;
+
+            try
+            {
+                DbConnection.ExecuteNonQuery(@"
+                    INSERT INTO PhieuMuon (MaPhieu, MaDocGia, MaNhanVien, MaSach, NgayMuon, HanTra)
+                    VALUES (@MaPhieu, @MaDocGia, @MaNhanVien, @MaSach, @NgayMuon, @HanTra)",
+                    DbConnection.Param("@MaPhieu", txtMaPhieu.Text.Trim()),
+                    DbConnection.Param("@MaDocGia", LayMa(cboDocGia.Text)),
+                    DbConnection.Param("@MaNhanVien", LayMa(cboNhanVien.Text)),
+                    DbConnection.Param("@MaSach", cboSach.SelectedValue.ToString()),
+                    DbConnection.Param("@NgayMuon", dtpNgayMuon.Value.Date),
+                    DbConnection.Param("@HanTra", dtpHanTra.Value.Date));
+
+                AppTheme.Info("Lập phiếu mượn thành công!");
+                LoadPhieuMuon();
+                XoaForm();
+            }
+            catch (SqlException ex) when (ex.Number == 2627 || ex.Number == 2601)
+            {
+                AppTheme.Warning("Mã phiếu đã tồn tại. Vui lòng nhập mã khác.");
+                txtMaPhieu.Focus();
+            }
+            catch (SqlException ex) when (ex.Number == 547)
+            {
+                AppTheme.Warning("Độc giả, nhân viên hoặc sách không hợp lệ.");
+            }
+            catch (Exception ex)
+            {
+                AppTheme.Error("Không thể lập phiếu mượn.\n\n" + ex.Message);
             }
         }
 
         private void btnThem_Click(object sender, EventArgs e)
         {
-            string maPhieu = txtMaPhieu.Text.Trim();
-            string docGia = cboDocGia.Text.Trim();
-            string nhanVien = cboNhanVien.Text.Trim();
-            if (cboSach.SelectedIndex == -1)
-            {
-                MessageBox.Show(
-                    "Vui lòng chọn sách.",
-                    "Thông báo",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning);
-
-                cboSach.Focus();
-                return;
-            }
-
-            string maSach = cboSach.SelectedValue.ToString();
-
-            if (maPhieu == "")
-            {
-                MessageBox.Show(
-                    "Vui lòng nhập mã phiếu.",
-                    "Thông báo",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning);
-
-                txtMaPhieu.Focus();
-                return;
-            }
-
-            if (docGia == "")
-            {
-                MessageBox.Show(
-                    "Vui lòng chọn độc giả.",
-                    "Thông báo",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning);
-
-                cboDocGia.Focus();
-                return;
-            }
-
-            if (nhanVien == "")
-            {
-                MessageBox.Show(
-                    "Vui lòng chọn nhân viên.",
-                    "Thông báo",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning);
-
-                cboNhanVien.Focus();
-                return;
-            }
-
-
-            if (dtpHanTra.Value.Date < dtpNgayMuon.Value.Date)
-            {
-                MessageBox.Show(
-                    "Hạn trả không được trước ngày mượn.",
-                    "Thông báo",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning);
-
-                return;
-            }
-
-            string maDocGia = docGia.Split('-')[0].Trim();
-            string maNhanVien = nhanVien.Split('-')[0].Trim();
-
-            try
-            {
-                using (SqlConnection conn = DbConnection.GetConnection())
-                {
-                    conn.Open();
-
-                    string sql = @"
-    INSERT INTO PhieuMuon
-        (MaPhieu, MaDocGia, MaNhanVien, MaSach, NgayMuon, HanTra)
-    VALUES
-        (@MaPhieu, @MaDocGia, @MaNhanVien, @MaSach, @NgayMuon, @HanTra)";
-
-                    using (SqlCommand cmd = new SqlCommand(sql, conn))
-                    {
-                        cmd.Parameters.AddWithValue("@MaPhieu", maPhieu);
-                        cmd.Parameters.AddWithValue("@MaDocGia", maDocGia);
-                        cmd.Parameters.AddWithValue("@MaNhanVien", maNhanVien);
-                        cmd.Parameters.AddWithValue("@MaSach", maSach);
-                        cmd.Parameters.AddWithValue(
-                            "@NgayMuon",
-                            dtpNgayMuon.Value.Date);
-                        cmd.Parameters.AddWithValue(
-                            "@HanTra",
-                            dtpHanTra.Value.Date);
-
-                        int soDong = cmd.ExecuteNonQuery();
-
-                        if (soDong <= 0)
-                        {
-                            MessageBox.Show(
-                                "Không thể thêm phiếu mượn.",
-                                "Thông báo",
-                                MessageBoxButtons.OK,
-                                MessageBoxIcon.Warning);
-
-                            return;
-                        }
-                    }
-                }
-
-                MessageBox.Show(
-                    "Thêm phiếu mượn thành công.",
-                    "Thông báo",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Information);
-
-                LoadPhieuMuon();
-                CapNhatThongKeTrangChu();
-
-                txtMaPhieu.Clear();
-                cboSach.SelectedIndex = -1;
-
-                if (cboDocGia.Items.Count > 0)
-                    cboDocGia.SelectedIndex = 0;
-
-                if (cboNhanVien.Items.Count > 0)
-                    cboNhanVien.SelectedIndex = 0;
-
-                dtpNgayMuon.Value = DateTime.Now;
-                dtpHanTra.Value = DateTime.Now.AddDays(7);
-
-                dongDangChon = -1;
-                dgvPhieuMuon.ClearSelection();
-
-                txtMaPhieu.Focus();
-            }
-            catch (SqlException ex)
-            {
-                if (ex.Number == 2627 || ex.Number == 2601)
-                {
-                    MessageBox.Show(
-                        "Mã phiếu đã tồn tại. Vui lòng nhập mã khác.",
-                        "Thông báo",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Warning);
-                }
-                else if (ex.Number == 547)
-                {
-                    MessageBox.Show(
-                        "Dữ liệu độc giả, nhân viên hoặc sách không hợp lệ.",
-                        "Thông báo",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Warning);
-                }
-                else
-                {
-                    MessageBox.Show(
-                        "Không thể thêm phiếu mượn.\n\n" + ex.Message,
-                        "Lỗi",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Error);
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(
-                    "Đã xảy ra lỗi.\n\n" + ex.Message,
-                    "Lỗi",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-            }
+            LapPhieuMoi();
         }
 
-        private void dgvPhieuMuon_CellClick(object sender, DataGridViewCellEventArgs e)
+        private void btnLapPhieu_Click(object sender, EventArgs e)
         {
-            if (e.RowIndex < 0)
-                return;
-
-            DataGridViewRow row = dgvPhieuMuon.Rows[e.RowIndex];
-
-            txtMaPhieu.Text =
-                row.Cells["colMaPhieu"].Value?.ToString() ?? "";
-
-            cboDocGia.Text =
-                row.Cells["colDocGia"].Value?.ToString() ?? "";
-
-            cboNhanVien.Text =
-                row.Cells["colNhanVien"].Value?.ToString() ?? "";
-
-            string ngayMuon =
-                row.Cells["colNgayMuon"].Value?.ToString() ?? "";
-
-            string hanTra =
-                row.Cells["colHanTra"].Value?.ToString() ?? "";
-
-            string maPhieu = row.Cells["colMaPhieu"].Value?.ToString() ?? "";
-
-            using (SqlConnection conn = DbConnection.GetConnection())
-            {
-                conn.Open();
-
-                string sql = "SELECT MaSach FROM PhieuMuon WHERE MaPhieu = @MaPhieu";
-
-                using (SqlCommand cmd = new SqlCommand(sql, conn))
-                {
-                    cmd.Parameters.AddWithValue("@MaPhieu", maPhieu);
-
-                    object result = cmd.ExecuteScalar();
-
-                    if (result != null)
-                        cboSach.SelectedValue = result.ToString();
-                    else
-                        cboSach.SelectedIndex = -1;
-                }
-            }
-
-            DateTime ngayMuonValue;
-            if (DateTime.TryParse(ngayMuon, out ngayMuonValue))
-            {
-                dtpNgayMuon.Value = ngayMuonValue;
-            }
-
-            DateTime hanTraValue;
-            if (DateTime.TryParse(hanTra, out hanTraValue))
-            {
-                dtpHanTra.Value = hanTraValue;
-            }
-
-            dongDangChon = e.RowIndex;
+            LapPhieuMoi();
         }
 
         private void btnSua_Click(object sender, EventArgs e)
         {
-            if (dongDangChon < 0 ||
-    dongDangChon >= dgvPhieuMuon.Rows.Count)
+            if (maDangChon == null)
             {
-                MessageBox.Show(
-                    "Vui lòng chọn phiếu mượn cần sửa.",
-                    "Thông báo",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning);
-
+                AppTheme.Warning("Vui lòng chọn phiếu mượn cần sửa.");
                 return;
             }
 
-            string maPhieu = txtMaPhieu.Text.Trim();
-            string docGia = cboDocGia.Text.Trim();
-            string nhanVien = cboNhanVien.Text.Trim();
-            if (cboSach.SelectedIndex == -1)
-            {
-                MessageBox.Show("Vui lòng chọn sách.");
-                cboSach.Focus();
-                return;
-            }
-
-            string maSach = cboSach.SelectedValue.ToString();
-
-            if (maPhieu == "")
-            {
-                MessageBox.Show(
-                    "Vui lòng nhập mã phiếu.",
-                    "Thông báo",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning);
-
-                txtMaPhieu.Focus();
-                return;
-            }
-
-            if (docGia == "")
-            {
-                MessageBox.Show(
-                    "Vui lòng chọn độc giả.",
-                    "Thông báo",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning);
-
-                cboDocGia.Focus();
-                return;
-            }
-
-            if (nhanVien == "")
-            {
-                MessageBox.Show(
-                    "Vui lòng chọn nhân viên.",
-                    "Thông báo",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning);
-
-                cboNhanVien.Focus();
-                return;
-            }
-
-            if (dtpHanTra.Value.Date < dtpNgayMuon.Value.Date)
-            {
-                MessageBox.Show(
-                    "Hạn trả không được trước ngày mượn.",
-                    "Thông báo",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning);
-
-                return;
-            }
-
-            DataGridViewRow row = dgvPhieuMuon.Rows[dongDangChon];
-
-            string maPhieuCu =
-                row.Cells["colMaPhieu"].Value?.ToString() ?? "";
-
-            if (maPhieuCu == "")
-            {
-                MessageBox.Show(
-                    "Không xác định được mã phiếu cần sửa.",
-                    "Thông báo",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning);
-
-                return;
-            }
-
-            string maDocGia = docGia.Split('-')[0].Trim();
-            string maNhanVien = nhanVien.Split('-')[0].Trim();
+            if (!KiemTraDuLieu()) return;
 
             try
             {
-                using (SqlConnection conn = DbConnection.GetConnection())
+                int soDong = DbConnection.ExecuteNonQuery(@"
+                    UPDATE PhieuMuon
+                    SET MaDocGia = @MaDocGia,
+                        MaNhanVien = @MaNhanVien,
+                        MaSach = @MaSach,
+                        NgayMuon = @NgayMuon,
+                        HanTra = @HanTra
+                    WHERE MaPhieu = @MaPhieu",
+                    DbConnection.Param("@MaDocGia", LayMa(cboDocGia.Text)),
+                    DbConnection.Param("@MaNhanVien", LayMa(cboNhanVien.Text)),
+                    DbConnection.Param("@MaSach", cboSach.SelectedValue.ToString()),
+                    DbConnection.Param("@NgayMuon", dtpNgayMuon.Value.Date),
+                    DbConnection.Param("@HanTra", dtpHanTra.Value.Date),
+                    DbConnection.Param("@MaPhieu", maDangChon));
+
+                if (soDong == 0)
                 {
-                    conn.Open();
-
-                    string sql = @"
-                UPDATE PhieuMuon
-                SET
-                    MaPhieu = @MaPhieuMoi,
-                    MaDocGia = @MaDocGia,
-                    MaNhanVien = @MaNhanVien,
-                    MaSach = @MaSach,
-                    NgayMuon = @NgayMuon,
-                    HanTra = @HanTra
-                WHERE MaPhieu = @MaPhieuCu";
-
-                    using (SqlCommand cmd = new SqlCommand(sql, conn))
-                    {
-                        cmd.Parameters.AddWithValue(
-                            "@MaPhieuMoi", maPhieu);
-
-                        cmd.Parameters.AddWithValue(
-                            "@MaDocGia", maDocGia);
-
-                        cmd.Parameters.AddWithValue(
-                            "@MaNhanVien", maNhanVien);
-
-                        cmd.Parameters.AddWithValue("@MaSach", maSach);
-
-                        cmd.Parameters.AddWithValue(
-                            "@NgayMuon", dtpNgayMuon.Value.Date);
-
-                        cmd.Parameters.AddWithValue(
-                            "@HanTra", dtpHanTra.Value.Date);
-
-                        cmd.Parameters.AddWithValue(
-                            "@MaPhieuCu", maPhieuCu);
-
-                        int soDong = cmd.ExecuteNonQuery();
-
-                        if (soDong == 0)
-                        {
-                            MessageBox.Show(
-                                "Không tìm thấy phiếu mượn cần sửa.",
-                                "Thông báo",
-                                MessageBoxButtons.OK,
-                                MessageBoxIcon.Warning);
-
-                            return;
-                        }
-                    }
+                    AppTheme.Warning("Không tìm thấy phiếu mượn cần sửa.");
+                    return;
                 }
 
-                MessageBox.Show(
-                    "Sửa phiếu mượn thành công.",
-                    "Thông báo",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Information);
-
+                AppTheme.Info("Cập nhật phiếu mượn thành công!");
                 LoadPhieuMuon();
-                CapNhatThongKeTrangChu();
-
-                txtMaPhieu.Clear();
-                cboSach.SelectedIndex = -1;
-
-                if (cboDocGia.Items.Count > 0)
-                    cboDocGia.SelectedIndex = 0;
-
-                if (cboNhanVien.Items.Count > 0)
-                    cboNhanVien.SelectedIndex = 0;
-
-                dtpNgayMuon.Value = DateTime.Now;
-                dtpHanTra.Value = DateTime.Now.AddDays(7);
-
-                dongDangChon = -1;
-                dgvPhieuMuon.ClearSelection();
-
-                txtMaPhieu.Focus();
+                XoaForm();
             }
-            catch (SqlException ex)
+            catch (SqlException ex) when (ex.Number == 547)
             {
-                if (ex.Number == 2627 || ex.Number == 2601)
-                {
-                    MessageBox.Show(
-                        "Mã phiếu mới đã tồn tại. Vui lòng nhập mã khác.",
-                        "Thông báo",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Warning);
-                }
-                else if (ex.Number == 547)
-                {
-                    MessageBox.Show(
-                        "Dữ liệu độc giả, nhân viên hoặc sách không hợp lệ.",
-                        "Thông báo",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Warning);
-                }
-                else
-                {
-                    MessageBox.Show(
-                        "Không thể sửa phiếu mượn.\n\n" + ex.Message,
-                        "Lỗi",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Error);
-                }
+                AppTheme.Warning("Độc giả, nhân viên hoặc sách không hợp lệ.");
             }
             catch (Exception ex)
             {
-                MessageBox.Show(
-                    "Đã xảy ra lỗi.\n\n" + ex.Message,
-                    "Lỗi",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
+                AppTheme.Error("Không thể cập nhật phiếu mượn.\n\n" + ex.Message);
             }
         }
 
         private void btnXoa_Click(object sender, EventArgs e)
         {
-            if (dongDangChon < 0 ||
-    dongDangChon >= dgvPhieuMuon.Rows.Count)
+            if (maDangChon == null)
             {
-                MessageBox.Show(
-                    "Vui lòng chọn phiếu mượn cần xóa.",
-                    "Thông báo",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning);
-
+                AppTheme.Warning("Vui lòng chọn phiếu mượn cần xóa.");
                 return;
             }
 
-            DataGridViewRow row = dgvPhieuMuon.Rows[dongDangChon];
-
-            string maPhieu =
-                row.Cells["colMaPhieu"].Value?.ToString() ?? "";
-
-            if (maPhieu == "")
-            {
-                MessageBox.Show(
-                    "Không xác định được mã phiếu cần xóa.",
-                    "Thông báo",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning);
-
-                return;
-            }
-
-            DialogResult result = MessageBox.Show(
-                "Bạn có chắc chắn muốn xóa phiếu mượn này không?",
-                "Xác nhận xóa",
-                MessageBoxButtons.YesNo,
-                MessageBoxIcon.Question);
-
-            if (result == DialogResult.No)
+            if (!AppTheme.Confirm("Bạn có chắc chắn muốn xóa phiếu mượn này không?"))
                 return;
 
             try
             {
-                using (SqlConnection conn = DbConnection.GetConnection())
+                int soDong = DbConnection.ExecuteNonQuery(
+                    "DELETE FROM PhieuMuon WHERE MaPhieu = @MaPhieu",
+                    DbConnection.Param("@MaPhieu", maDangChon));
+
+                if (soDong == 0)
                 {
-                    conn.Open();
-
-                    string sql = @"
-                DELETE FROM PhieuMuon
-                WHERE MaPhieu = @MaPhieu";
-
-                    using (SqlCommand cmd = new SqlCommand(sql, conn))
-                    {
-                        cmd.Parameters.AddWithValue(
-                            "@MaPhieu", maPhieu);
-
-                        int soDong = cmd.ExecuteNonQuery();
-
-                        if (soDong == 0)
-                        {
-                            MessageBox.Show(
-                                "Không tìm thấy phiếu mượn cần xóa.",
-                                "Thông báo",
-                                MessageBoxButtons.OK,
-                                MessageBoxIcon.Warning);
-
-                            return;
-                        }
-                    }
+                    AppTheme.Warning("Không tìm thấy phiếu mượn cần xóa.");
+                    return;
                 }
 
-                MessageBox.Show(
-                    "Xóa phiếu mượn thành công.",
-                    "Thông báo",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Information);
-
+                AppTheme.Info("Xóa phiếu mượn thành công!");
                 LoadPhieuMuon();
-
-                txtMaPhieu.Clear();
-                cboSach.SelectedIndex = -1;
-
-                if (cboDocGia.Items.Count > 0)
-                    cboDocGia.SelectedIndex = 0;
-
-                if (cboNhanVien.Items.Count > 0)
-                    cboNhanVien.SelectedIndex = 0;
-
-                dtpNgayMuon.Value = DateTime.Now;
-                dtpHanTra.Value = DateTime.Now.AddDays(7);
-
-                dongDangChon = -1;
-
-                dgvPhieuMuon.ClearSelection();
-
-                txtMaPhieu.Focus();
+                XoaForm();
             }
-            catch (SqlException ex)
+            catch (SqlException ex) when (ex.Number == 547)
             {
-                if (ex.Number == 547)
-                {
-                    MessageBox.Show(
-                        "Không thể xóa phiếu mượn vì dữ liệu đang được tham chiếu.",
-                        "Không thể xóa",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Warning);
-                }
-                else
-                {
-                    MessageBox.Show(
-                        "Không thể xóa phiếu mượn.\n\n" + ex.Message,
-                        "Lỗi",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Error);
-                }
+                AppTheme.Warning("Không thể xóa phiếu mượn vì dữ liệu đang được tham chiếu.");
             }
             catch (Exception ex)
             {
-                MessageBox.Show(
-                    "Đã xảy ra lỗi.\n\n" + ex.Message,
-                    "Lỗi",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
+                AppTheme.Error("Không thể xóa phiếu mượn.\n\n" + ex.Message);
             }
         }
 
         private void btnLamMoi_Click(object sender, EventArgs e)
         {
-            txtMaPhieu.Clear();
-            cboSach.SelectedIndex = -1;
-
-            if (cboDocGia.Items.Count > 0)
-                cboDocGia.SelectedIndex = 0;
-
-            if (cboNhanVien.Items.Count > 0)
-                cboNhanVien.SelectedIndex = 0;
-
-            dtpNgayMuon.Value = DateTime.Now;
-            dtpHanTra.Value = DateTime.Now.AddDays(7);
-
             LoadPhieuMuon();
-
-            dongDangChon = -1;
-            dgvPhieuMuon.ClearSelection();
-            dgvPhieuMuon.CurrentCell = null;
-
-            txtMaPhieu.Focus();
+            XoaForm();
         }
-
-
-        private void btnLapPhieu_Click(object sender, EventArgs e)
-        {
-            string maPhieu = txtMaPhieu.Text.Trim();
-            string docGia = cboDocGia.Text.Trim();
-            string nhanVien = cboNhanVien.Text.Trim();
-
-            // 1. Kiểm tra mã phiếu
-            if (maPhieu == "")
-            {
-                MessageBox.Show(
-                    "Vui lòng nhập mã phiếu.",
-                    "Thông báo",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning);
-
-                txtMaPhieu.Focus();
-                return;
-            }
-
-            // 2. Kiểm tra độc giả
-            if (cboDocGia.SelectedIndex == -1 || docGia == "")
-            {
-                MessageBox.Show(
-                    "Vui lòng chọn độc giả.",
-                    "Thông báo",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning);
-
-                cboDocGia.Focus();
-                return;
-            }
-
-            // 3. Kiểm tra nhân viên
-            if (cboNhanVien.SelectedIndex == -1 || nhanVien == "")
-            {
-                MessageBox.Show(
-                    "Vui lòng chọn nhân viên.",
-                    "Thông báo",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning);
-
-                cboNhanVien.Focus();
-                return;
-            }
-
-            // 4. Kiểm tra sách
-            if (cboSach.SelectedIndex == -1 || cboSach.SelectedValue == null)
-            {
-                MessageBox.Show(
-                    "Vui lòng chọn sách.",
-                    "Thông báo",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning);
-
-                cboSach.Focus();
-                return;
-            }
-
-            // Lấy mã độc giả, nhân viên và sách
-            string maDocGia = docGia.Split('-')[0].Trim();
-            string maNhanVien = nhanVien.Split('-')[0].Trim();
-            string maSach = cboSach.SelectedValue.ToString();
-
-            // 5. Kiểm tra ngày mượn và hạn trả
-            if (dtpHanTra.Value.Date < dtpNgayMuon.Value.Date)
-            {
-                MessageBox.Show(
-                    "Hạn trả không được trước ngày mượn.",
-                    "Thông báo",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning);
-
-                dtpHanTra.Focus();
-                return;
-            }
-
-            try
-            {
-                using (SqlConnection conn = DbConnection.GetConnection())
-                {
-                    conn.Open();
-
-                    // 6. Thêm phiếu mượn bằng mã sách đã chọn
-                    string sql = @"
-                INSERT INTO PhieuMuon
-                    (MaPhieu, MaDocGia, MaNhanVien, MaSach,
-                     NgayMuon, HanTra)
-                VALUES
-                    (@MaPhieu, @MaDocGia, @MaNhanVien, @MaSach,
-                     @NgayMuon, @HanTra)";
-
-                    using (SqlCommand cmd = new SqlCommand(sql, conn))
-                    {
-                        cmd.Parameters.AddWithValue("@MaPhieu", maPhieu);
-                        cmd.Parameters.AddWithValue("@MaDocGia", maDocGia);
-                        cmd.Parameters.AddWithValue("@MaNhanVien", maNhanVien);
-                        cmd.Parameters.AddWithValue("@MaSach", maSach);
-                        cmd.Parameters.AddWithValue(
-                            "@NgayMuon", dtpNgayMuon.Value.Date);
-                        cmd.Parameters.AddWithValue(
-                            "@HanTra", dtpHanTra.Value.Date);
-
-                        int soDong = cmd.ExecuteNonQuery();
-
-                        if (soDong <= 0)
-                        {
-                            MessageBox.Show(
-                                "Không thể lập phiếu mượn.",
-                                "Thông báo",
-                                MessageBoxButtons.OK,
-                                MessageBoxIcon.Warning);
-
-                            return;
-                        }
-                    }
-                }
-
-                // 7. Thông báo thành công
-                MessageBox.Show(
-                    "Lập phiếu mượn thành công.",
-                    "Thông báo",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Information);
-
-                // 8. Cập nhật lại danh sách phiếu mượn
-                LoadPhieuMuon();
-
-                // 9. Làm sạch dữ liệu sau khi lập phiếu
-                txtMaPhieu.Clear();
-                cboSach.SelectedIndex = -1;
-
-                if (cboDocGia.Items.Count > 0)
-                    cboDocGia.SelectedIndex = 0;
-
-                if (cboNhanVien.Items.Count > 0)
-                    cboNhanVien.SelectedIndex = 0;
-
-                dtpNgayMuon.Value = DateTime.Now;
-                dtpHanTra.Value = DateTime.Now.AddDays(7);
-
-                dongDangChon = -1;
-                dgvPhieuMuon.ClearSelection();
-
-                txtMaPhieu.Focus();
-            }
-            catch (SqlException ex)
-            {
-                // Trùng khóa chính hoặc khóa duy nhất
-                if (ex.Number == 2627 || ex.Number == 2601)
-                {
-                    MessageBox.Show(
-                        "Mã phiếu đã tồn tại. Vui lòng nhập mã khác.",
-                        "Thông báo",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Warning);
-
-                    txtMaPhieu.Focus();
-                }
-                // Vi phạm khóa ngoại
-                else if (ex.Number == 547)
-                {
-                    MessageBox.Show(
-                        "Độc giả, nhân viên hoặc sách không hợp lệ. " +
-                        "Vui lòng kiểm tra lại dữ liệu.",
-                        "Thông báo",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Warning);
-                }
-                else
-                {
-                    MessageBox.Show(
-                        "Không thể lập phiếu mượn.\n\n" + ex.Message,
-                        "Lỗi",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Error);
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(
-                    "Đã xảy ra lỗi.\n\n" + ex.Message,
-                    "Lỗi",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-            }
-        }
-
     }
 }
