@@ -1,454 +1,282 @@
-﻿using System.Data;
+﻿using System;
+using System.Data;
 using System.Data.SqlClient;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace DoAnQLTV
 {
     public partial class FrmTheLoai : Form
     {
-        private int dongDangChon = -1;
+        // Mã thể loại đang được chọn để sửa/xóa. null = đang ở chế độ nhập mới.
+        private string maDangChon = null;
+
         public FrmTheLoai()
         {
             InitializeComponent();
-
+            AppTheme.ApplyForm(this);
+            ApDungGiaoDien();
             LoadTheLoai();
         }
 
-        private void btnThem_Click(object sender, EventArgs e)
+        // ================= GIAO DIỆN =================
+
+        private void ApDungGiaoDien()
         {
-            string maTheLoai = txtMaTheLoai.Text.Trim();
-            string tenTheLoai = txtTenTheLoai.Text.Trim();
+            AppTheme.StyleCard(pnlThongTin);
+            AppTheme.StyleCard(pnlDanhSach);
 
-            if (string.IsNullOrWhiteSpace(maTheLoai) ||
-                string.IsNullOrWhiteSpace(tenTheLoai))
-            {
-                MessageBox.Show(
-                    "Vui lòng nhập đầy đủ mã thể loại và tên thể loại.",
-                    "Thông báo",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning);
+            AppTheme.StyleGrid(dgvTheLoai);
 
-                return;
-            }
+            AppTheme.StyleTextBox(txtMaTheLoai);
+            AppTheme.StyleTextBox(txtTenTheLoai);
 
-            try
-            {
-                using (SqlConnection conn = DbConnection.GetConnection())
-                {
-                    conn.Open();
-
-                    string sql = @"
-                INSERT INTO TheLoai (MaTheLoai, TenTheLoai)
-                VALUES (@MaTheLoai, @TenTheLoai)";
-
-                    using (SqlCommand cmd = new SqlCommand(sql, conn))
-                    {
-                        cmd.Parameters.AddWithValue("@MaTheLoai", maTheLoai);
-                        cmd.Parameters.AddWithValue("@TenTheLoai", tenTheLoai);
-
-                        cmd.ExecuteNonQuery();
-                    }
-                }
-
-                MessageBox.Show(
-                    "Thêm thể loại thành công!",
-                    "Thông báo",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Information);
-
-                LoadTheLoai();
-
-                txtMaTheLoai.Clear();
-                txtTenTheLoai.Clear();
-                txtMaTheLoai.Focus();
-            }
-            catch (SqlException ex)
-            {
-                if (ex.Number == 2627 || ex.Number == 2601)
-                {
-                    MessageBox.Show(
-                        "Mã thể loại đã tồn tại.",
-                        "Thông báo",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Warning);
-                }
-                else
-                {
-                    MessageBox.Show(
-                        "Không thể thêm thể loại.\n\n" + ex.Message,
-                        "Lỗi",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Error);
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(
-                    "Đã xảy ra lỗi.\n\n" + ex.Message,
-                    "Lỗi",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-            }
+            AppTheme.StylePrimaryButton(btnThem);
+            AppTheme.StyleButton(btnSua, AppTheme.Amber, ColorTranslator.FromHtml("#D97706"));
+            AppTheme.StyleDangerButton(btnXoa);
+            AppTheme.StyleSuccessButton(btnTimKiem);
+            AppTheme.StyleButton(btnLamMoi,
+                ColorTranslator.FromHtml("#E2E8F0"),
+                ColorTranslator.FromHtml("#CBD5E1"),
+                AppTheme.TextDark);
         }
 
-        private void btnSua_Click(object sender, EventArgs e)
+        // ================= NẠP DỮ LIỆU =================
+
+        /// <summary>Lấy danh sách thể loại; tuKhoa rỗng/null = lấy tất cả.</summary>
+        private DataTable TruyVanTheLoai(string tuKhoa)
         {
-            if (dongDangChon == -1 ||
-    dongDangChon >= dgvTheLoai.Rows.Count)
-            {
-                MessageBox.Show(
-                    "Vui lòng chọn thể loại cần sửa.",
-                    "Thông báo",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning);
-
-                return;
-            }
-
-            string maTheLoai = txtMaTheLoai.Text.Trim();
-            string tenTheLoai = txtTenTheLoai.Text.Trim();
-
-            if (string.IsNullOrWhiteSpace(maTheLoai) ||
-                string.IsNullOrWhiteSpace(tenTheLoai))
-            {
-                MessageBox.Show(
-                    "Vui lòng nhập đầy đủ mã thể loại và tên thể loại.",
-                    "Thông báo",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning);
-
-                return;
-            }
-
-            try
-            {
-                using (SqlConnection conn = DbConnection.GetConnection())
-                {
-                    conn.Open();
-
-                    string sql = @"
-                UPDATE TheLoai
-                SET TenTheLoai = @TenTheLoai
-                WHERE MaTheLoai = @MaTheLoai";
-
-                    using (SqlCommand cmd = new SqlCommand(sql, conn))
-                    {
-                        cmd.Parameters.AddWithValue("@TenTheLoai", tenTheLoai);
-                        cmd.Parameters.AddWithValue("@MaTheLoai", maTheLoai);
-
-                        int soDong = cmd.ExecuteNonQuery();
-
-                        if (soDong == 0)
-                        {
-                            MessageBox.Show(
-                                "Không tìm thấy mã thể loại cần sửa.",
-                                "Thông báo",
-                                MessageBoxButtons.OK,
-                                MessageBoxIcon.Warning);
-
-                            return;
-                        }
-                    }
-                }
-
-                MessageBox.Show(
-                    "Cập nhật thể loại thành công!",
-                    "Thông báo",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Information);
-
-                LoadTheLoai();
-                dongDangChon = -1;
-                dgvTheLoai.ClearSelection();
-                dgvTheLoai.CurrentCell = null;
-
-                txtMaTheLoai.Clear();
-                txtTenTheLoai.Clear();
-                txtMaTheLoai.Focus();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(
-                    "Không thể cập nhật thể loại.\n\n" + ex.Message,
-                    "Lỗi",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-            }
-        }
-
-        private void dgvTheLoai_CellClick(object sender, DataGridViewCellEventArgs e)
-        {
-            if (e.RowIndex < 0)
-                return;
-
-            dongDangChon = e.RowIndex;
-
-            DataGridViewRow row = dgvTheLoai.Rows[e.RowIndex];
-
-            txtMaTheLoai.Text = row.Cells["colMaTheLoai"].Value?.ToString();
-            txtTenTheLoai.Text = row.Cells["colTenTheLoai"].Value?.ToString();
-        }
-
-        private void btnXoa_Click(object sender, EventArgs e)
-        {
-            if (dongDangChon == -1 ||
-    dongDangChon >= dgvTheLoai.Rows.Count)
-            {
-                MessageBox.Show(
-                    "Vui lòng chọn thể loại cần xóa.",
-                    "Thông báo",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning);
-
-                return;
-            }
-
-            string maTheLoai = txtMaTheLoai.Text.Trim();
-
-            if (string.IsNullOrWhiteSpace(maTheLoai))
-            {
-                MessageBox.Show(
-                    "Vui lòng chọn thể loại cần xóa.",
-                    "Thông báo",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning);
-
-                return;
-            }
-
-            DialogResult ketQua = MessageBox.Show(
-                "Bạn có chắc chắn muốn xóa thể loại này không?",
-                "Xác nhận xóa",
-                MessageBoxButtons.YesNo,
-                MessageBoxIcon.Question);
-
-            if (ketQua != DialogResult.Yes)
-                return;
-
-            try
-            {
-                using (SqlConnection conn = DbConnection.GetConnection())
-                {
-                    conn.Open();
-
-                    string sql = @"
-                DELETE FROM TheLoai
-                WHERE MaTheLoai = @MaTheLoai";
-
-                    using (SqlCommand cmd = new SqlCommand(sql, conn))
-                    {
-                        cmd.Parameters.AddWithValue("@MaTheLoai", maTheLoai);
-
-                        int soDong = cmd.ExecuteNonQuery();
-
-                        if (soDong == 0)
-                        {
-                            MessageBox.Show(
-                                "Không tìm thấy thể loại cần xóa.",
-                                "Thông báo",
-                                MessageBoxButtons.OK,
-                                MessageBoxIcon.Warning);
-
-                            return;
-                        }
-                    }
-                }
-
-                MessageBox.Show(
-                    "Xóa thể loại thành công!",
-                    "Thông báo",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Information);
-
-                LoadTheLoai();
-                dongDangChon = -1;
-                dgvTheLoai.ClearSelection();
-                dgvTheLoai.CurrentCell = null;
-
-                txtMaTheLoai.Clear();
-                txtTenTheLoai.Clear();
-                txtMaTheLoai.Focus();
-            }
-            catch (SqlException ex)
-            {
-                if (ex.Number == 547)
-                {
-                    MessageBox.Show(
-                        "Không thể xóa thể loại này vì đang được sử dụng bởi sách.",
-                        "Thông báo",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Warning);
-                }
-                else
-                {
-                    MessageBox.Show(
-                        "Không thể xóa thể loại.\n\n" + ex.Message,
-                        "Lỗi",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Error);
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(
-                    "Đã xảy ra lỗi.\n\n" + ex.Message,
-                    "Lỗi",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-            }
-        }
-
-        private void btnTimKiem_Click(object sender, EventArgs e)
-        {
-            string tuKhoa = txtTenTheLoai.Text.Trim();
-
-            if (tuKhoa == "")
-            {
-                MessageBox.Show(
-                    "Vui lòng nhập từ khóa cần tìm.",
-                    "Thông báo",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning);
-
-                txtTenTheLoai.Focus();
-                return;
-            }
-
-            try
-            {
-                using (SqlConnection conn = DbConnection.GetConnection())
-                {
-                    conn.Open();
-
-                    string sql = @"
+            const string sql = @"
                 SELECT MaTheLoai, TenTheLoai
                 FROM TheLoai
-                WHERE MaTheLoai LIKE @TuKhoa
-                   OR TenTheLoai LIKE @TuKhoa
+                WHERE (@TuKhoa IS NULL OR MaTheLoai LIKE @TuKhoa OR TenTheLoai LIKE @TuKhoa)
                 ORDER BY MaTheLoai";
 
-                    using (SqlCommand cmd = new SqlCommand(sql, conn))
-                    {
-                        cmd.Parameters.AddWithValue("@TuKhoa", "%" + tuKhoa + "%");
-
-                        using (SqlDataAdapter adapter = new SqlDataAdapter(cmd))
-                        {
-                            DataTable dt = new DataTable();
-                            adapter.Fill(dt);
-
-                            dgvTheLoai.Rows.Clear();
-
-                            foreach (DataRow row in dt.Rows)
-                            {
-                                dgvTheLoai.Rows.Add(
-                                    row["MaTheLoai"].ToString(),
-                                    row["TenTheLoai"].ToString());
-                            }
-
-
-                            if (dt.Rows.Count == 0)
-                            {
-                                dongDangChon = -1;
-
-                                txtMaTheLoai.Clear();
-                                txtTenTheLoai.Clear();
-
-                                dgvTheLoai.ClearSelection();
-                                dgvTheLoai.CurrentCell = null;
-
-                                MessageBox.Show(
-                                    "Không tìm thấy thể loại phù hợp.",
-                                    "Thông báo",
-                                    MessageBoxButtons.OK,
-                                    MessageBoxIcon.Information);
-
-                                return;
-                            }
-
-
-
-                            if (dt.Rows.Count == 1)
-                            {
-                                txtMaTheLoai.Text = dt.Rows[0]["MaTheLoai"].ToString();
-                                txtTenTheLoai.Text = dt.Rows[0]["TenTheLoai"].ToString();
-                            }
-
-                            dgvTheLoai.ClearSelection();
-                            dgvTheLoai.CurrentCell = null;
-                            dongDangChon = -1;
-
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(
-                    "Không thể tìm kiếm thể loại.\n\n" + ex.Message,
-                    "Lỗi",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-            }
-        }
-
-        private void btnLamMoi_Click(object sender, EventArgs e)
-        {
-            txtMaTheLoai.Clear();
-            txtTenTheLoai.Clear();
-
-            dongDangChon = -1;
-
-            LoadTheLoai();
-
-            dgvTheLoai.ClearSelection();
-
-            txtMaTheLoai.Focus();
+            object tuKhoaLike = string.IsNullOrEmpty(tuKhoa) ? null : "%" + tuKhoa + "%";
+            return DbConnection.ExecuteQuery(sql, DbConnection.Param("@TuKhoa", tuKhoaLike));
         }
 
         private void LoadTheLoai()
         {
             try
             {
-                using (SqlConnection conn = DbConnection.GetConnection())
+                HienThiLuoi(TruyVanTheLoai(null));
+            }
+            catch (Exception ex)
+            {
+                AppTheme.Error("Không thể tải dữ liệu thể loại.\n\n" + ex.Message);
+            }
+        }
+
+        private void HienThiLuoi(DataTable dt)
+        {
+            dgvTheLoai.Rows.Clear();
+            foreach (DataRow r in dt.Rows)
+                dgvTheLoai.Rows.Add(r["MaTheLoai"], r["TenTheLoai"]);
+
+            dgvTheLoai.ClearSelection();
+            dgvTheLoai.CurrentCell = null;
+        }
+
+        // ================= HÀM DÙNG CHUNG TRÊN FORM =================
+
+        private void DoLenForm(string maTheLoai, string tenTheLoai)
+        {
+            txtMaTheLoai.Text = maTheLoai;
+            txtTenTheLoai.Text = tenTheLoai;
+
+            maDangChon = maTheLoai;
+            txtMaTheLoai.ReadOnly = true;
+            txtMaTheLoai.BackColor = ColorTranslator.FromHtml("#F1F5F9");   // <-- thêm: xám nhạt = đang khóa
+        }
+
+        private void XoaForm()
+        {
+            txtMaTheLoai.Clear();
+            txtTenTheLoai.Clear();
+
+            maDangChon = null;
+            txtMaTheLoai.ReadOnly = false;
+            txtMaTheLoai.BackColor = Color.White;                            // <-- thêm: trả về trắng
+
+            dgvTheLoai.ClearSelection();
+            dgvTheLoai.CurrentCell = null;
+            txtMaTheLoai.Focus();
+        }
+
+        private bool KiemTraDuLieu()
+        {
+            if (txtMaTheLoai.Text.Trim() == "")
+            {
+                AppTheme.Warning("Vui lòng nhập mã thể loại.");
+                txtMaTheLoai.Focus();
+                return false;
+            }
+
+            if (txtTenTheLoai.Text.Trim() == "")
+            {
+                AppTheme.Warning("Vui lòng nhập tên thể loại.");
+                txtTenTheLoai.Focus();
+                return false;
+            }
+
+            return true;
+        }
+
+        // ================= SỰ KIỆN (giữ nguyên tên để Designer không bị lỗi) =================
+
+        private void dgvTheLoai_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex < 0) return;
+
+            DataGridViewRow row = dgvTheLoai.Rows[e.RowIndex];
+            DoLenForm(
+                row.Cells["colMaTheLoai"].Value?.ToString(),
+                row.Cells["colTenTheLoai"].Value?.ToString());
+        }
+
+        private void btnThem_Click(object sender, EventArgs e)
+        {
+            if (maDangChon != null)
+            {
+                AppTheme.Warning("Bạn đang chọn một thể loại có sẵn.\nBấm \"Làm mới\" để nhập thể loại mới.");
+                return;
+            }
+
+            if (!KiemTraDuLieu()) return;
+
+            try
+            {
+                DbConnection.ExecuteNonQuery(@"
+                    INSERT INTO TheLoai (MaTheLoai, TenTheLoai)
+                    VALUES (@MaTheLoai, @TenTheLoai)",
+                    DbConnection.Param("@MaTheLoai", txtMaTheLoai.Text.Trim()),
+                    DbConnection.Param("@TenTheLoai", txtTenTheLoai.Text.Trim()));
+
+                AppTheme.Info("Thêm thể loại thành công!");
+                LoadTheLoai();
+                XoaForm();
+            }
+            catch (SqlException ex) when (ex.Number == 2627 || ex.Number == 2601)
+            {
+                AppTheme.Warning("Mã thể loại đã tồn tại.");
+            }
+            catch (Exception ex)
+            {
+                AppTheme.Error("Không thể thêm thể loại.\n\n" + ex.Message);
+            }
+        }
+
+        private void btnSua_Click(object sender, EventArgs e)
+        {
+            if (maDangChon == null)
+            {
+                AppTheme.Warning("Vui lòng chọn thể loại cần sửa.");
+                return;
+            }
+
+            if (!KiemTraDuLieu()) return;
+
+            try
+            {
+                int soDong = DbConnection.ExecuteNonQuery(@"
+                    UPDATE TheLoai
+                    SET TenTheLoai = @TenTheLoai
+                    WHERE MaTheLoai = @MaTheLoai",
+                    DbConnection.Param("@TenTheLoai", txtTenTheLoai.Text.Trim()),
+                    DbConnection.Param("@MaTheLoai", maDangChon));
+
+                if (soDong == 0)
                 {
-                    conn.Open();
+                    AppTheme.Warning("Không tìm thấy mã thể loại cần sửa.");
+                    return;
+                }
 
-                    string sql = @"
-                SELECT MaTheLoai, TenTheLoai
-                FROM TheLoai
-                ORDER BY MaTheLoai";
+                AppTheme.Info("Cập nhật thể loại thành công!");
+                LoadTheLoai();
+                XoaForm();
+            }
+            catch (Exception ex)
+            {
+                AppTheme.Error("Không thể cập nhật thể loại.\n\n" + ex.Message);
+            }
+        }
 
-                    using (SqlDataAdapter adapter = new SqlDataAdapter(sql, conn))
-                    {
-                        DataTable dt = new DataTable();
-                        adapter.Fill(dt);
+        private void btnXoa_Click(object sender, EventArgs e)
+        {
+            if (maDangChon == null)
+            {
+                AppTheme.Warning("Vui lòng chọn thể loại cần xóa.");
+                return;
+            }
 
-                        dgvTheLoai.Rows.Clear();
+            if (!AppTheme.Confirm("Bạn có chắc chắn muốn xóa thể loại này không?"))
+                return;
 
-                        foreach (DataRow row in dt.Rows)
-                        {
-                            dgvTheLoai.Rows.Add(
-                                row["MaTheLoai"].ToString(),
-                                row["TenTheLoai"].ToString());
-                        }
-                    }
+            try
+            {
+                int soDong = DbConnection.ExecuteNonQuery(
+                    "DELETE FROM TheLoai WHERE MaTheLoai = @MaTheLoai",
+                    DbConnection.Param("@MaTheLoai", maDangChon));
+
+                if (soDong == 0)
+                {
+                    AppTheme.Warning("Không tìm thấy thể loại cần xóa.");
+                    return;
+                }
+
+                AppTheme.Info("Xóa thể loại thành công!");
+                LoadTheLoai();
+                XoaForm();
+            }
+            catch (SqlException ex) when (ex.Number == 547)
+            {
+                AppTheme.Warning("Không thể xóa thể loại này vì đang được sử dụng bởi sách.");
+            }
+            catch (Exception ex)
+            {
+                AppTheme.Error("Không thể xóa thể loại.\n\n" + ex.Message);
+            }
+        }
+
+        private void btnTimKiem_Click(object sender, EventArgs e)
+        {
+            string tuKhoa = txtTenTheLoai.Text.Trim();
+            if (tuKhoa == "")
+            {
+                AppTheme.Warning("Vui lòng nhập từ khóa cần tìm.");
+                txtTenTheLoai.Focus();
+                return;
+            }
+
+            try
+            {
+                DataTable dt = TruyVanTheLoai(tuKhoa);
+                HienThiLuoi(dt);
+
+                if (dt.Rows.Count == 0)
+                {
+                    maDangChon = null;
+                    txtMaTheLoai.ReadOnly = false;
+                    AppTheme.Info("Không tìm thấy thể loại phù hợp.");
+                }
+                else if (dt.Rows.Count == 1)
+                {
+                    DoLenForm(
+                        dt.Rows[0]["MaTheLoai"].ToString(),
+                        dt.Rows[0]["TenTheLoai"].ToString());
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show(
-                    "Không thể tải dữ liệu thể loại.\n\n" + ex.Message,
-                    "Lỗi",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
+                AppTheme.Error("Không thể tìm kiếm thể loại.\n\n" + ex.Message);
             }
+        }
+
+        private void btnLamMoi_Click(object sender, EventArgs e)
+        {
+            LoadTheLoai();
+            XoaForm();
         }
     }
 }
