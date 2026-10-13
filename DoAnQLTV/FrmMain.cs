@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DV = System.Windows.Forms.DataVisualization.Charting;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
@@ -27,6 +28,8 @@ namespace DoAnQLTV
         {
             InitializeComponent();
 
+            AppTheme.ApplyForm(this);
+
             this.StartPosition = FormStartPosition.CenterScreen;
             this.WindowState = FormWindowState.Maximized;
             this.MinimumSize = new System.Drawing.Size(1000, 650);
@@ -34,10 +37,358 @@ namespace DoAnQLTV
             // Chỉ giữ thanh menu ở phía trên.
             this.menuStrip1.Dock = DockStyle.Top;
 
-            // Màu nền vùng nội dung.
-            this.BackColor = System.Drawing.Color.White;
+            ApDungGiaoDien();
         }
 
+
+        // ================= GIAO DIỆN =================
+
+        private readonly Font fontNhom = new Font("Segoe UI", 9F, FontStyle.Bold);
+        private readonly Font fontMoTa = new Font("Segoe UI", 8.5F);
+        private readonly Color mauMucSidebar = ColorTranslator.FromHtml("#DBEAFE");
+        private readonly Color mauNhomSidebar = ColorTranslator.FromHtml("#93C5FD");
+        private readonly Color mauHoverSidebar = ColorTranslator.FromHtml("#2D4A9E");
+        private readonly Color mauNenIcon = ColorTranslator.FromHtml("#DBEAFE");
+        private readonly Color mauHoverThe = ColorTranslator.FromHtml("#F5F9FF");
+
+        private void ApDungGiaoDien()
+        {
+            foreach (Control c in new Control[] { pnlContent, pnlHeader, pnlSidebar })
+                AppTheme.SetDoubleBuffered(c);
+
+            this.AutoScroll = false;
+
+            // ----- Menu trên cùng -----
+            menuStrip1.Renderer = new ToolStripProfessionalRenderer(new MenuColors());
+            menuStrip1.BackColor = Color.White;
+            menuStrip1.ForeColor = AppTheme.TextDark;
+
+            // ----- Thanh bên -----
+            pnlSidebar.BackColor = AppTheme.Primary;
+
+            AppTheme.StyleButton(btnTrangChu, AppTheme.Accent, AppTheme.AccentHover, null, 0);
+            btnTrangChu.Padding = new Padding(14, 0, 0, 0);
+
+            StyleTieuDeNhom(btnQuanLy, "QUẢN LÝ");
+            StyleTieuDeNhom(btnTraCuu, "TRA CỨU");
+            StyleTieuDeNhom(btnMuonTra, "MƯỢN - TRẢ");
+            StyleTieuDeNhom(btnTroGiup, "TRỢ GIÚP");
+            StyleTieuDeNhom(btnHeThong, "HỆ THỐNG");
+
+            foreach (Button b in new Button[]
+            {
+        btnQuanLySach, btnQuanLyTheLoai, btnQuanLyTacGia, btnQuanLyDocGia, btnQuanLyNhanVien,
+        btnTimKiemSach, btnThongTinDocGia,
+        btnLapPhieuMuon, btnTraSach, btnDanhSachPhieuMuon,
+        btnThongTinChuongTrinh, btnHuongDanSuDung,
+        btnDangXuat, btnThoat
+            })
+                StyleMucSidebar(b);
+
+            // Chừa khoảng trống giữa các nhóm
+            foreach (Panel p in new Panel[] { pnlNhomQuanLy, pnlNhomTraCuu, pnlNhomMuonTra, pnlNhomTroGiup, pnlNhomHeThong })
+                p.Height += 12;
+
+            // ----- Thanh tiêu đề -----
+            pnlHeader.BackColor = Color.White;
+            pnlHeader.Paint += (s, e) =>
+            {
+                using (var pen = new Pen(AppTheme.Border))
+                    e.Graphics.DrawLine(pen, 0, pnlHeader.Height - 1, pnlHeader.Width, pnlHeader.Height - 1);
+            };
+
+            lblTieuDeTrang.ForeColor = AppTheme.Primary;
+            foreach (Button b in new Button[] { btnMenu, btnThongBao })
+            {
+                b.FlatStyle = FlatStyle.Flat;
+                b.FlatAppearance.BorderSize = 0;
+                b.FlatAppearance.MouseOverBackColor = AppTheme.AccentLight;
+                b.FlatAppearance.MouseDownBackColor = AppTheme.AccentLight;
+                b.ForeColor = AppTheme.Primary;
+                b.Cursor = Cursors.Hand;
+                b.UseVisualStyleBackColor = false;
+                b.BackColor = Color.White;
+            }
+            picDaiDien.BorderStyle = BorderStyle.None;
+            lblHoTenNguoiDung.ForeColor = AppTheme.TextDark;
+            lblHoTenNguoiDung.Font = AppTheme.Bold;
+            lblChucVuNguoiDung.ForeColor = AppTheme.TextMuted;
+
+            // ----- Vùng nội dung -----
+            pnlContent.BackColor = AppTheme.Background;
+            pnlContent.AutoScroll = true;
+
+            lblLoiChao.ForeColor = AppTheme.Primary;
+            lblMoTaTrangChu.ForeColor = AppTheme.TextMuted;
+            lblCauTrichDan.ForeColor = AppTheme.TextMuted;
+            lblCauTrichDan.TextAlign = ContentAlignment.MiddleRight;
+            lblCauTrichDan.Width = 380;
+            lblThoiGianHienTai.ForeColor = AppTheme.Accent;
+
+            // ----- 4 thẻ thống kê -----
+            StyleTheThongKe(pnlCardSach, lblTieuDeSach, lblSoSach, AppTheme.Accent);
+            StyleTheThongKe(pnlCardDocGia, lblTieuDeDocGia, lblSoDocGia, AppTheme.Success);
+            StyleTheThongKe(pnlCardDangMuon, lblTieuDeDangMuon, lblSoDangMuon, AppTheme.Amber);
+            StyleTheThongKe(pnlCardQuaHan, lblTieuDeQuaHan, lblSoQuaHan, AppTheme.Danger);
+
+            // ----- Biểu đồ -----
+            AppTheme.StyleCard(pnlBieuDoMuonTra);
+            AppTheme.StyleCard(pnlBieuDoTheLoai);
+            StyleTieuDeKhoi(lblTieuDeMuonTra);
+            StyleTieuDeKhoi(lblTieuDeTheLoai);
+
+            // chartTheLoai đang nằm đè lên tiêu đề: đặt lại vị trí giống chartMuonTra
+            chartTheLoai.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            chartTheLoai.Location = new Point(12, 56);
+            chartTheLoai.Size = new Size(
+                pnlBieuDoTheLoai.ClientSize.Width - 24,
+                pnlBieuDoTheLoai.ClientSize.Height - 68);
+
+            // ----- Truy cập nhanh -----
+            AppTheme.StyleCard(pnlThaoTacNhanh);
+            StyleTieuDeKhoi(lblTieuDeTruyCapNhanh);
+
+            StyleTheTruyCap(pnlTheQuanLySach, lblTenQuanLySach, lblMoTaQuanLySach, picQuanLySach, pnlTheQuanLySach_Click);
+            StyleTheTruyCap(pnlTheQuanLyDocGia, lblTenQuanLyDocGia, lblMoTaQuanLyDocGia, picQuanLyDocGia, pnlTheQuanLyDocGia_Click);
+            StyleTheTruyCap(pnlTheQuanLyNhanVien, lblTenQuanLyNhanVien, lblMoTaQuanLyNhanVien, picQuanLyNhanVien, pnlTheQuanLyNhanVien_Click);
+            StyleTheTruyCap(pnlTheLapPhieuMuon, lblTenLapPhieuMuon, lblMoTaLapPhieuMuon, picLapPhieuMuon, pnlTheLapPhieuMuon_Click);
+            StyleTheTruyCap(pnlTheTraSach, lblTenTraSach, lblMoTaTraSach, picTraSach, pnlTheTraSach_Click);
+            StyleTheTruyCap(pnlTheTimKiemSach, lblTenTimKiemSach, lblMoTaTimKiemSach, picTimKiemSach, pnlTheTimKiemSach_Click);
+
+            // ----- Hoạt động gần đây -----
+            AppTheme.StyleCard(pnlHoatDongGanDay);
+            StyleTieuDeKhoi(lblTieuDeHoatDongGanDay);
+            AppTheme.StyleGrid(dgvHoatDongGanDay);
+
+            // ----- Căn lề nội dung -----
+            pnlContent.SizeChanged += (s, e) => CanLeNoiDung();
+            CanLeNoiDung();
+        }
+
+        private void CanLeNoiDung()
+        {
+            const int le = 38;
+            int w = Math.Max(700, pnlContent.ClientSize.Width - 2 * le);
+
+            foreach (Control c in new Control[] { tlpThongKe, tlpBieuDo, pnlThaoTacNhanh, pnlHoatDongGanDay })
+            {
+                c.Left = le;
+                c.Width = w;
+            }
+
+            lblThoiGianHienTai.Left = (pnlContent.ClientSize.Width - lblThoiGianHienTai.Width) / 2;
+            lblCauTrichDan.Left = pnlContent.ClientSize.Width - le - lblCauTrichDan.Width;
+        }
+
+        private void StyleTieuDeNhom(Button b, string text)
+        {
+            b.Text = text;
+            b.FlatStyle = FlatStyle.Flat;
+            b.FlatAppearance.BorderSize = 0;
+            b.FlatAppearance.MouseOverBackColor = AppTheme.Primary;   // tiêu đề nhóm: không đổi màu khi rê chuột
+            b.FlatAppearance.MouseDownBackColor = AppTheme.Primary;
+            b.UseVisualStyleBackColor = false;
+            b.BackColor = AppTheme.Primary;
+            b.ForeColor = mauNhomSidebar;
+            b.Font = fontNhom;
+            b.Cursor = Cursors.Default;
+            b.TabStop = false;
+            b.Padding = new Padding(14, 0, 0, 0);
+        }
+
+        private void StyleMucSidebar(Button b)
+        {
+            b.FlatStyle = FlatStyle.Flat;
+            b.FlatAppearance.BorderSize = 0;
+            b.FlatAppearance.MouseOverBackColor = mauHoverSidebar;
+            b.FlatAppearance.MouseDownBackColor = AppTheme.Accent;
+            b.UseVisualStyleBackColor = false;
+            b.BackColor = AppTheme.Primary;
+            b.ForeColor = mauMucSidebar;
+            b.Font = AppTheme.Base;
+            b.Cursor = Cursors.Hand;
+        }
+
+        private void StyleTieuDeKhoi(Label lbl)
+        {
+            lbl.Font = AppTheme.Heading;
+            lbl.ForeColor = AppTheme.Primary;
+        }
+
+        private void StyleTheThongKe(Panel card, Label tieuDe, Label so, Color mau)
+        {
+            AppTheme.StyleCard(card);
+            tieuDe.Font = AppTheme.Base;
+            tieuDe.ForeColor = AppTheme.TextMuted;
+            so.Font = AppTheme.Number;
+            so.ForeColor = mau;
+
+            // Vạch màu bên trái thẻ
+            card.Paint += (s, e) =>
+            {
+                using (var brush = new SolidBrush(mau))
+                    e.Graphics.FillRectangle(brush, 0, 0, 5, card.Height);
+            };
+        }
+
+        private void StyleTheTruyCap(Panel card, Label ten, Label moTa, PictureBox pic, EventHandler khiBam)
+        {
+            AppTheme.StyleCard(card);
+
+            ten.Font = AppTheme.Bold;
+            ten.ForeColor = AppTheme.TextDark;
+            moTa.Font = fontMoTa;
+            moTa.ForeColor = AppTheme.TextMuted;
+            pic.BackColor = mauNenIcon;
+
+            AppTheme.AddHover(card, Color.White, mauHoverThe);
+
+            // Bấm vào ảnh/chữ trong thẻ cũng mở form (dùng lại đúng hàm đã có)
+            foreach (Control child in card.Controls)
+                child.Click += khiBam;
+        }
+
+        /// <summary>Màu cho menu trên cùng, đồng bộ với AppTheme.</summary>
+        private class MenuColors : ProfessionalColorTable
+        {
+            public MenuColors() { UseSystemColors = false; }
+
+            public override Color MenuItemSelected { get { return AppTheme.AccentLight; } }
+            public override Color MenuItemBorder { get { return AppTheme.AccentLight; } }
+            public override Color MenuItemSelectedGradientBegin { get { return AppTheme.AccentLight; } }
+            public override Color MenuItemSelectedGradientEnd { get { return AppTheme.AccentLight; } }
+            public override Color MenuItemPressedGradientBegin { get { return AppTheme.AccentLight; } }
+            public override Color MenuItemPressedGradientEnd { get { return AppTheme.AccentLight; } }
+            public override Color MenuBorder { get { return AppTheme.Border; } }
+            public override Color ToolStripDropDownBackground { get { return Color.White; } }
+            public override Color ImageMarginGradientBegin { get { return Color.White; } }
+            public override Color ImageMarginGradientMiddle { get { return Color.White; } }
+            public override Color ImageMarginGradientEnd { get { return Color.White; } }
+            public override Color MenuStripGradientBegin { get { return Color.White; } }
+            public override Color MenuStripGradientEnd { get { return Color.White; } }
+            public override Color SeparatorDark { get { return AppTheme.Border; } }
+        }
+
+        // ================= BIỂU ĐỒ =================
+
+        private void VeBieuDoMuonTra()
+        {
+            if (chartMuonTra == null) return;
+
+            chartMuonTra.Series.Clear();
+            chartMuonTra.ChartAreas.Clear();
+            chartMuonTra.Legends.Clear();
+            chartMuonTra.BackColor = Color.White;
+
+            DV.ChartArea area = chartMuonTra.ChartAreas.Add("ChartArea1");
+            DV.Legend legend = chartMuonTra.Legends.Add("Legend1");
+
+            area.BackColor = Color.White;
+            area.AxisX.Interval = 1;
+            area.AxisX.MajorGrid.Enabled = false;
+            area.AxisX.MajorTickMark.Enabled = false;
+            area.AxisX.LineColor = AppTheme.Border;
+            area.AxisX.LabelStyle.Font = new Font("Segoe UI", 9F);
+            area.AxisX.LabelStyle.ForeColor = AppTheme.TextMuted;
+
+            area.AxisY.Minimum = 0;
+            area.AxisY.Maximum = 50;
+            area.AxisY.Interval = 10;
+            area.AxisY.Title = "Số lượt";
+            area.AxisY.TitleFont = new Font("Segoe UI", 9F);
+            area.AxisY.TitleForeColor = AppTheme.TextMuted;
+            area.AxisY.MajorGrid.LineColor = AppTheme.Border;
+            area.AxisY.MajorTickMark.Enabled = false;
+            area.AxisY.LineColor = Color.Transparent;
+            area.AxisY.LabelStyle.Font = new Font("Segoe UI", 9F);
+            area.AxisY.LabelStyle.ForeColor = AppTheme.TextMuted;
+
+            legend.Enabled = true;
+            legend.Docking = DV.Docking.Bottom;
+            legend.Alignment = StringAlignment.Center;
+            legend.Font = new Font("Segoe UI", 9F);
+            legend.ForeColor = AppTheme.TextDark;
+            legend.BackColor = Color.White;
+
+            DV.Series seriesMuon = chartMuonTra.Series.Add("SeriesMuon");
+            DV.Series seriesTra = chartMuonTra.Series.Add("SeriesTra");
+
+            foreach (DV.Series s in new DV.Series[] { seriesMuon, seriesTra })
+            {
+                s.ChartArea = "ChartArea1";
+                s.Legend = "Legend1";
+                s.ChartType = DV.SeriesChartType.Column;
+                s["PointWidth"] = "0.55";
+            }
+
+            seriesMuon.LegendText = "Số lượt mượn";
+            seriesMuon.Color = AppTheme.ChartPalette[0];
+            seriesTra.LegendText = "Số lượt trả";
+            seriesTra.Color = AppTheme.ChartPalette[1];
+
+            // Dữ liệu minh họa trong 6 tháng.
+            int[] soLuotMuon = { 24, 28, 28, 34, 37, 44 };
+            int[] soLuotTra = { 20, 26, 23, 29, 34, 42 };
+
+            for (int i = 0; i < 6; i++)
+            {
+                string thang = "Tháng " + (i + 1);
+                seriesMuon.Points.AddXY(thang, soLuotMuon[i]);
+                seriesTra.Points.AddXY(thang, soLuotTra[i]);
+            }
+
+            chartMuonTra.Visible = true;
+            chartMuonTra.Invalidate();
+        }
+
+        private void VeBieuDoTheLoai()
+        {
+            if (chartTheLoai == null) return;
+
+            chartTheLoai.Series.Clear();
+            chartTheLoai.ChartAreas.Clear();
+            chartTheLoai.Legends.Clear();
+            chartTheLoai.BackColor = Color.White;
+
+            DV.ChartArea area = chartTheLoai.ChartAreas.Add("ChartArea1");
+            DV.Legend legend = chartTheLoai.Legends.Add("Legend1");
+
+            area.BackColor = Color.White;
+
+            legend.Enabled = true;
+            legend.Docking = DV.Docking.Right;
+            legend.Alignment = StringAlignment.Center;
+            legend.Font = new Font("Segoe UI", 10F);
+            legend.ForeColor = AppTheme.TextDark;
+            legend.BackColor = Color.White;
+
+            DV.Series s = chartTheLoai.Series.Add("TheLoai");
+            s.ChartArea = "ChartArea1";
+            s.Legend = "Legend1";
+            s.ChartType = DV.SeriesChartType.Doughnut;
+            s["DoughnutRadius"] = "55";          // lỗ giữa to hơn cho thanh thoát
+            s.IsValueShownAsLabel = true;
+            s.Label = "#PERCENT{P0}";
+            s.LegendText = "#VALX";
+            s.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            s.LabelForeColor = Color.White;
+            s.BorderWidth = 2;
+            s.BorderColor = Color.White;
+
+            // Dữ liệu minh họa.
+            s.Points.AddXY("Văn học", 28);
+            s.Points.AddXY("Khoa học", 18);
+            s.Points.AddXY("Lịch sử", 15);
+            s.Points.AddXY("Kỹ thuật", 12);
+            s.Points.AddXY("Thiếu nhi", 10);
+            s.Points.AddXY("Khác", 17);
+
+            for (int i = 0; i < s.Points.Count; i++)
+                s.Points[i].Color = AppTheme.ChartPalette[i % AppTheme.ChartPalette.Length];
+
+            chartTheLoai.Visible = true;
+            chartTheLoai.Invalidate();
+        }
 
         private void CapNhatThongKe()
         {
@@ -184,162 +535,8 @@ namespace DoAnQLTV
             // 4. BIỂU ĐỒ MƯỢN - TRẢ SÁCH
             // ==========================================
 
-            if (chartMuonTra != null)
-            {
-                // Xóa Series cũ để tránh lỗi không tìm thấy tên Series.
-                chartMuonTra.Series.Clear();
-
-                // Đảm bảo biểu đồ có ít nhất một ChartArea.
-                if (chartMuonTra.ChartAreas.Count == 0)
-                {
-                    chartMuonTra.ChartAreas.Add("ChartArea1");
-                }
-
-                // Đảm bảo biểu đồ có ít nhất một Legend.
-                if (chartMuonTra.Legends.Count == 0)
-                {
-                    chartMuonTra.Legends.Add("Legend1");
-                }
-
-                // Tạo hai nhóm dữ liệu mới.
-                var seriesMuon =
-                    chartMuonTra.Series.Add("SeriesMuon");
-
-                var seriesTra =
-                    chartMuonTra.Series.Add("SeriesTra");
-
-                // Cấu hình Series mượn.
-                seriesMuon.LegendText = "Số lượt mượn";
-                seriesMuon.Color = Color.RoyalBlue;
-                seriesMuon.ChartType =
-                    System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Column;
-
-                // Cấu hình Series trả.
-                seriesTra.LegendText = "Số lượt trả";
-                seriesTra.Color = Color.SeaGreen;
-                seriesTra.ChartType =
-                    System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Column;
-
-                // Dữ liệu minh họa trong 6 tháng.
-                int[] soLuotMuon = { 24, 28, 28, 34, 37, 44 };
-                int[] soLuotTra = { 20, 26, 23, 29, 34, 42 };
-
-                for (int i = 0; i < 6; i++)
-                {
-                    string thang = "Tháng " + (i + 1);
-
-                    seriesMuon.Points.AddXY(
-                        thang, soLuotMuon[i]);
-
-                    seriesTra.Points.AddXY(
-                        thang, soLuotTra[i]);
-                }
-
-                // Cấu hình trục biểu đồ.
-                var areaMuonTra = chartMuonTra.ChartAreas[0];
-
-                areaMuonTra.AxisX.Interval = 1;
-                areaMuonTra.AxisX.MajorGrid.Enabled = false;
-                areaMuonTra.AxisX.LabelStyle.Angle = 0;
-
-                areaMuonTra.AxisY.Minimum = 0;
-                areaMuonTra.AxisY.Maximum = 50;
-                areaMuonTra.AxisY.Interval = 10;
-                areaMuonTra.AxisY.Title = "Số lượt";
-                areaMuonTra.AxisY.MajorGrid.Enabled = true;
-
-                // Cấu hình chú thích.
-                var legendMuonTra = chartMuonTra.Legends[0];
-
-                legendMuonTra.Enabled = true;
-                legendMuonTra.Docking =
-                    System.Windows.Forms.DataVisualization.Charting.Docking.Right;
-
-                legendMuonTra.Alignment =
-                    System.Drawing.StringAlignment.Center;
-
-                legendMuonTra.Font =
-                    new Font("Segoe UI", 9F, FontStyle.Regular);
-
-                // Tự động căn chỉnh vùng biểu đồ.
-                areaMuonTra.Position.Auto = true;
-                areaMuonTra.InnerPlotPosition.Auto = true;
-
-                chartMuonTra.Visible = true;
-                chartMuonTra.Invalidate();
-            }
-
-            // ==========================================
-            // 5. BIỂU ĐỒ THỂ LOẠI SÁCH
-            // ==========================================
-
-            if (chartTheLoai != null)
-            {
-                // Xóa dữ liệu biểu đồ cũ.
-                chartTheLoai.Series.Clear();
-
-                // Đảm bảo có vùng hiển thị.
-                if (chartTheLoai.ChartAreas.Count == 0)
-                {
-                    chartTheLoai.ChartAreas.Add("ChartArea1");
-                }
-
-                // Đảm bảo có chú thích.
-                if (chartTheLoai.Legends.Count == 0)
-                {
-                    chartTheLoai.Legends.Add("Legend1");
-                }
-
-                // Tạo Series mới.
-                var seriesTheLoai =
-                    chartTheLoai.Series.Add("TheLoai");
-
-                seriesTheLoai.ChartType =
-                    System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Doughnut;
-
-                seriesTheLoai.IsValueShownAsLabel = true;
-                seriesTheLoai.Label = "#PERCENT{P0}";
-                seriesTheLoai.LegendText = "#VALX";
-
-                // Đường viền trắng giữa các phần biểu đồ.
-                seriesTheLoai.BorderWidth = 1;
-                seriesTheLoai.BorderColor = Color.White;
-
-                // Dữ liệu minh họa.
-                seriesTheLoai.Points.AddXY("Văn học", 28);
-                seriesTheLoai.Points.AddXY("Khoa học", 18);
-                seriesTheLoai.Points.AddXY("Lịch sử", 15);
-                seriesTheLoai.Points.AddXY("Kỹ thuật", 12);
-                seriesTheLoai.Points.AddXY("Thiếu nhi", 10);
-                seriesTheLoai.Points.AddXY("Khác", 17);
-
-                // Màu sắc từng thể loại.
-                seriesTheLoai.Points[0].Color = Color.RoyalBlue;
-                seriesTheLoai.Points[1].Color = Color.MediumSeaGreen;
-                seriesTheLoai.Points[2].Color = Color.Orange;
-                seriesTheLoai.Points[3].Color = Color.MediumPurple;
-                seriesTheLoai.Points[4].Color = Color.Gold;
-                seriesTheLoai.Points[5].Color = Color.LightSteelBlue;
-
-                // Cấu hình chú thích bên phải.
-                var legendTheLoai = chartTheLoai.Legends[0];
-
-                legendTheLoai.Enabled = true;
-                legendTheLoai.Docking =
-                    System.Windows.Forms.DataVisualization.Charting.Docking.Right;
-
-                legendTheLoai.Alignment =
-                    System.Drawing.StringAlignment.Center;
-
-                // Căn chỉnh vùng hiển thị.
-                var areaTheLoai = chartTheLoai.ChartAreas[0];
-
-                areaTheLoai.Position.Auto = true;
-                areaTheLoai.InnerPlotPosition.Auto = true;
-
-                chartTheLoai.Visible = true;
-                chartTheLoai.Invalidate();
-            }
+            VeBieuDoMuonTra();
+            VeBieuDoTheLoai();
         }
 
 
