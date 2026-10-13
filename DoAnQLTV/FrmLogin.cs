@@ -15,7 +15,21 @@ namespace DoAnQLTV
         public FrmLogin()
         {
             InitializeComponent();
+
+            AppTheme.ApplyForm(this);
+            ApDungGiaoDien();
         }
+
+        private void ApDungGiaoDien()
+        {
+            AppTheme.StyleCard(pnlLogin);
+
+            AppTheme.StyleTextBox(txtUsername);
+            AppTheme.StyleTextBox(txtPassword);
+
+            AppTheme.StylePrimaryButton(btnLogin);
+        }
+
 
         private void btnLogin_Click(object sender, EventArgs e)
         {

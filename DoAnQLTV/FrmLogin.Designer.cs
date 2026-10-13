@@ -38,142 +38,166 @@
             this.lblCopyright = new System.Windows.Forms.Label();
             this.lblUsername = new System.Windows.Forms.Label();
             this.lblPassword = new System.Windows.Forms.Label();
+            this.pnlLogin = new System.Windows.Forms.Panel();
+            this.pnlLogin.SuspendLayout();
             this.SuspendLayout();
+            // 
+            // pnlLogin
+            // 
+            this.pnlLogin.BackColor = System.Drawing.Color.White;
+            this.pnlLogin.Controls.Add(this.lblIcon);
+            this.pnlLogin.Controls.Add(this.lblHutech);
+            this.pnlLogin.Controls.Add(this.lblTieuDe);
+            this.pnlLogin.Controls.Add(this.lblUsername);
+            this.pnlLogin.Controls.Add(this.txtUsername);
+            this.pnlLogin.Controls.Add(this.lblPassword);
+            this.pnlLogin.Controls.Add(this.txtPassword);
+            this.pnlLogin.Controls.Add(this.btnLogin);
+            this.pnlLogin.Location = new System.Drawing.Point(40, 36);
+            this.pnlLogin.Name = "pnlLogin";
+            this.pnlLogin.Size = new System.Drawing.Size(400, 472);
+            this.pnlLogin.TabIndex = 0;
+            // 
+            // lblIcon
+            // 
+            this.lblIcon.BackColor = System.Drawing.Color.Transparent;
+            this.lblIcon.Font = new System.Drawing.Font("Segoe UI Symbol", 40F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblIcon.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(37)))), ((int)(((byte)(99)))), ((int)(((byte)(235)))));
+            this.lblIcon.Location = new System.Drawing.Point(0, 24);
+            this.lblIcon.Name = "lblIcon";
+            this.lblIcon.Size = new System.Drawing.Size(400, 80);
+            this.lblIcon.TabIndex = 0;
+            this.lblIcon.Text = "📖";
+            this.lblIcon.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // lblHutech
             // 
-            this.lblHutech.Font = new System.Drawing.Font("Segoe UI", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblHutech.ForeColor = System.Drawing.Color.DarkBlue;
-            this.lblHutech.Location = new System.Drawing.Point(100, 50);
+            this.lblHutech.BackColor = System.Drawing.Color.Transparent;
+            this.lblHutech.Font = new System.Drawing.Font("Segoe UI", 22F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblHutech.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(58)))), ((int)(((byte)(138)))));
+            this.lblHutech.Location = new System.Drawing.Point(0, 108);
             this.lblHutech.Name = "lblHutech";
-            this.lblHutech.Size = new System.Drawing.Size(300, 55);
-            this.lblHutech.TabIndex = 0;
+            this.lblHutech.Size = new System.Drawing.Size(400, 46);
+            this.lblHutech.TabIndex = 1;
             this.lblHutech.Text = "HUTECH";
             this.lblHutech.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // lblTieuDe
             // 
-            this.lblTieuDe.Font = new System.Drawing.Font("Segoe UI", 18.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblTieuDe.ForeColor = System.Drawing.Color.DarkBlue;
-            this.lblTieuDe.Location = new System.Drawing.Point(75, 110);
+            this.lblTieuDe.BackColor = System.Drawing.Color.Transparent;
+            this.lblTieuDe.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblTieuDe.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(107)))), ((int)(((byte)(114)))), ((int)(((byte)(128)))));
+            this.lblTieuDe.Location = new System.Drawing.Point(0, 154);
             this.lblTieuDe.Name = "lblTieuDe";
-            this.lblTieuDe.Size = new System.Drawing.Size(350, 50);
-            this.lblTieuDe.TabIndex = 1;
+            this.lblTieuDe.Size = new System.Drawing.Size(400, 28);
+            this.lblTieuDe.TabIndex = 2;
             this.lblTieuDe.Text = "QUẢN LÝ THƯ VIỆN";
             this.lblTieuDe.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // lblIcon
+            // lblUsername
             // 
-            this.lblIcon.Font = new System.Drawing.Font("Segoe UI Symbol", 54.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblIcon.ForeColor = System.Drawing.Color.DarkBlue;
-            this.lblIcon.Location = new System.Drawing.Point(175, 165);
-            this.lblIcon.Name = "lblIcon";
-            this.lblIcon.Size = new System.Drawing.Size(150, 90);
-            this.lblIcon.TabIndex = 2;
-            this.lblIcon.Text = "📖";
-            this.lblIcon.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.lblUsername.AutoSize = true;
+            this.lblUsername.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblUsername.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(58)))), ((int)(((byte)(138)))));
+            this.lblUsername.Location = new System.Drawing.Point(40, 214);
+            this.lblUsername.Name = "lblUsername";
+            this.lblUsername.Size = new System.Drawing.Size(99, 19);
+            this.lblUsername.TabIndex = 3;
+            this.lblUsername.Text = "Tên đăng nhập";
             // 
             // txtUsername
             // 
+            this.txtUsername.BackColor = System.Drawing.Color.White;
             this.txtUsername.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.txtUsername.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtUsername.Location = new System.Drawing.Point(105, 298);
+            this.txtUsername.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtUsername.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(31)))), ((int)(((byte)(41)))), ((int)(((byte)(55)))));
+            this.txtUsername.Location = new System.Drawing.Point(40, 240);
             this.txtUsername.Name = "txtUsername";
-            this.txtUsername.Size = new System.Drawing.Size(300, 27);
-            this.txtUsername.TabIndex = 3;
+            this.txtUsername.Size = new System.Drawing.Size(320, 27);
+            this.txtUsername.TabIndex = 0;
+            // 
+            // lblPassword
+            // 
+            this.lblPassword.AutoSize = true;
+            this.lblPassword.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblPassword.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(58)))), ((int)(((byte)(138)))));
+            this.lblPassword.Location = new System.Drawing.Point(40, 294);
+            this.lblPassword.Name = "lblPassword";
+            this.lblPassword.Size = new System.Drawing.Size(66, 19);
+            this.lblPassword.TabIndex = 5;
+            this.lblPassword.Text = "Mật khẩu";
             // 
             // txtPassword
             // 
             this.txtPassword.BackColor = System.Drawing.Color.White;
             this.txtPassword.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.txtPassword.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtPassword.Location = new System.Drawing.Point(105, 373);
+            this.txtPassword.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtPassword.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(31)))), ((int)(((byte)(41)))), ((int)(((byte)(55)))));
+            this.txtPassword.Location = new System.Drawing.Point(40, 320);
             this.txtPassword.Name = "txtPassword";
-            this.txtPassword.Size = new System.Drawing.Size(300, 27);
-            this.txtPassword.TabIndex = 4;
+            this.txtPassword.Size = new System.Drawing.Size(320, 27);
+            this.txtPassword.TabIndex = 1;
             this.txtPassword.UseSystemPasswordChar = true;
             this.txtPassword.WordWrap = false;
             // 
             // btnLogin
             // 
-            this.btnLogin.BackColor = System.Drawing.Color.Blue;
+            this.btnLogin.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(37)))), ((int)(((byte)(99)))), ((int)(((byte)(235)))));
+            this.btnLogin.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnLogin.FlatAppearance.BorderSize = 0;
             this.btnLogin.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnLogin.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnLogin.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnLogin.ForeColor = System.Drawing.Color.White;
-            this.btnLogin.Location = new System.Drawing.Point(105, 430);
+            this.btnLogin.Location = new System.Drawing.Point(40, 388);
             this.btnLogin.Name = "btnLogin";
-            this.btnLogin.Size = new System.Drawing.Size(300, 40);
-            this.btnLogin.TabIndex = 5;
+            this.btnLogin.Size = new System.Drawing.Size(320, 44);
+            this.btnLogin.TabIndex = 2;
             this.btnLogin.Text = "Đăng nhập";
             this.btnLogin.UseVisualStyleBackColor = false;
             this.btnLogin.Click += new System.EventHandler(this.btnLogin_Click);
             // 
             // lblFooter
             // 
+            this.lblFooter.BackColor = System.Drawing.Color.Transparent;
             this.lblFooter.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblFooter.ForeColor = System.Drawing.Color.Gray;
-            this.lblFooter.Location = new System.Drawing.Point(100, 580);
+            this.lblFooter.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(107)))), ((int)(((byte)(114)))), ((int)(((byte)(128)))));
+            this.lblFooter.Location = new System.Drawing.Point(40, 526);
             this.lblFooter.Name = "lblFooter";
-            this.lblFooter.Size = new System.Drawing.Size(300, 25);
-            this.lblFooter.TabIndex = 6;
+            this.lblFooter.Size = new System.Drawing.Size(400, 22);
+            this.lblFooter.TabIndex = 1;
             this.lblFooter.Text = "Quản lý thư viện - HUTECH";
             this.lblFooter.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // lblCopyright
             // 
+            this.lblCopyright.BackColor = System.Drawing.Color.Transparent;
             this.lblCopyright.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblCopyright.ForeColor = System.Drawing.Color.Gray;
-            this.lblCopyright.Location = new System.Drawing.Point(100, 605);
+            this.lblCopyright.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(107)))), ((int)(((byte)(114)))), ((int)(((byte)(128)))));
+            this.lblCopyright.Location = new System.Drawing.Point(40, 548);
             this.lblCopyright.Name = "lblCopyright";
-            this.lblCopyright.Size = new System.Drawing.Size(300, 25);
-            this.lblCopyright.TabIndex = 7;
+            this.lblCopyright.Size = new System.Drawing.Size(400, 22);
+            this.lblCopyright.TabIndex = 2;
             this.lblCopyright.Text = "© 2026";
             this.lblCopyright.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // lblUsername
-            // 
-            this.lblUsername.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblUsername.ForeColor = System.Drawing.Color.Black;
-            this.lblUsername.Location = new System.Drawing.Point(105, 275);
-            this.lblUsername.Name = "lblUsername";
-            this.lblUsername.Size = new System.Drawing.Size(100, 23);
-            this.lblUsername.TabIndex = 8;
-            this.lblUsername.Text = "Tên đăng nhập";
-            // 
-            // lblPassword
-            // 
-            this.lblPassword.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblPassword.ForeColor = System.Drawing.Color.Black;
-            this.lblPassword.Location = new System.Drawing.Point(105, 350);
-            this.lblPassword.Name = "lblPassword";
-            this.lblPassword.Size = new System.Drawing.Size(100, 23);
-            this.lblPassword.TabIndex = 9;
-            this.lblPassword.Text = "Mật khẩu";
-            // 
             // FrmLogin
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(484, 630);
-            this.Controls.Add(this.lblPassword);
-            this.Controls.Add(this.lblUsername);
+            this.AcceptButton = this.btnLogin;
+            this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
+            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(243)))), ((int)(((byte)(246)))), ((int)(((byte)(251)))));
+            this.ClientSize = new System.Drawing.Size(480, 590);
             this.Controls.Add(this.lblCopyright);
             this.Controls.Add(this.lblFooter);
-            this.Controls.Add(this.btnLogin);
-            this.Controls.Add(this.txtPassword);
-            this.Controls.Add(this.txtUsername);
-            this.Controls.Add(this.lblIcon);
-            this.Controls.Add(this.lblTieuDe);
-            this.Controls.Add(this.lblHutech);
-            this.ForeColor = System.Drawing.Color.Blue;
+            this.Controls.Add(this.pnlLogin);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
             this.Name = "FrmLogin";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Đăng nhập";
+            this.pnlLogin.ResumeLayout(false);
+            this.pnlLogin.PerformLayout();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
@@ -189,6 +213,6 @@
         private System.Windows.Forms.Label lblCopyright;
         private System.Windows.Forms.Label lblUsername;
         private System.Windows.Forms.Label lblPassword;
+        private System.Windows.Forms.Panel pnlLogin;
     }
 }
-
