@@ -9,11 +9,16 @@ namespace DoAnQLTV
     {
         private const string DinhDangNgay = "dd/MM/yyyy";
 
+        // Hai nút tạo bằng code (không sửa Designer)
+        private Button btnXuatExcel;
+        private Button btnInQuaHan;
+
         public FrmDanhSachPhieuMuon()
         {
             InitializeComponent();
 
             AppTheme.ApplyForm(this);
+            ThemNutBaoCao();
             ApDungGiaoDien();
             ThemCotTrangThai();
 
@@ -21,6 +26,29 @@ namespace DoAnQLTV
         }
 
         // ================= GIAO DIỆN =================
+
+        /// <summary>Thu ô từ khóa lại cho có chỗ, rồi thêm 2 nút báo cáo bên phải.</summary>
+        private void ThemNutBaoCao()
+        {
+            txtTuKhoa.Width = 280;
+            btnTimKiem.SetBounds(405, 18, 100, 40);
+            btnLamMoi.SetBounds(513, 18, 100, 40);
+
+            btnXuatExcel = new Button();
+            btnXuatExcel.Name = "btnXuatExcel";
+            btnXuatExcel.Text = "Xuất Excel quá hạn";
+            btnXuatExcel.SetBounds(621, 18, 170, 40);
+            btnXuatExcel.Click += btnXuatExcel_Click;
+
+            btnInQuaHan = new Button();
+            btnInQuaHan.Name = "btnInQuaHan";
+            btnInQuaHan.Text = "In quá hạn";
+            btnInQuaHan.SetBounds(799, 18, 110, 40);
+            btnInQuaHan.Click += btnInQuaHan_Click;
+
+            pnlThongTin.Controls.Add(btnXuatExcel);
+            pnlThongTin.Controls.Add(btnInQuaHan);
+        }
 
         private void ApDungGiaoDien()
         {
@@ -36,19 +64,33 @@ namespace DoAnQLTV
                 ColorTranslator.FromHtml("#E2E8F0"),
                 ColorTranslator.FromHtml("#CBD5E1"),
                 AppTheme.TextDark);
+
+            AppTheme.StylePrimaryButton(btnXuatExcel);
+            AppTheme.StyleOutlineButton(btnInQuaHan);
         }
 
-        /// <summary>Thêm cột "Trạng thái" bằng code, không cần sửa Designer.</summary>
+        /// <summary>Thêm cột "Trạng thái" và "Tiền phạt" bằng code, không cần sửa Designer.</summary>
         private void ThemCotTrangThai()
         {
-            if (dgvPhieuMuon.Columns.Contains("colTrangThai")) return;
+            if (!dgvPhieuMuon.Columns.Contains("colTrangThai"))
+            {
+                DataGridViewTextBoxColumn col = new DataGridViewTextBoxColumn();
+                col.Name = "colTrangThai";
+                col.HeaderText = "Trạng thái";
+                col.FillWeight = 80F;
+                col.ReadOnly = true;
+                dgvPhieuMuon.Columns.Add(col);
+            }
 
-            DataGridViewTextBoxColumn col = new DataGridViewTextBoxColumn();
-            col.Name = "colTrangThai";
-            col.HeaderText = "Trạng thái";
-            col.FillWeight = 80F;
-            col.ReadOnly = true;
-            dgvPhieuMuon.Columns.Add(col);
+            if (!dgvPhieuMuon.Columns.Contains("colTienPhat"))
+            {
+                DataGridViewTextBoxColumn col = new DataGridViewTextBoxColumn();
+                col.Name = "colTienPhat";
+                col.HeaderText = "Tiền phạt";
+                col.FillWeight = 90F;
+                col.ReadOnly = true;
+                dgvPhieuMuon.Columns.Add(col);
+            }
         }
 
         // ================= NẠP DỮ LIỆU =================
@@ -63,7 +105,8 @@ namespace DoAnQLTV
                        pm.NgayMuon,
                        pm.HanTra,
                        s.MaSach + ' - ' + s.TenSach AS Sach,
-                       pm.NgayTra
+                       pm.NgayTra,
+                       pm.TienPhat
                 FROM PhieuMuon pm
                 INNER JOIN DocGia dg ON pm.MaDocGia = dg.MaDocGia
                 INNER JOIN NhanVien nv ON pm.MaNhanVien = nv.MaNhanVien
@@ -102,16 +145,27 @@ namespace DoAnQLTV
                 DateTime hanTra = Convert.ToDateTime(r["HanTra"]).Date;
 
                 string trangThai;
+                string tienPhat = "";
                 Color mau;
+
                 if (r["NgayTra"] != DBNull.Value)
                 {
+                    DateTime ngayTra = Convert.ToDateTime(r["NgayTra"]).Date;
                     trangThai = "Đã trả";
                     mau = AppTheme.Success;
+
+                    // Phiếu trả trước khi có tính năng phạt thì TienPhat = NULL -> tính lại từ ngày tháng
+                    decimal phat = r["TienPhat"] == DBNull.Value
+                        ? QuyDinh.TinhTienPhat(hanTra, ngayTra)
+                        : Convert.ToDecimal(r["TienPhat"]);
+                    if (phat > 0) tienPhat = QuyDinh.DinhDangTien(phat);
                 }
                 else if (hanTra < DateTime.Today)
                 {
-                    trangThai = "Quá hạn " + (DateTime.Today - hanTra).Days + " ngày";
+                    int soNgay = (DateTime.Today - hanTra).Days;
+                    trangThai = "Quá hạn " + soNgay + " ngày";
                     mau = AppTheme.Danger;
+                    tienPhat = QuyDinh.DinhDangTien(soNgay * QuyDinh.MucPhatMoiNgay) + " (tạm tính)";
                 }
                 else
                 {
@@ -126,12 +180,21 @@ namespace DoAnQLTV
                     Convert.ToDateTime(r["NgayMuon"]).ToString(DinhDangNgay),
                     hanTra.ToString(DinhDangNgay),
                     r["Sach"],
-                    trangThai);
+                    trangThai,
+                    tienPhat);
 
                 DataGridViewCell o = dgvPhieuMuon.Rows[idx].Cells["colTrangThai"];
                 o.Style.ForeColor = mau;
                 o.Style.SelectionForeColor = mau;
                 o.Style.Font = AppTheme.Bold;
+
+                if (tienPhat != "")
+                {
+                    DataGridViewCell p = dgvPhieuMuon.Rows[idx].Cells["colTienPhat"];
+                    p.Style.ForeColor = AppTheme.Danger;
+                    p.Style.SelectionForeColor = AppTheme.Danger;
+                    p.Style.Font = AppTheme.Bold;
+                }
             }
 
             dgvPhieuMuon.ClearSelection();
@@ -178,6 +241,32 @@ namespace DoAnQLTV
 
             DataGridViewRow row = dgvPhieuMuon.Rows[e.RowIndex];
             txtTuKhoa.Text = row.Cells["colMaPhieu"].Value?.ToString() ?? "";
+        }
+
+        // ================= BÁO CÁO PHIẾU QUÁ HẠN =================
+
+        private void btnXuatExcel_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                BaoCao.XuatExcelQuaHan(this);
+            }
+            catch (Exception ex)
+            {
+                AppTheme.Error("Không thể xuất báo cáo.\n\n" + ex.Message);
+            }
+        }
+
+        private void btnInQuaHan_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                BaoCao.InQuaHan();
+            }
+            catch (Exception ex)
+            {
+                AppTheme.Error("Không thể in báo cáo.\n\n" + ex.Message);
+            }
         }
     }
 }

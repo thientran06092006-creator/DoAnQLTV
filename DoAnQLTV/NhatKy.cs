@@ -12,6 +12,7 @@ namespace DoAnQLTV
     {
         /// <summary>Tên nhân viên đang đăng nhập. FrmLogin gán sau khi đăng nhập thành công.</summary>
         public static string NguoiThucHien = "";
+        public static string MaNhanVien = "";
 
         /// <summary>
         /// Tạo bảng NhatKyHoatDong nếu chưa có (gọi 1 lần khi khởi động trong Program.cs).

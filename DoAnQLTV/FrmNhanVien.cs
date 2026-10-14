@@ -17,8 +17,52 @@ namespace DoAnQLTV
             InitializeComponent();
             AppTheme.ApplyForm(this);
             ApDungGiaoDien();
+            ThemNutMatKhau();
             LoadNhanVien();
         }
+
+        private Button btnDatMatKhau;
+
+        private void ThemNutMatKhau()
+        {
+            btnDatMatKhau = new Button();
+            btnDatMatKhau.Name = "btnDatMatKhau";
+            btnDatMatKhau.Text = "Đặt mật khẩu";
+            btnDatMatKhau.SetBounds(684, 132, 120, 40);
+            AppTheme.StyleOutlineButton(btnDatMatKhau);
+            btnDatMatKhau.Click += btnDatMatKhau_Click;
+            pnlThongTin.Controls.Add(btnDatMatKhau);
+        }
+
+        private void btnDatMatKhau_Click(object sender, EventArgs e)
+        {
+            if (maDangChon == null)
+            {
+                AppTheme.Warning("Vui lòng chọn nhân viên cần đặt mật khẩu.");
+                return;
+            }
+
+            string mk = TaiKhoan.HoiMatKhauMoi("Đặt mật khẩu cho nhân viên " + maDangChon);
+            if (mk == null) return;
+
+            if (mk.Length < 6)
+            {
+                AppTheme.Warning("Mật khẩu phải có ít nhất 6 ký tự.");
+                return;
+            }
+
+            try
+            {
+                TaiKhoan.DatMatKhau(maDangChon, mk);
+                NhatKy.Ghi("Đổi mật khẩu", "Đặt mật khẩu cho nhân viên mã " + maDangChon);
+                AppTheme.Info("Đã đặt mật khẩu mới.");
+            }
+            catch (Exception ex)
+            {
+                AppTheme.Error("Không thể đặt mật khẩu.\n\n" + ex.Message);
+            }
+        }
+
 
         // ================= GIAO DIỆN =================
 
@@ -43,6 +87,9 @@ namespace DoAnQLTV
                 ColorTranslator.FromHtml("#CBD5E1"),
                 AppTheme.TextDark);
         }
+
+
+
 
         // ================= NẠP DỮ LIỆU =================
 
@@ -187,14 +234,15 @@ namespace DoAnQLTV
             try
             {
                 DbConnection.ExecuteNonQuery(@"
-                    INSERT INTO NhanVien (MaNhanVien, TenNhanVien, SoDienThoai, DiaChi)
-                    VALUES (@MaNhanVien, @TenNhanVien, @SoDienThoai, @DiaChi)",
-                    DbConnection.Param("@MaNhanVien", txtMaNhanVien.Text.Trim()),
-                    DbConnection.Param("@TenNhanVien", txtTenNhanVien.Text.Trim()),
-                    DbConnection.Param("@SoDienThoai", txtSoDienThoai.Text.Trim()),
-                    DbConnection.Param("@DiaChi", txtDiaChi.Text.Trim()));
+    INSERT INTO NhanVien (MaNhanVien, TenNhanVien, SoDienThoai, DiaChi, MatKhau)
+    VALUES (@MaNhanVien, @TenNhanVien, @SoDienThoai, @DiaChi, @MatKhau)",
+    DbConnection.Param("@MaNhanVien", txtMaNhanVien.Text.Trim()),
+    DbConnection.Param("@TenNhanVien", txtTenNhanVien.Text.Trim()),
+    DbConnection.Param("@SoDienThoai", txtSoDienThoai.Text.Trim()),
+    DbConnection.Param("@DiaChi", txtDiaChi.Text.Trim()),
+    DbConnection.Param("@MatKhau", TaiKhoan.BamMatKhau(txtMaNhanVien.Text.Trim(), QuyDinh.MatKhauMacDinh)));
 
-                AppTheme.Info("Thêm nhân viên thành công!");
+                AppTheme.Info("Thêm nhân viên thành công!\nMật khẩu mặc định: " + QuyDinh.MatKhauMacDinh);
                 LoadNhanVien();
                 XoaForm();
             }

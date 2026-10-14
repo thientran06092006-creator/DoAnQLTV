@@ -201,13 +201,11 @@ namespace DoAnQLTV
 
             try
             {
-                // Lấy thông tin phiếu trực tiếp từ CSDL (không tin các ô trên form,
-                // vì người dùng có thể gõ mã phiếu mà không bấm chọn dòng).
                 DataTable dt = DbConnection.ExecuteQuery(@"
-                    SELECT pm.MaDocGia, s.TenSach, pm.NgayMuon, pm.HanTra
-                    FROM PhieuMuon pm
-                    INNER JOIN Sach s ON pm.MaSach = s.MaSach
-                    WHERE pm.MaPhieu = @MaPhieu AND pm.NgayTra IS NULL",
+            SELECT pm.MaDocGia, s.TenSach, pm.NgayMuon, pm.HanTra
+            FROM PhieuMuon pm
+            INNER JOIN Sach s ON pm.MaSach = s.MaSach
+            WHERE pm.MaPhieu = @MaPhieu AND pm.NgayTra IS NULL",
                     DbConnection.Param("@MaPhieu", maPhieu));
 
                 if (dt.Rows.Count == 0)
@@ -230,15 +228,24 @@ namespace DoAnQLTV
                     return;
                 }
 
-                if (!AppTheme.Confirm("Xác nhận trả sách \"" + tenSach + "\" cho phiếu " + maPhieu + "?"))
+                int soNgayTre = QuyDinh.SoNgayTre(hanTra, ngayTra);
+                decimal tienPhat = QuyDinh.TinhTienPhat(hanTra, ngayTra);
+
+                string cauHoi = "Xác nhận trả sách \"" + tenSach + "\" cho phiếu " + maPhieu + "?";
+                if (soNgayTre > 0)
+                    cauHoi += "\n\nTrả muộn " + soNgayTre + " ngày.\nTiền phạt: " + QuyDinh.DinhDangTien(tienPhat) +
+                              " (" + QuyDinh.DinhDangTien(QuyDinh.MucPhatMoiNgay) + "/ngày).";
+                if (!AppTheme.Confirm(cauHoi))
                     return;
 
                 int soDong = DbConnection.ExecuteNonQuery(@"
-                    UPDATE PhieuMuon
-                    SET NgayTra = @NgayTra
-                    WHERE MaPhieu = @MaPhieu
-                      AND NgayTra IS NULL",
+            UPDATE PhieuMuon
+            SET NgayTra = @NgayTra,
+                TienPhat = @TienPhat
+            WHERE MaPhieu = @MaPhieu
+              AND NgayTra IS NULL",
                     DbConnection.Param("@NgayTra", ngayTra),
+                    DbConnection.Param("@TienPhat", tienPhat),
                     DbConnection.Param("@MaPhieu", maPhieu));
 
                 if (soDong == 0)
@@ -248,11 +255,12 @@ namespace DoAnQLTV
                     return;
                 }
 
-                NhatKy.Ghi("Trả sách", "Trả sách \"" + tenSach + "\" - Mã DG: " + maDocGia);
+                NhatKy.Ghi("Trả sách", "Trả sách \"" + tenSach + "\" - Mã DG: " + maDocGia +
+                    (tienPhat > 0 ? " - Phạt: " + QuyDinh.DinhDangTien(tienPhat) : ""));
 
-                int soNgayTre = (ngayTra - hanTra).Days;
                 if (soNgayTre > 0)
-                    AppTheme.Warning("Trả sách thành công.\n\nPhiếu này trả muộn " + soNgayTre + " ngày so với hạn trả.");
+                    AppTheme.Warning("Trả sách thành công.\n\nTrả muộn " + soNgayTre + " ngày.\nTiền phạt cần thu: " +
+                                     QuyDinh.DinhDangTien(tienPhat));
                 else
                     AppTheme.Info("Trả sách thành công.");
 

@@ -5,16 +5,15 @@ namespace DoAnQLTV
 {
     public partial class FrmLogin : Form
     {
-        private const string TaiKhoan = "admin";
-        private const string MatKhau = "123456";
-        private const string TenHienThi = "Admin";   // hiện ở góc phải trang chủ và cột "Người thực hiện"
-
         public FrmLogin()
         {
             InitializeComponent();
 
             AppTheme.ApplyForm(this);
             ApDungGiaoDien();
+
+            // Tên đăng nhập chính là mã nhân viên trong bảng NhanVien
+            lblUsername.Text = "Mã nhân viên (tên đăng nhập)";
 
             // Khi quay lại màn hình đăng nhập (sau khi đăng xuất): xóa mật khẩu cũ
             VisibleChanged += (s, e) =>
@@ -43,7 +42,7 @@ namespace DoAnQLTV
 
             if (username == "")
             {
-                AppTheme.Warning("Vui lòng nhập tên đăng nhập.");
+                AppTheme.Warning("Vui lòng nhập mã nhân viên.");
                 txtUsername.Focus();
                 return;
             }
@@ -55,16 +54,29 @@ namespace DoAnQLTV
                 return;
             }
 
-            if (!string.Equals(username, TaiKhoan, StringComparison.OrdinalIgnoreCase) || password != MatKhau)
+            string maNhanVien, tenNhanVien;
+            bool hopLe;
+            try
             {
-                AppTheme.Warning("Tên đăng nhập hoặc mật khẩu không đúng.");
+                hopLe = TaiKhoan.DangNhap(username, password, out maNhanVien, out tenNhanVien);
+            }
+            catch (Exception ex)
+            {
+                AppTheme.Error("Không thể kiểm tra đăng nhập.\n\n" + ex.Message);
+                return;
+            }
+
+            if (!hopLe)
+            {
+                AppTheme.Warning("Mã nhân viên hoặc mật khẩu không đúng.");
                 txtPassword.Clear();
                 txtPassword.Focus();
                 return;
             }
 
             // Gán người đăng nhập TRƯỚC khi tạo FrmMain (FrmMain đọc tên này lúc Load)
-            NhatKy.NguoiThucHien = TenHienThi;
+            NhatKy.MaNhanVien = maNhanVien;
+            NhatKy.NguoiThucHien = tenNhanVien;
             NhatKy.Ghi("Đăng nhập", "Đăng nhập hệ thống");
 
             FrmMain frmMain = new FrmMain();

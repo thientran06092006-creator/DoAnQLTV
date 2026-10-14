@@ -23,12 +23,22 @@ namespace DoAnQLTV
                         "\n\nHãy kiểm tra SQL Server LocalDB và chuỗi kết nối trong App.config.");
                     return;
                 }
-
-                NhatKy.DamBaoBang();
             }
             catch (Exception ex)
             {
                 AppTheme.Error("Không đọc được cấu hình kết nối (App.config).\n\n" + ex.Message);
+                return;
+            }
+
+            // Tạo bảng nhật ký, thêm cột MatKhau / TienPhat nếu chưa có
+            try
+            {
+                NhatKy.DamBaoBang();
+                CauTrucDb.DamBao();
+            }
+            catch (Exception ex)
+            {
+                AppTheme.Error("Không cập nhật được cấu trúc cơ sở dữ liệu.\n\n" + ex.Message);
                 return;
             }
 

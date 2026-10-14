@@ -163,9 +163,30 @@ namespace DoAnQLTV
             txtMaPhieu.Clear();
             cboSach.SelectedIndex = -1;
             cboDocGia.SelectedIndex = cboDocGia.Items.Count > 0 ? 0 : -1;
-            cboNhanVien.SelectedIndex = cboNhanVien.Items.Count > 0 ? 0 : -1;
+            cboNhanVien.SelectedIndex = TimNhanVienDangNhap();
             dtpNgayMuon.Value = DateTime.Today;
             dtpHanTra.Value = DateTime.Today.AddDays(SoNgayMuonMacDinh);
+        }
+
+        /// <summary>Mặc định chọn nhân viên đang đăng nhập.</summary>
+        private int TimNhanVienDangNhap()
+        {
+            for (int i = 0; i < cboNhanVien.Items.Count; i++)
+                if (string.Equals(LayMa(cboNhanVien.Items[i].ToString()), NhatKy.MaNhanVien,
+                        StringComparison.OrdinalIgnoreCase))
+                    return i;
+            return cboNhanVien.Items.Count > 0 ? 0 : -1;
+        }
+
+        /// <summary>Số sách độc giả đang mượn mà chưa trả (boQuaMaPhieu: bỏ qua phiếu này khi sửa).</summary>
+        private int DemSachDangMuon(string maDocGia, string boQuaMaPhieu)
+        {
+            return DbConnection.ExecuteScalar<int>(@"
+        SELECT COUNT(*) FROM PhieuMuon
+        WHERE MaDocGia = @MaDocGia AND NgayTra IS NULL
+          AND (@BoQua IS NULL OR MaPhieu <> @BoQua)",
+                DbConnection.Param("@MaDocGia", maDocGia),
+                DbConnection.Param("@BoQua", boQuaMaPhieu));
         }
 
         private void XoaForm()
@@ -307,12 +328,12 @@ namespace DoAnQLTV
                 string maSach = cboSach.SelectedValue.ToString();
 
                 // Mỗi đầu sách chỉ có 1 bản: đang có người mượn chưa trả thì không cho lập phiếu mới
-                string phieuDangMuon = TimPhieuDangMuonSach(maSach, null);
-                if (phieuDangMuon != null)
+                int dangMuon = DemSachDangMuon(LayMa(cboDocGia.Text), null);
+                if (dangMuon >= QuyDinh.SoSachToiDa)
                 {
-                    AppTheme.Warning("Sách \"" + cboSach.Text + "\" đang được mượn (phiếu " + phieuDangMuon +
-                                     ") và chưa trả.\nVui lòng chọn sách khác.");
-                    cboSach.Focus();
+                    AppTheme.Warning("Độc giả này đang mượn " + dangMuon + " cuốn chưa trả, đã đạt giới hạn tối đa " +
+                                     QuyDinh.SoSachToiDa + " cuốn.\nVui lòng trả bớt sách trước khi mượn thêm.");
+                    cboDocGia.Focus();
                     return;
                 }
 
@@ -379,12 +400,10 @@ namespace DoAnQLTV
 
                 if (soPhieuMo > 0)
                 {
-                    string phieuKhac = TimPhieuDangMuonSach(maSach, maDangChon);
-                    if (phieuKhac != null)
+                    if (DemSachDangMuon(LayMa(cboDocGia.Text), maDangChon) >= QuyDinh.SoSachToiDa)
                     {
-                        AppTheme.Warning("Sách \"" + cboSach.Text + "\" đang được mượn ở phiếu " + phieuKhac +
-                                         " và chưa trả.\nVui lòng chọn sách khác.");
-                        cboSach.Focus();
+                        AppTheme.Warning("Độc giả được chọn đã đạt giới hạn " + QuyDinh.SoSachToiDa + " cuốn đang mượn.");
+                        cboDocGia.Focus();
                         return;
                     }
                 }
