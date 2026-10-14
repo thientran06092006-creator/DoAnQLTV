@@ -150,9 +150,9 @@ namespace DoAnQLTV
         private readonly Dictionary<Panel, int> chieuCaoNhom = new Dictionary<Panel, int>();
         private readonly Dictionary<Panel, TheTruyCap> theTruyCap = new Dictionary<Panel, TheTruyCap>();
 
-        // ----- Dữ liệu biểu đồ thể loại (dữ liệu minh họa như bản cũ) -----
-        private readonly string[] tenTheLoai = { "Văn học", "Khoa học", "Lịch sử", "Kỹ thuật", "Thiếu nhi", "Khác" };
-        private readonly int[] soTheLoai = { 28, 18, 15, 12, 10, 17 };
+        // ----- Dữ liệu biểu đồ thể loại (đọc từ CSDL trong VeBieuDoTheLoai) -----
+        private string[] tenTheLoai = new string[0];
+        private int[] soTheLoai = new int[0];
         private readonly Color[] mauTheLoai =
         {
             Mau("#3B82F6"), Mau("#34C38F"), Mau("#F59E0B"), Mau("#8B5CF6"), Mau("#FCD34D"), Mau("#94A3B8")
@@ -548,7 +548,7 @@ namespace DoAnQLTV
 
             pnlChuThichTheLoai = new DoubleBufferedPanel();
             pnlChuThichTheLoai.Dock = DockStyle.Right;
-            pnlChuThichTheLoai.Width = S(210);
+            pnlChuThichTheLoai.Width = S(250);
             pnlChuThichTheLoai.BackColor = Color.White;
             pnlChuThichTheLoai.Paint += VeChuThichTheLoai;
             pnlBieuDoTheLoai.Controls.Add(pnlChuThichTheLoai);
@@ -1003,9 +1003,10 @@ namespace DoAnQLTV
                 using (SolidBrush br = new SolidBrush(mauTheLoai[i]))
                     g.FillEllipse(br, S(10), y + (cao - S(10)) / 2, S(10), S(10));
 
+
                 TextRenderer.DrawText(g, tenTheLoai[i], fChuMuc, new Rectangle(S(30), y, Math.Max(10, rong - S(30) - S(64)), cao),
-                    Mau("#374151"),
-                    TextFormatFlags.Left | TextFormatFlags.VerticalCenter | TextFormatFlags.NoPadding);
+    Mau("#374151"),
+    TextFormatFlags.Left | TextFormatFlags.VerticalCenter | TextFormatFlags.NoPadding | TextFormatFlags.EndEllipsis);
 
                 int phanTram = (int)Math.Round(soTheLoai[i] * 100.0 / tong);
                 TextRenderer.DrawText(g, phanTram + "%", fChuMuc, new Rectangle(rong - S(64), y, S(54), cao),
@@ -1153,14 +1154,85 @@ namespace DoAnQLTV
         //  BIỂU ĐỒ
         // =====================================================================
 
+        // Dấu vân tay dữ liệu lần vẽ trước: dữ liệu không đổi thì không vẽ lại (đỡ nháy).
+        private string khoaBieuDoMuonTra = "";
+        private string khoaBieuDoTheLoai = "";
+
+        /// <summary>Vẽ lại cả 2 biểu đồ từ CSDL. Gọi từ CapNhatThongKe().</summary>
+        private void CapNhatBieuDo()
+        {
+            try
+            {
+                VeBieuDoMuonTra();
+                VeBieuDoTheLoai();
+            }
+            catch (Exception ex)
+            {
+                // Lỗi CSDL đã được CapNhatThongKe báo rồi, ở đây chỉ ghi log để khỏi hiện hộp thoại lặp lại
+                System.Diagnostics.Debug.WriteLine("Không vẽ được biểu đồ: " + ex.Message);
+            }
+        }
+
+        /// <summary>Chọn bước chia trục tung (số nguyên) sao cho có tối đa khoảng 5 vạch.</summary>
+        private static int BuocChia(int max)
+        {
+            int[] cacBuoc = { 1, 2, 5, 10, 20, 50, 100, 200, 500, 1000 };
+            foreach (int b in cacBuoc)
+            {
+                if (max / (double)b <= 5) return b;
+            }
+            return 1000;
+        }
+
+        /// <summary>
+        /// Đếm số phiếu theo từng tháng, bắt đầu từ tháng "tu", đủ soThang tháng.
+        /// tenCot chỉ nhận NgayMuon hoặc NgayTra (cố định trong code, không lấy từ người dùng).
+        /// </summary>
+        private int[] DemTheoThang(string tenCot, DateTime tu, int soThang)
+        {
+            DataTable dt = DbConnection.ExecuteQuery(
+                "SELECT YEAR(" + tenCot + ") AS Nam, MONTH(" + tenCot + ") AS Thang, COUNT(*) AS SoLuot " +
+                "FROM PhieuMuon " +
+                "WHERE " + tenCot + " IS NOT NULL AND " + tenCot + " >= @Tu " +
+                "GROUP BY YEAR(" + tenCot + "), MONTH(" + tenCot + ")",
+                DbConnection.Param("@Tu", tu));
+
+            int[] kq = new int[soThang];
+            foreach (DataRow r in dt.Rows)
+            {
+                int nam = Convert.ToInt32(r["Nam"]);
+                int thang = Convert.ToInt32(r["Thang"]);
+                int viTri = (nam - tu.Year) * 12 + (thang - tu.Month);
+
+                if (viTri >= 0 && viTri < soThang)
+                    kq[viTri] = Convert.ToInt32(r["SoLuot"]);
+            }
+            return kq;
+        }
+
         private void VeBieuDoMuonTra()
         {
             if (chartMuonTra == null) return;
+
+            // 6 tháng gần nhất, tính cả tháng hiện tại
+            const int soThang = 6;
+            DateTime tu = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1).AddMonths(-(soThang - 1));
+
+            int[] soLuotMuon = DemTheoThang("NgayMuon", tu, soThang);
+            int[] soLuotTra = DemTheoThang("NgayTra", tu, soThang);
+
+            string khoa = tu.ToString("yyyyMM") + "|" + string.Join(",", soLuotMuon) + "|" + string.Join(",", soLuotTra);
+            if (khoa == khoaBieuDoMuonTra) return;   // dữ liệu không đổi
+            khoaBieuDoMuonTra = khoa;
 
             chartMuonTra.Series.Clear();
             chartMuonTra.ChartAreas.Clear();
             chartMuonTra.Legends.Clear();      // chú thích tự vẽ ở góc phải tiêu đề
             chartMuonTra.BackColor = Color.White;
+
+            // Trục tung tự co giãn theo số liệu, luôn là số nguyên
+            int max = Math.Max(4, Math.Max(soLuotMuon.Max(), soLuotTra.Max()));
+            int buoc = BuocChia(max);
 
             DV.ChartArea area = chartMuonTra.ChartAreas.Add("ChartArea1");
             area.BackColor = Color.White;
@@ -1173,8 +1245,8 @@ namespace DoAnQLTV
             area.AxisX.LabelStyle.ForeColor = mauChuPhu;
 
             area.AxisY.Minimum = 0;
-            area.AxisY.Maximum = 50;
-            area.AxisY.Interval = 10;
+            area.AxisY.Maximum = Math.Ceiling(max / (double)buoc) * buoc;
+            area.AxisY.Interval = buoc;
             area.AxisY.MajorGrid.LineColor = Mau("#E5EAF3");
             area.AxisY.MajorTickMark.Enabled = false;
             area.AxisY.LineColor = Color.Transparent;
@@ -1194,16 +1266,16 @@ namespace DoAnQLTV
 
             seriesMuon.Color = mauMuon;
             seriesTra.Color = mauTra;
+            seriesMuon.ToolTip = "Mượn sách #VALX: #VAL lượt";
+            seriesTra.ToolTip = "Trả sách #VALX: #VAL lượt";
 
-            // Dữ liệu minh họa trong 6 tháng.
-            int[] soLuotMuon = { 24, 28, 28, 34, 37, 44 };
-            int[] soLuotTra = { 20, 26, 23, 29, 34, 42 };
-
-            for (int i = 0; i < 6; i++)
+            for (int i = 0; i < soThang; i++)
             {
-                string thang = "Tháng " + (i + 1);
-                seriesMuon.Points.AddXY(thang, soLuotMuon[i]);
-                seriesTra.Points.AddXY(thang, soLuotTra[i]);
+                DateTime thang = tu.AddMonths(i);
+                string nhan = "T" + thang.Month + "/" + thang.Year;
+
+                seriesMuon.Points.AddXY(nhan, soLuotMuon[i]);
+                seriesTra.Points.AddXY(nhan, soLuotTra[i]);
             }
 
             chartMuonTra.Visible = true;
@@ -1213,6 +1285,54 @@ namespace DoAnQLTV
         private void VeBieuDoTheLoai()
         {
             if (chartTheLoai == null) return;
+
+            // Đếm số sách theo thể loại (nhiều nhất đứng đầu)
+            DataTable dt = DbConnection.ExecuteQuery(@"
+                SELECT tl.TenTheLoai, COUNT(s.MaSach) AS SoSach
+                FROM TheLoai tl
+                INNER JOIN Sach s ON s.MaTheLoai = tl.MaTheLoai
+                GROUP BY tl.MaTheLoai, tl.TenTheLoai
+                ORDER BY COUNT(s.MaSach) DESC, tl.TenTheLoai");
+
+            // Tối đa 6 phần (bằng số màu): quá 6 thể loại thì 5 thể loại đầu + "Khác"
+            int soPhanToiDa = mauTheLoai.Length;
+            List<string> ten = new List<string>();
+            List<int> so = new List<int>();
+
+            if (dt.Rows.Count <= soPhanToiDa)
+            {
+                foreach (DataRow r in dt.Rows)
+                {
+                    ten.Add(r["TenTheLoai"].ToString());
+                    so.Add(Convert.ToInt32(r["SoSach"]));
+                }
+            }
+            else
+            {
+                int khac = 0;
+                for (int i = 0; i < dt.Rows.Count; i++)
+                {
+                    int soSach = Convert.ToInt32(dt.Rows[i]["SoSach"]);
+                    if (i < soPhanToiDa - 1)
+                    {
+                        ten.Add(dt.Rows[i]["TenTheLoai"].ToString());
+                        so.Add(soSach);
+                    }
+                    else
+                    {
+                        khac += soSach;
+                    }
+                }
+                ten.Add("Khác (" + (dt.Rows.Count - (soPhanToiDa - 1)) + " thể loại)");
+                so.Add(khac);
+            }
+
+            string khoa = string.Join("|", ten) + "#" + string.Join(",", so);
+            if (khoa == khoaBieuDoTheLoai) return;   // dữ liệu không đổi
+            khoaBieuDoTheLoai = khoa;
+
+            tenTheLoai = ten.ToArray();
+            soTheLoai = so.ToArray();
 
             chartTheLoai.Series.Clear();
             chartTheLoai.ChartAreas.Clear();
@@ -1233,12 +1353,22 @@ namespace DoAnQLTV
             s["PieStartAngle"] = "270";      // bắt đầu từ chính giữa phía trên
             s.BorderWidth = 3;
             s.BorderColor = Color.White;
+            s["PieLabelStyle"] = "Disabled";     // tắt nhãn tên in trên vòng tròn
 
-            // Dữ liệu minh họa.
-            for (int i = 0; i < tenTheLoai.Length; i++)
+            if (tenTheLoai.Length == 0)
             {
-                int idx = s.Points.AddXY(tenTheLoai[i], soTheLoai[i]);
-                s.Points[idx].Color = mauTheLoai[i];
+                // Chưa có sách nào: vẽ vòng xám nhạt thay vì để trống
+                int idx = s.Points.AddXY("Chưa có dữ liệu", 1);
+                s.Points[idx].Color = Mau("#E2E8F0");
+            }
+            else
+            {
+                s.ToolTip = "#VALX: #VAL sách";
+                for (int i = 0; i < tenTheLoai.Length; i++)
+                {
+                    int idx = s.Points.AddXY(tenTheLoai[i], soTheLoai[i]);
+                    s.Points[idx].Color = mauTheLoai[i];
+                }
             }
 
             chartTheLoai.Visible = true;
@@ -1306,6 +1436,7 @@ namespace DoAnQLTV
             }
 
             TaiHoatDongGanDay();
+            CapNhatBieuDo();      // <-- THÊM: vẽ lại 2 biểu đồ từ dữ liệu thật
         }
 
         /// <summary>Nạp 4 hoạt động mới nhất từ bảng NhatKyHoatDong vào bảng ở trang chủ.</summary>
@@ -1398,8 +1529,7 @@ namespace DoAnQLTV
             // 4. BIỂU ĐỒ
             // ==========================================
 
-            VeBieuDoMuonTra();
-            VeBieuDoTheLoai();
+            CapNhatBieuDo();   // có try/catch, và bỏ qua nếu dữ liệu không đổi
         }
 
 
