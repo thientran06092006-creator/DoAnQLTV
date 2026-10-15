@@ -259,10 +259,31 @@ namespace DoAnQLTV
                     (tienPhat > 0 ? " - Phạt: " + QuyDinh.DinhDangTien(tienPhat) : ""));
 
                 if (soNgayTre > 0)
-                    AppTheme.Warning("Trả sách thành công.\n\nTrả muộn " + soNgayTre + " ngày.\nTiền phạt cần thu: " +
-                                     QuyDinh.DinhDangTien(tienPhat));
+                {
+                    bool daThu = AppTheme.Confirm("Trả sách thành công.\n\nTrả muộn " + soNgayTre + " ngày.\nTiền phạt: " +
+                        QuyDinh.DinhDangTien(tienPhat) + "\n\nBạn đã thu tiền phạt này chưa?");
+
+                    if (daThu)
+                    {
+                        DbConnection.ExecuteNonQuery(@"
+                    UPDATE PhieuMuon
+                    SET DaThuPhat = 1, NgayThuPhat = GETDATE()
+                    WHERE MaPhieu = @MaPhieu",
+                            DbConnection.Param("@MaPhieu", maPhieu));
+
+                        NhatKy.Ghi("Thu phạt", "Thu phạt " + QuyDinh.DinhDangTien(tienPhat) +
+                            " - phiếu " + maPhieu + " - Mã DG: " + maDocGia);
+                    }
+                    else
+                    {
+                        AppTheme.Info("Phiếu được ghi nhận là CHƯA THU phạt.\n" +
+                                      "Bạn có thể thu sau ở mục Danh sách phiếu mượn (nút Thu phạt).");
+                    }
+                }
                 else
+                {
                     AppTheme.Info("Trả sách thành công.");
+                }
 
                 LoadTraSach(null);
                 DatLaiGiaTriMacDinh();

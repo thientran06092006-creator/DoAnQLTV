@@ -47,13 +47,13 @@ namespace DoAnQLTV
             dgvLichSu.Name = "dgvLichSu";
             dgvLichSu.SetBounds(1, 42, 938, 185);
 
-            ThemCot("colLsMaPhieu", "Mã phiếu", 14F);
-            ThemCot("colLsSach", "Sách", 34F);
-            ThemCot("colLsNgayMuon", "Ngày mượn", 14F);
-            ThemCot("colLsHanTra", "Hạn trả", 14F);
-            ThemCot("colLsNgayTra", "Ngày trả", 14F);
-            ThemCot("colLsTrangThai", "Trạng thái", 18F);
-            ThemCot("colLsTienPhat", "Tiền phạt", 20F);
+            ThemCot("colLsMaPhieu", "Mã phiếu", 13F);
+            ThemCot("colLsSach", "Sách", 30F);
+            ThemCot("colLsNgayMuon", "Ngày mượn", 13F);
+            ThemCot("colLsHanTra", "Hạn trả", 13F);
+            ThemCot("colLsNgayTra", "Ngày trả", 13F);
+            ThemCot("colLsTrangThai", "Trạng thái", 17F);
+            ThemCot("colLsTienPhat", "Tiền phạt", 24F);
 
             pnlLichSu.Controls.Add(lblTomTat);
             pnlLichSu.Controls.Add(dgvLichSu);
@@ -150,7 +150,7 @@ namespace DoAnQLTV
             lblTomTat.Text = GoiY;
         }
 
-        /// <summary>Hiện toàn bộ phiếu của độc giả + tóm tắt: đang mượn, quá hạn, tiền phạt.</summary>
+        /// <summary>Hiện toàn bộ phiếu của độc giả + tóm tắt: đang mượn, quá hạn, tiền phạt (đã thu / chưa thu).</summary>
         private void HienLichSu(string maDocGia, string tenDocGia)
         {
             try
@@ -158,7 +158,7 @@ namespace DoAnQLTV
                 DataTable dt = DbConnection.ExecuteQuery(@"
                     SELECT pm.MaPhieu,
                            s.MaSach + ' - ' + s.TenSach AS Sach,
-                           pm.NgayMuon, pm.HanTra, pm.NgayTra, pm.TienPhat
+                           pm.NgayMuon, pm.HanTra, pm.NgayTra, pm.TienPhat, pm.DaThuPhat
                     FROM PhieuMuon pm
                     INNER JOIN Sach s ON pm.MaSach = s.MaSach
                     WHERE pm.MaDocGia = @MaDocGia
@@ -168,7 +168,7 @@ namespace DoAnQLTV
                 dgvLichSu.Rows.Clear();
 
                 int dangMuon = 0, quaHan = 0;
-                decimal phatDaTinh = 0, phatTamTinh = 0;
+                decimal tongPhat = 0, phatChuaThu = 0, phatTamTinh = 0;
 
                 foreach (DataRow r in dt.Rows)
                 {
@@ -177,6 +177,7 @@ namespace DoAnQLTV
                     string trangThai;
                     string tienPhatText = "";
                     Color mau;
+                    Color? mauPhat = null;
 
                     if (r["NgayTra"] != DBNull.Value)
                     {
@@ -189,10 +190,14 @@ namespace DoAnQLTV
                         decimal phat = r["TienPhat"] == DBNull.Value
                             ? QuyDinh.TinhTienPhat(hanTra, ngayTra)
                             : Convert.ToDecimal(r["TienPhat"]);
+
                         if (phat > 0)
                         {
-                            tienPhatText = QuyDinh.DinhDangTien(phat);
-                            phatDaTinh += phat;
+                            bool daThu = Convert.ToBoolean(r["DaThuPhat"]);
+                            tienPhatText = QuyDinh.DinhDangTien(phat) + (daThu ? " - Đã thu" : " - Chưa thu");
+                            mauPhat = daThu ? AppTheme.Success : AppTheme.Danger;
+                            tongPhat += phat;
+                            if (!daThu) phatChuaThu += phat;
                         }
                     }
                     else if (hanTra < DateTime.Today)
@@ -202,6 +207,7 @@ namespace DoAnQLTV
                         trangThai = "Quá hạn " + soNgay + " ngày";
                         mau = AppTheme.Danger;
                         tienPhatText = QuyDinh.DinhDangTien(phat) + " (tạm tính)";
+                        mauPhat = AppTheme.Danger;
                         phatTamTinh += phat;
                         dangMuon++;
                         quaHan++;
@@ -226,6 +232,14 @@ namespace DoAnQLTV
                     o.Style.ForeColor = mau;
                     o.Style.SelectionForeColor = mau;
                     o.Style.Font = AppTheme.Bold;
+
+                    if (mauPhat.HasValue)
+                    {
+                        DataGridViewCell p = dgvLichSu.Rows[idx].Cells["colLsTienPhat"];
+                        p.Style.ForeColor = mauPhat.Value;
+                        p.Style.SelectionForeColor = mauPhat.Value;
+                        p.Style.Font = AppTheme.Bold;
+                    }
                 }
 
                 dgvLichSu.ClearSelection();
@@ -234,12 +248,14 @@ namespace DoAnQLTV
                 string tomTat = tenDocGia + "  |  Đang mượn: " + dangMuon + "/" + QuyDinh.SoSachToiDa +
                                 " cuốn  |  Quá hạn: " + quaHan +
                                 "  |  Tổng số phiếu: " + dt.Rows.Count +
-                                "  |  Tiền phạt: " + QuyDinh.DinhDangTien(phatDaTinh);
+                                "  |  Tiền phạt: " + QuyDinh.DinhDangTien(tongPhat);
+                if (phatChuaThu > 0)
+                    tomTat += " (chưa thu " + QuyDinh.DinhDangTien(phatChuaThu) + ")";
                 if (phatTamTinh > 0)
                     tomTat += " + " + QuyDinh.DinhDangTien(phatTamTinh) + " tạm tính";
 
                 lblTomTat.Text = tomTat;
-                lblTomTat.ForeColor = quaHan > 0 ? AppTheme.Danger : AppTheme.Primary;
+                lblTomTat.ForeColor = (quaHan > 0 || phatChuaThu > 0) ? AppTheme.Danger : AppTheme.Primary;
             }
             catch (Exception ex)
             {

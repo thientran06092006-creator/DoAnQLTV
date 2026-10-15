@@ -9,7 +9,8 @@ namespace DoAnQLTV
     {
         private const string DinhDangNgay = "dd/MM/yyyy";
 
-        // Hai nút tạo bằng code (không sửa Designer)
+        // Các nút tạo bằng code (không sửa Designer)
+        private Button btnThuPhat;
         private Button btnXuatExcel;
         private Button btnInQuaHan;
 
@@ -18,7 +19,7 @@ namespace DoAnQLTV
             InitializeComponent();
 
             AppTheme.ApplyForm(this);
-            ThemNutBaoCao();
+            ThemNutChucNang();
             ApDungGiaoDien();
             ThemCotTrangThai();
 
@@ -27,25 +28,32 @@ namespace DoAnQLTV
 
         // ================= GIAO DIỆN =================
 
-        /// <summary>Thu ô từ khóa lại cho có chỗ, rồi thêm 2 nút báo cáo bên phải.</summary>
-        private void ThemNutBaoCao()
+        /// <summary>Thu ô từ khóa lại cho có chỗ, rồi thêm các nút Thu phạt / Xuất Excel / In.</summary>
+        private void ThemNutChucNang()
         {
-            txtTuKhoa.Width = 280;
-            btnTimKiem.SetBounds(405, 18, 100, 40);
-            btnLamMoi.SetBounds(513, 18, 100, 40);
+            txtTuKhoa.Width = 220;
+            btnTimKiem.SetBounds(342, 18, 90, 40);
+            btnLamMoi.SetBounds(440, 18, 90, 40);
+
+            btnThuPhat = new Button();
+            btnThuPhat.Name = "btnThuPhat";
+            btnThuPhat.Text = "Thu phạt";
+            btnThuPhat.SetBounds(538, 18, 110, 40);
+            btnThuPhat.Click += btnThuPhat_Click;
 
             btnXuatExcel = new Button();
             btnXuatExcel.Name = "btnXuatExcel";
             btnXuatExcel.Text = "Xuất Excel quá hạn";
-            btnXuatExcel.SetBounds(621, 18, 170, 40);
+            btnXuatExcel.SetBounds(656, 18, 160, 40);
             btnXuatExcel.Click += btnXuatExcel_Click;
 
             btnInQuaHan = new Button();
             btnInQuaHan.Name = "btnInQuaHan";
             btnInQuaHan.Text = "In quá hạn";
-            btnInQuaHan.SetBounds(799, 18, 110, 40);
+            btnInQuaHan.SetBounds(824, 18, 100, 40);
             btnInQuaHan.Click += btnInQuaHan_Click;
 
+            pnlThongTin.Controls.Add(btnThuPhat);
             pnlThongTin.Controls.Add(btnXuatExcel);
             pnlThongTin.Controls.Add(btnInQuaHan);
         }
@@ -65,6 +73,7 @@ namespace DoAnQLTV
                 ColorTranslator.FromHtml("#CBD5E1"),
                 AppTheme.TextDark);
 
+            AppTheme.StyleButton(btnThuPhat, AppTheme.Amber, ColorTranslator.FromHtml("#D97706"));
             AppTheme.StylePrimaryButton(btnXuatExcel);
             AppTheme.StyleOutlineButton(btnInQuaHan);
         }
@@ -87,7 +96,7 @@ namespace DoAnQLTV
                 DataGridViewTextBoxColumn col = new DataGridViewTextBoxColumn();
                 col.Name = "colTienPhat";
                 col.HeaderText = "Tiền phạt";
-                col.FillWeight = 90F;
+                col.FillWeight = 100F;
                 col.ReadOnly = true;
                 dgvPhieuMuon.Columns.Add(col);
             }
@@ -106,7 +115,8 @@ namespace DoAnQLTV
                        pm.HanTra,
                        s.MaSach + ' - ' + s.TenSach AS Sach,
                        pm.NgayTra,
-                       pm.TienPhat
+                       pm.TienPhat,
+                       pm.DaThuPhat
                 FROM PhieuMuon pm
                 INNER JOIN DocGia dg ON pm.MaDocGia = dg.MaDocGia
                 INNER JOIN NhanVien nv ON pm.MaNhanVien = nv.MaNhanVien
@@ -147,6 +157,7 @@ namespace DoAnQLTV
                 string trangThai;
                 string tienPhat = "";
                 Color mau;
+                Color? mauPhat = null;
 
                 if (r["NgayTra"] != DBNull.Value)
                 {
@@ -158,7 +169,13 @@ namespace DoAnQLTV
                     decimal phat = r["TienPhat"] == DBNull.Value
                         ? QuyDinh.TinhTienPhat(hanTra, ngayTra)
                         : Convert.ToDecimal(r["TienPhat"]);
-                    if (phat > 0) tienPhat = QuyDinh.DinhDangTien(phat);
+
+                    if (phat > 0)
+                    {
+                        bool daThu = Convert.ToBoolean(r["DaThuPhat"]);
+                        tienPhat = QuyDinh.DinhDangTien(phat) + (daThu ? " - Đã thu" : " - Chưa thu");
+                        mauPhat = daThu ? AppTheme.Success : AppTheme.Danger;
+                    }
                 }
                 else if (hanTra < DateTime.Today)
                 {
@@ -166,6 +183,7 @@ namespace DoAnQLTV
                     trangThai = "Quá hạn " + soNgay + " ngày";
                     mau = AppTheme.Danger;
                     tienPhat = QuyDinh.DinhDangTien(soNgay * QuyDinh.MucPhatMoiNgay) + " (tạm tính)";
+                    mauPhat = AppTheme.Danger;
                 }
                 else
                 {
@@ -188,11 +206,11 @@ namespace DoAnQLTV
                 o.Style.SelectionForeColor = mau;
                 o.Style.Font = AppTheme.Bold;
 
-                if (tienPhat != "")
+                if (mauPhat.HasValue)
                 {
                     DataGridViewCell p = dgvPhieuMuon.Rows[idx].Cells["colTienPhat"];
-                    p.Style.ForeColor = AppTheme.Danger;
-                    p.Style.SelectionForeColor = AppTheme.Danger;
+                    p.Style.ForeColor = mauPhat.Value;
+                    p.Style.SelectionForeColor = mauPhat.Value;
                     p.Style.Font = AppTheme.Bold;
                 }
             }
@@ -241,6 +259,102 @@ namespace DoAnQLTV
 
             DataGridViewRow row = dgvPhieuMuon.Rows[e.RowIndex];
             txtTuKhoa.Text = row.Cells["colMaPhieu"].Value?.ToString() ?? "";
+        }
+
+        // ================= THU TIỀN PHẠT =================
+
+        private void btnThuPhat_Click(object sender, EventArgs e)
+        {
+            if (dgvPhieuMuon.SelectedRows.Count == 0)
+            {
+                AppTheme.Warning("Vui lòng chọn phiếu cần thu phạt trong danh sách.");
+                return;
+            }
+
+            string maPhieu = dgvPhieuMuon.SelectedRows[0].Cells["colMaPhieu"].Value?.ToString() ?? "";
+
+            try
+            {
+                // Đọc trạng thái mới nhất từ CSDL (không tin dữ liệu đang hiện trên lưới)
+                DataTable dt = DbConnection.ExecuteQuery(@"
+                    SELECT pm.MaDocGia + ' - ' + dg.TenDocGia AS DocGia,
+                           pm.HanTra, pm.NgayTra, pm.TienPhat, pm.DaThuPhat, pm.NgayThuPhat
+                    FROM PhieuMuon pm
+                    INNER JOIN DocGia dg ON pm.MaDocGia = dg.MaDocGia
+                    WHERE pm.MaPhieu = @MaPhieu",
+                    DbConnection.Param("@MaPhieu", maPhieu));
+
+                if (dt.Rows.Count == 0)
+                {
+                    AppTheme.Warning("Không tìm thấy phiếu " + maPhieu + ".");
+                    LoadPhieuMuon(null);
+                    return;
+                }
+
+                DataRow r = dt.Rows[0];
+
+                if (r["NgayTra"] == DBNull.Value)
+                {
+                    AppTheme.Warning("Phiếu " + maPhieu + " chưa trả sách.\n" +
+                                     "Hãy trả sách trước (mục Trả sách), tiền phạt sẽ được tính khi trả.");
+                    return;
+                }
+
+                DateTime hanTra = Convert.ToDateTime(r["HanTra"]).Date;
+                DateTime ngayTra = Convert.ToDateTime(r["NgayTra"]).Date;
+                decimal phat = r["TienPhat"] == DBNull.Value
+                    ? QuyDinh.TinhTienPhat(hanTra, ngayTra)
+                    : Convert.ToDecimal(r["TienPhat"]);
+
+                if (phat <= 0)
+                {
+                    AppTheme.Info("Phiếu " + maPhieu + " không có tiền phạt.");
+                    return;
+                }
+
+                if (Convert.ToBoolean(r["DaThuPhat"]))
+                {
+                    string ngayThu = r["NgayThuPhat"] == DBNull.Value
+                        ? ""
+                        : " vào " + Convert.ToDateTime(r["NgayThuPhat"]).ToString("dd/MM/yyyy HH:mm");
+                    AppTheme.Info("Phiếu " + maPhieu + " đã thu phạt" + ngayThu + ".");
+                    return;
+                }
+
+                string docGia = r["DocGia"].ToString();
+                if (!AppTheme.Confirm("Xác nhận đã thu tiền phạt " + QuyDinh.DinhDangTien(phat) +
+                                      "\ncủa độc giả " + docGia + " (phiếu " + maPhieu + ")?"))
+                    return;
+
+                // Lưu luôn số tiền (phiếu cũ chưa có TienPhat) và chỉ cập nhật nếu chưa thu
+                int soDong = DbConnection.ExecuteNonQuery(@"
+                    UPDATE PhieuMuon
+                    SET TienPhat = @TienPhat,
+                        DaThuPhat = 1,
+                        NgayThuPhat = GETDATE()
+                    WHERE MaPhieu = @MaPhieu
+                      AND DaThuPhat = 0",
+                    DbConnection.Param("@TienPhat", phat),
+                    DbConnection.Param("@MaPhieu", maPhieu));
+
+                if (soDong == 0)
+                {
+                    AppTheme.Warning("Phiếu này vừa được thu phạt ở nơi khác. Danh sách sẽ được làm mới.");
+                }
+                else
+                {
+                    NhatKy.Ghi("Thu phạt",
+                        "Thu phạt " + QuyDinh.DinhDangTien(phat) + " - phiếu " + maPhieu + " - " + docGia);
+                    AppTheme.Info("Đã ghi nhận thu phạt " + QuyDinh.DinhDangTien(phat) + ".");
+                }
+
+                txtTuKhoa.Clear();
+                LoadPhieuMuon(null);
+            }
+            catch (Exception ex)
+            {
+                AppTheme.Error("Không thể thu phạt.\n\n" + ex.Message);
+            }
         }
 
         // ================= BÁO CÁO PHIẾU QUÁ HẠN =================

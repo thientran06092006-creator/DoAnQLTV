@@ -28,17 +28,6 @@ namespace DoAnQLTV
             DatLaiGiaTriMacDinh();
         }
 
-        /// <summary>Số phiếu CHƯA TRẢ và đã QUÁ HẠN của độc giả.</summary>
-        private int DemPhieuQuaHan(string maDocGia)
-        {
-            return DbConnection.ExecuteScalar<int>(@"
-        SELECT COUNT(*) FROM PhieuMuon
-        WHERE MaDocGia = @MaDocGia
-          AND NgayTra IS NULL
-          AND HanTra < CAST(GETDATE() AS DATE)",
-                DbConnection.Param("@MaDocGia", maDocGia));
-        }
-
         // ================= GIAO DIỆN =================
 
         private void ApDungGiaoDien()
@@ -72,20 +61,37 @@ namespace DoAnQLTV
 
         // ================= NẠP DỮ LIỆU =================
 
+        /// <summary>
+        /// Nạp danh sách sách. Ô chọn hiện kèm số bản còn lại, ví dụ "Lập trình C# (còn 2/3)".
+        /// Cột TenSach giữ tên gốc để dùng trong thông báo / nhật ký.
+        /// </summary>
         private void LoadSach()
         {
             try
             {
-                cboSach.DataSource = DbConnection.ExecuteQuery(
-                    "SELECT MaSach, TenSach FROM Sach ORDER BY TenSach");
-                cboSach.DisplayMember = "TenSach";
+                DataTable dt = DbConnection.ExecuteQuery(
+                    "SELECT s.MaSach, s.TenSach, " +
+                    "       s.TenSach + CASE WHEN " + ThuVienDb.SqlConLai + " > 0 " +
+                    "            THEN N' (còn ' + CAST(" + ThuVienDb.SqlConLai + " AS NVARCHAR(10)) + N'/' + CAST(s.SoLuong AS NVARCHAR(10)) + N')' " +
+                    "            ELSE N' (hết sách)' END AS HienThi " +
+                    "FROM Sach s ORDER BY s.TenSach");
+
+                cboSach.DisplayMember = "HienThi";
                 cboSach.ValueMember = "MaSach";
+                cboSach.DataSource = dt;
                 cboSach.SelectedIndex = -1;
             }
             catch (Exception ex)
             {
                 AppTheme.Error("Không thể tải danh sách sách.\n\n" + ex.Message);
             }
+        }
+
+        /// <summary>Tên sách gốc (không kèm "(còn x/y)") của sách đang chọn.</summary>
+        private string TenSachDangChon()
+        {
+            DataRowView drv = cboSach.SelectedItem as DataRowView;
+            return drv == null ? "" : drv["TenSach"].ToString();
         }
 
         private void LoadDocGia()
@@ -169,16 +175,6 @@ namespace DoAnQLTV
             txtMaPhieu.BackColor = khoa ? ColorTranslator.FromHtml("#F1F5F9") : Color.White;
         }
 
-        private void DatLaiGiaTriMacDinh()
-        {
-            txtMaPhieu.Clear();
-            cboSach.SelectedIndex = -1;
-            cboDocGia.SelectedIndex = cboDocGia.Items.Count > 0 ? 0 : -1;
-            cboNhanVien.SelectedIndex = TimNhanVienDangNhap();
-            dtpNgayMuon.Value = DateTime.Today;
-            dtpHanTra.Value = DateTime.Today.AddDays(SoNgayMuonMacDinh);
-        }
-
         /// <summary>Mặc định chọn nhân viên đang đăng nhập.</summary>
         private int TimNhanVienDangNhap()
         {
@@ -189,15 +185,14 @@ namespace DoAnQLTV
             return cboNhanVien.Items.Count > 0 ? 0 : -1;
         }
 
-        /// <summary>Số sách độc giả đang mượn mà chưa trả (boQuaMaPhieu: bỏ qua phiếu này khi sửa).</summary>
-        private int DemSachDangMuon(string maDocGia, string boQuaMaPhieu)
+        private void DatLaiGiaTriMacDinh()
         {
-            return DbConnection.ExecuteScalar<int>(@"
-        SELECT COUNT(*) FROM PhieuMuon
-        WHERE MaDocGia = @MaDocGia AND NgayTra IS NULL
-          AND (@BoQua IS NULL OR MaPhieu <> @BoQua)",
-                DbConnection.Param("@MaDocGia", maDocGia),
-                DbConnection.Param("@BoQua", boQuaMaPhieu));
+            txtMaPhieu.Clear();
+            cboSach.SelectedIndex = -1;
+            cboDocGia.SelectedIndex = cboDocGia.Items.Count > 0 ? 0 : -1;
+            cboNhanVien.SelectedIndex = TimNhanVienDangNhap();
+            dtpNgayMuon.Value = DateTime.Today;
+            dtpHanTra.Value = DateTime.Today.AddDays(SoNgayMuonMacDinh);
         }
 
         private void XoaForm()
@@ -264,20 +259,11 @@ namespace DoAnQLTV
             return true;
         }
 
-        /// <summary>
-        /// Sách này đang nằm trong phiếu mượn nào chưa trả? Trả về mã phiếu đó, hoặc null nếu sách đang rảnh.
-        /// boQuaMaPhieu: bỏ qua phiếu này (dùng khi sửa chính phiếu đó).
-        /// </summary>
-        private string TimPhieuDangMuonSach(string maSach, string boQuaMaPhieu)
+        /// <summary>Đưa con trỏ vào ô liên quan đến lỗi nghiệp vụ.</summary>
+        private void FocusTheoLoi(LoiNghiepVu ex)
         {
-            return DbConnection.ExecuteScalar<string>(@"
-                SELECT TOP 1 MaPhieu
-                FROM PhieuMuon
-                WHERE MaSach = @MaSach
-                  AND NgayTra IS NULL
-                  AND (@BoQua IS NULL OR MaPhieu <> @BoQua)",
-                DbConnection.Param("@MaSach", maSach),
-                DbConnection.Param("@BoQua", boQuaMaPhieu));
+            if (ex.Truong == "sach") cboSach.Focus();
+            else if (ex.Truong == "docgia") cboDocGia.Focus();
         }
 
         // ================= SỰ KIỆN (giữ nguyên tên để Designer không bị lỗi) =================
@@ -337,42 +323,29 @@ namespace DoAnQLTV
             try
             {
                 string maSach = cboSach.SelectedValue.ToString();
+                string tenSach = TenSachDangChon();   // lấy trước khi nạp lại danh sách
+                string maDocGia = LayMa(cboDocGia.Text);
 
-                // Mỗi đầu sách chỉ có 1 bản: đang có người mượn chưa trả thì không cho lập phiếu mới
-                int dangMuon = DemSachDangMuon(LayMa(cboDocGia.Text), null);
+                // Kiểm tra số bản còn lại, quá hạn, giới hạn mượn và ghi phiếu trong 1 transaction
+                ThuVienDb.LapPhieu(
+                    txtMaPhieu.Text.Trim(),
+                    maDocGia,
+                    LayMa(cboNhanVien.Text),
+                    maSach,
+                    dtpNgayMuon.Value.Date,
+                    dtpHanTra.Value.Date);
 
-                int quaHan = DemPhieuQuaHan(LayMa(cboDocGia.Text));
-                if (quaHan > 0)
-                {
-                    AppTheme.Warning("Độc giả này đang có " + quaHan + " phiếu mượn quá hạn chưa trả.\n" +
-                                     "Vui lòng trả sách quá hạn trước khi mượn thêm.");
-                    cboDocGia.Focus();
-                    return;
-                }
-
-                if (dangMuon >= QuyDinh.SoSachToiDa)
-                {
-                    AppTheme.Warning("Độc giả này đang mượn " + dangMuon + " cuốn chưa trả, đã đạt giới hạn tối đa " +
-                                     QuyDinh.SoSachToiDa + " cuốn.\nVui lòng trả bớt sách trước khi mượn thêm.");
-                    cboDocGia.Focus();
-                    return;
-                }
-
-                DbConnection.ExecuteNonQuery(@"
-                    INSERT INTO PhieuMuon (MaPhieu, MaDocGia, MaNhanVien, MaSach, NgayMuon, HanTra)
-                    VALUES (@MaPhieu, @MaDocGia, @MaNhanVien, @MaSach, @NgayMuon, @HanTra)",
-                    DbConnection.Param("@MaPhieu", txtMaPhieu.Text.Trim()),
-                    DbConnection.Param("@MaDocGia", LayMa(cboDocGia.Text)),
-                    DbConnection.Param("@MaNhanVien", LayMa(cboNhanVien.Text)),
-                    DbConnection.Param("@MaSach", maSach),
-                    DbConnection.Param("@NgayMuon", dtpNgayMuon.Value.Date),
-                    DbConnection.Param("@HanTra", dtpHanTra.Value.Date));
-
-                NhatKy.Ghi("Mượn sách", "Mượn sách \"" + cboSach.Text + "\" - Mã DG: " + LayMa(cboDocGia.Text));
+                NhatKy.Ghi("Mượn sách", "Mượn sách \"" + tenSach + "\" - Mã DG: " + maDocGia);
 
                 AppTheme.Info("Lập phiếu mượn thành công!");
+                LoadSach();          // số bản còn lại đã thay đổi
                 LoadPhieuMuon();
                 XoaForm();
+            }
+            catch (LoiNghiepVu ex)
+            {
+                AppTheme.Warning(ex.Message);
+                FocusTheoLoi(ex);
             }
             catch (SqlException ex) when (ex.Number == 2627 || ex.Number == 2601)
             {
@@ -411,38 +384,15 @@ namespace DoAnQLTV
 
             try
             {
-                string maSach = cboSach.SelectedValue.ToString();
-
-                // Chỉ kiểm tra khi phiếu này CHƯA TRẢ. Phiếu đã trả là lịch sử cũ,
-                // sửa nó không được bị chặn chỉ vì sách đó đang cho người khác mượn.
-                int soPhieuMo = DbConnection.ExecuteScalar<int>(
-                    "SELECT COUNT(*) FROM PhieuMuon WHERE MaPhieu = @MaPhieu AND NgayTra IS NULL",
-                    DbConnection.Param("@MaPhieu", maDangChon));
-
-                if (soPhieuMo > 0)
-                {
-                    if (DemSachDangMuon(LayMa(cboDocGia.Text), maDangChon) >= QuyDinh.SoSachToiDa)
-                    {
-                        AppTheme.Warning("Độc giả được chọn đã đạt giới hạn " + QuyDinh.SoSachToiDa + " cuốn đang mượn.");
-                        cboDocGia.Focus();
-                        return;
-                    }
-                }
-
-                int soDong = DbConnection.ExecuteNonQuery(@"
-                    UPDATE PhieuMuon
-                    SET MaDocGia = @MaDocGia,
-                        MaNhanVien = @MaNhanVien,
-                        MaSach = @MaSach,
-                        NgayMuon = @NgayMuon,
-                        HanTra = @HanTra
-                    WHERE MaPhieu = @MaPhieu",
-                    DbConnection.Param("@MaDocGia", LayMa(cboDocGia.Text)),
-                    DbConnection.Param("@MaNhanVien", LayMa(cboNhanVien.Text)),
-                    DbConnection.Param("@MaSach", maSach),
-                    DbConnection.Param("@NgayMuon", dtpNgayMuon.Value.Date),
-                    DbConnection.Param("@HanTra", dtpHanTra.Value.Date),
-                    DbConnection.Param("@MaPhieu", maDangChon));
+                // Phiếu chưa trả: kiểm tra số bản còn lại + giới hạn mượn (bỏ qua chính phiếu này).
+                // Phiếu đã trả là lịch sử cũ, sửa không bị chặn.
+                int soDong = ThuVienDb.SuaPhieu(
+                    maDangChon,
+                    LayMa(cboDocGia.Text),
+                    LayMa(cboNhanVien.Text),
+                    cboSach.SelectedValue.ToString(),
+                    dtpNgayMuon.Value.Date,
+                    dtpHanTra.Value.Date);
 
                 if (soDong == 0)
                 {
@@ -453,8 +403,14 @@ namespace DoAnQLTV
                 NhatKy.Ghi("Sửa phiếu mượn", "Sửa phiếu mượn " + maDangChon + " - Mã DG: " + LayMa(cboDocGia.Text));
 
                 AppTheme.Info("Cập nhật phiếu mượn thành công!");
+                LoadSach();
                 LoadPhieuMuon();
                 XoaForm();
+            }
+            catch (LoiNghiepVu ex)
+            {
+                AppTheme.Warning(ex.Message);
+                FocusTheoLoi(ex);
             }
             catch (SqlException ex) when (ex.Number == 547)
             {
@@ -492,6 +448,7 @@ namespace DoAnQLTV
                 NhatKy.Ghi("Xóa phiếu mượn", "Xóa phiếu mượn " + maDangChon + " - Mã DG: " + LayMa(cboDocGia.Text));
 
                 AppTheme.Info("Xóa phiếu mượn thành công!");
+                LoadSach();          // xóa phiếu chưa trả sẽ trả lại 1 bản
                 LoadPhieuMuon();
                 XoaForm();
             }
@@ -507,6 +464,7 @@ namespace DoAnQLTV
 
         private void btnLamMoi_Click(object sender, EventArgs e)
         {
+            LoadSach();
             LoadPhieuMuon();
             XoaForm();
         }

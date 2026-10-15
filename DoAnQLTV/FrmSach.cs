@@ -11,11 +11,18 @@ namespace DoAnQLTV
         // Mã sách đang được chọn để sửa/xóa. null = đang ở chế độ nhập sách mới.
         private string maSachDangChon = null;
 
+        // Thành phần thêm bằng code (không sửa Designer)
+        private Label lblSoLuong;
+        private Label lblDonVi;
+        private NumericUpDown nudSoLuong;
+
         public FrmSach()
         {
             InitializeComponent();
             AppTheme.ApplyForm(this);
+            ThemOSoLuong();
             ApDungGiaoDien();
+            ThemCotSoLuong();
 
             LoadComboBox(cboTheLoai,
                 "SELECT MaTheLoai, TenTheLoai FROM TheLoai ORDER BY TenTheLoai",
@@ -29,6 +36,42 @@ namespace DoAnQLTV
         }
 
         // ================= GIAO DIỆN =================
+
+        /// <summary>Chừa thêm 1 hàng cho ô "Số lượng": đẩy hàng nút và danh sách xuống 48px.</summary>
+        private void ThemOSoLuong()
+        {
+            const int doi = 48;
+
+            pnlThongTin.Height += doi;
+            foreach (Button b in new Button[] { btnThem, btnSua, btnXoa, btnTimKiem, btnLamMoi })
+                b.Top += doi;
+            pnlDanhSach.Top += doi;
+            ClientSize = new Size(ClientSize.Width, ClientSize.Height + doi);
+
+            lblSoLuong = new Label();
+            lblSoLuong.AutoSize = true;
+            lblSoLuong.Font = lblMaSach.Font;
+            lblSoLuong.ForeColor = lblMaSach.ForeColor;
+            lblSoLuong.Text = "Số lượng";
+            lblSoLuong.Location = new Point(24, 132);
+            pnlThongTin.Controls.Add(lblSoLuong);
+
+            nudSoLuong = new NumericUpDown();
+            nudSoLuong.Minimum = 1;
+            nudSoLuong.Maximum = 1000;
+            nudSoLuong.Value = 1;
+            nudSoLuong.Font = new Font("Segoe UI", 11F);
+            nudSoLuong.SetBounds(110, 128, 110, 27);
+            pnlThongTin.Controls.Add(nudSoLuong);
+
+            lblDonVi = new Label();
+            lblDonVi.AutoSize = true;
+            lblDonVi.Font = AppTheme.Base;
+            lblDonVi.ForeColor = AppTheme.TextMuted;
+            lblDonVi.Text = "bản (cuốn) của đầu sách này";
+            lblDonVi.Location = new Point(232, 132);
+            pnlThongTin.Controls.Add(lblDonVi);
+        }
 
         private void ApDungGiaoDien()
         {
@@ -54,6 +97,29 @@ namespace DoAnQLTV
                 AppTheme.TextDark);   // nút phụ màu xám nhạt
         }
 
+        private void ThemCotSoLuong()
+        {
+            if (!dgvSach.Columns.Contains("colSoLuong"))
+            {
+                DataGridViewTextBoxColumn col = new DataGridViewTextBoxColumn();
+                col.Name = "colSoLuong";
+                col.HeaderText = "Số lượng";
+                col.FillWeight = 40F;
+                col.ReadOnly = true;
+                dgvSach.Columns.Add(col);
+            }
+
+            if (!dgvSach.Columns.Contains("colConLai"))
+            {
+                DataGridViewTextBoxColumn col = new DataGridViewTextBoxColumn();
+                col.Name = "colConLai";
+                col.HeaderText = "Còn lại";
+                col.FillWeight = 40F;
+                col.ReadOnly = true;
+                dgvSach.Columns.Add(col);
+            }
+        }
+
         // ================= NẠP DỮ LIỆU =================
 
         private void LoadComboBox(ComboBox cbo, string sql, string display, string value, string tenDanhSach)
@@ -72,11 +138,12 @@ namespace DoAnQLTV
             }
         }
 
-        /// <summary>Lấy danh sách sách; tuKhoa rỗng/null = lấy tất cả.</summary>
+        /// <summary>Lấy danh sách sách (kèm số lượng và số bản còn lại); tuKhoa rỗng/null = lấy tất cả.</summary>
         private DataTable TruyVanSach(string tuKhoa)
         {
             const string sql = @"
-                SELECT s.MaSach, s.TenSach, tl.TenTheLoai, tg.TenTacGia
+                SELECT s.MaSach, s.TenSach, tl.TenTheLoai, tg.TenTacGia,
+                       s.SoLuong, " + ThuVienDb.SqlConLai + @" AS ConLai
                 FROM Sach s
                 INNER JOIN TheLoai tl ON s.MaTheLoai = tl.MaTheLoai
                 INNER JOIN TacGia  tg ON s.MaTacGia  = tg.MaTacGia
@@ -103,7 +170,22 @@ namespace DoAnQLTV
         {
             dgvSach.Rows.Clear();
             foreach (DataRow r in dt.Rows)
-                dgvSach.Rows.Add(r["MaSach"], r["TenSach"], r["TenTheLoai"], r["TenTacGia"]);
+            {
+                int conLai = Convert.ToInt32(r["ConLai"]);
+
+                int idx = dgvSach.Rows.Add(
+                    r["MaSach"], r["TenSach"], r["TenTheLoai"], r["TenTacGia"],
+                    r["SoLuong"], conLai);
+
+                // Hết sách thì tô đỏ cột "Còn lại"
+                if (conLai <= 0)
+                {
+                    DataGridViewCell o = dgvSach.Rows[idx].Cells["colConLai"];
+                    o.Style.ForeColor = AppTheme.Danger;
+                    o.Style.SelectionForeColor = AppTheme.Danger;
+                    o.Style.Font = AppTheme.Bold;
+                }
+            }
 
             dgvSach.ClearSelection();
             dgvSach.CurrentCell = null;
@@ -111,12 +193,13 @@ namespace DoAnQLTV
 
         // ================= HÀM DÙNG CHUNG TRÊN FORM =================
 
-        private void DoLenForm(string maSach, string tenSach, string tenTheLoai, string tenTacGia)
+        private void DoLenForm(string maSach, string tenSach, string tenTheLoai, string tenTacGia, int soLuong)
         {
             txtMaSach.Text = maSach;
             txtTenSach.Text = tenSach;
             cboTheLoai.SelectedIndex = cboTheLoai.FindStringExact(tenTheLoai);
             cboTacGia.SelectedIndex = cboTacGia.FindStringExact(tenTacGia);
+            nudSoLuong.Value = Math.Max(nudSoLuong.Minimum, Math.Min(nudSoLuong.Maximum, soLuong));
 
             maSachDangChon = maSach;
             txtMaSach.ReadOnly = true;   // Không cho đổi mã khi đang sửa (mã là khóa chính)
@@ -128,6 +211,7 @@ namespace DoAnQLTV
             txtTenSach.Clear();
             cboTheLoai.SelectedIndex = -1;
             cboTacGia.SelectedIndex = -1;
+            nudSoLuong.Value = 1;
 
             maSachDangChon = null;
             txtMaSach.ReadOnly = false;
@@ -157,6 +241,12 @@ namespace DoAnQLTV
             return true;
         }
 
+        private static int DocSo(object giaTri)
+        {
+            int n;
+            return int.TryParse(giaTri == null ? "" : giaTri.ToString(), out n) ? n : 1;
+        }
+
         // ================= SỰ KIỆN (giữ nguyên tên để Designer không bị lỗi) =================
 
         private void dgvSach_CellClick(object sender, DataGridViewCellEventArgs e)
@@ -168,7 +258,8 @@ namespace DoAnQLTV
                 row.Cells["colMaSach"].Value?.ToString(),
                 row.Cells["colTenSach"].Value?.ToString(),
                 row.Cells["colTheLoai"].Value?.ToString(),
-                row.Cells["colTacGia"].Value?.ToString());
+                row.Cells["colTacGia"].Value?.ToString(),
+                DocSo(row.Cells["colSoLuong"].Value));
         }
 
         private void btnThem_Click(object sender, EventArgs e)
@@ -184,14 +275,16 @@ namespace DoAnQLTV
             try
             {
                 DbConnection.ExecuteNonQuery(@"
-                    INSERT INTO Sach (MaSach, TenSach, MaTheLoai, MaTacGia)
-                    VALUES (@MaSach, @TenSach, @MaTheLoai, @MaTacGia)",
+                    INSERT INTO Sach (MaSach, TenSach, MaTheLoai, MaTacGia, SoLuong)
+                    VALUES (@MaSach, @TenSach, @MaTheLoai, @MaTacGia, @SoLuong)",
                     DbConnection.Param("@MaSach", txtMaSach.Text.Trim()),
                     DbConnection.Param("@TenSach", txtTenSach.Text.Trim()),
                     DbConnection.Param("@MaTheLoai", cboTheLoai.SelectedValue),
-                    DbConnection.Param("@MaTacGia", cboTacGia.SelectedValue));
+                    DbConnection.Param("@MaTacGia", cboTacGia.SelectedValue),
+                    DbConnection.Param("@SoLuong", (int)nudSoLuong.Value));
 
-                NhatKy.Ghi("Thêm sách", "Thêm sách \"" + txtTenSach.Text.Trim() + "\" - Mã sách: " + txtMaSach.Text.Trim());
+                NhatKy.Ghi("Thêm sách", "Thêm sách \"" + txtTenSach.Text.Trim() + "\" - Mã sách: " +
+                    txtMaSach.Text.Trim() + " (" + (int)nudSoLuong.Value + " bản)");
 
                 AppTheme.Info("Thêm sách thành công.");
                 LoadSach();
@@ -219,15 +312,30 @@ namespace DoAnQLTV
 
             try
             {
+                // Không cho giảm số bản xuống thấp hơn số bản đang được mượn chưa trả
+                int dangMuon = DbConnection.ExecuteScalar<int>(
+                    "SELECT COUNT(*) FROM PhieuMuon WHERE MaSach = @MaSach AND NgayTra IS NULL",
+                    DbConnection.Param("@MaSach", maSachDangChon));
+
+                if ((int)nudSoLuong.Value < dangMuon)
+                {
+                    AppTheme.Warning("Sách này đang có " + dangMuon + " bản được mượn chưa trả.\n" +
+                                     "Số lượng không được nhỏ hơn " + dangMuon + ".");
+                    nudSoLuong.Focus();
+                    return;
+                }
+
                 int soDong = DbConnection.ExecuteNonQuery(@"
                     UPDATE Sach
                     SET TenSach   = @TenSach,
                         MaTheLoai = @MaTheLoai,
-                        MaTacGia  = @MaTacGia
+                        MaTacGia  = @MaTacGia,
+                        SoLuong   = @SoLuong
                     WHERE MaSach = @MaSach",
                     DbConnection.Param("@TenSach", txtTenSach.Text.Trim()),
                     DbConnection.Param("@MaTheLoai", cboTheLoai.SelectedValue),
                     DbConnection.Param("@MaTacGia", cboTacGia.SelectedValue),
+                    DbConnection.Param("@SoLuong", (int)nudSoLuong.Value),
                     DbConnection.Param("@MaSach", maSachDangChon));
 
                 if (soDong == 0)
@@ -236,7 +344,8 @@ namespace DoAnQLTV
                     return;
                 }
 
-                NhatKy.Ghi("Sửa sách", "Sửa sách \"" + txtTenSach.Text.Trim() + "\" - Mã sách: " + maSachDangChon);
+                NhatKy.Ghi("Sửa sách", "Sửa sách \"" + txtTenSach.Text.Trim() + "\" - Mã sách: " +
+                    maSachDangChon + " (" + (int)nudSoLuong.Value + " bản)");
 
                 AppTheme.Info("Sửa thông tin sách thành công.");
                 LoadSach();
@@ -314,7 +423,8 @@ namespace DoAnQLTV
                         r["MaSach"].ToString(),
                         r["TenSach"].ToString(),
                         r["TenTheLoai"].ToString(),
-                        r["TenTacGia"].ToString());
+                        r["TenTacGia"].ToString(),
+                        Convert.ToInt32(r["SoLuong"]));
                 }
             }
             catch (Exception ex)

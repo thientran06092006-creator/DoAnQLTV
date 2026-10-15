@@ -5,9 +5,10 @@ namespace DoAnQLTV
 {
     /// <summary>
     /// Gọi 1 lần khi khởi động (Program.cs). Chạy lại nhiều lần vẫn an toàn:
-    ///  - thêm cột NhanVien.MatKhau, NhanVien.VaiTro, PhieuMuon.TienPhat (nếu chưa có)
-    ///  - đảm bảo có nhân viên "admin"
-    ///  - đảm bảo luôn có ít nhất 1 quản trị viên
+    ///  - NhanVien : MatKhau, VaiTro
+    ///  - PhieuMuon: TienPhat, DaThuPhat, NgayThuPhat
+    ///  - Sach     : SoLuong (số bản của mỗi đầu sách, mặc định 1)
+    ///  - đảm bảo có nhân viên "admin" và luôn có ít nhất 1 quản trị viên
     ///  - gán mật khẩu mặc định cho nhân viên nào chưa có mật khẩu
     /// </summary>
     public static class CauTrucDb
@@ -25,6 +26,22 @@ namespace DoAnQLTV
             DbConnection.ExecuteNonQuery(
                 "IF COL_LENGTH('dbo.PhieuMuon', 'TienPhat') IS NULL " +
                 "ALTER TABLE dbo.PhieuMuon ADD TienPhat DECIMAL(18,0) NULL");
+
+            // Thu tiền phạt: mặc định mọi phiếu là CHƯA thu
+            DbConnection.ExecuteNonQuery(
+                "IF COL_LENGTH('dbo.PhieuMuon', 'DaThuPhat') IS NULL " +
+                "ALTER TABLE dbo.PhieuMuon ADD DaThuPhat BIT NOT NULL " +
+                "CONSTRAINT DF_PhieuMuon_DaThuPhat DEFAULT 0");
+
+            DbConnection.ExecuteNonQuery(
+                "IF COL_LENGTH('dbo.PhieuMuon', 'NgayThuPhat') IS NULL " +
+                "ALTER TABLE dbo.PhieuMuon ADD NgayThuPhat DATETIME NULL");
+
+            // Số bản của mỗi đầu sách: sách cũ mặc định có 1 bản (giữ đúng hành vi trước đây)
+            DbConnection.ExecuteNonQuery(
+                "IF COL_LENGTH('dbo.Sach', 'SoLuong') IS NULL " +
+                "ALTER TABLE dbo.Sach ADD SoLuong INT NOT NULL " +
+                "CONSTRAINT DF_Sach_SoLuong DEFAULT 1");
 
             // Giữ được tài khoản cũ admin / 123456: nếu chưa có nhân viên mã "admin" thì tạo.
             int coAdmin = DbConnection.ExecuteScalar<int>(

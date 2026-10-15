@@ -12,6 +12,7 @@ namespace DoAnQLTV
             InitializeComponent();
             AppTheme.ApplyForm(this);
             ApDungGiaoDien();
+            ThemCotTinhTrang();
             LoadSach();
         }
 
@@ -35,13 +36,34 @@ namespace DoAnQLTV
             AcceptButton = btnTimKiem;
         }
 
+        /// <summary>Thêm cột "Số lượng", "Còn lại", "Tình trạng" bằng code, không cần sửa Designer.</summary>
+        private void ThemCotTinhTrang()
+        {
+            ThemCot("colSoLuong", "Số lượng", 18F);
+            ThemCot("colConLai", "Còn lại", 18F);
+            ThemCot("colTinhTrang", "Tình trạng", 26F);
+        }
+
+        private void ThemCot(string ten, string tieuDe, float trongSo)
+        {
+            if (dgvKetQua.Columns.Contains(ten)) return;
+
+            DataGridViewTextBoxColumn col = new DataGridViewTextBoxColumn();
+            col.Name = ten;
+            col.HeaderText = tieuDe;
+            col.FillWeight = trongSo;
+            col.ReadOnly = true;
+            dgvKetQua.Columns.Add(col);
+        }
+
         // ================= NẠP DỮ LIỆU =================
 
         /// <summary>Lấy danh sách sách; tuKhoa rỗng/null = lấy tất cả.</summary>
         private DataTable TruyVanSach(string tuKhoa)
         {
             const string sql = @"
-                SELECT s.MaSach, s.TenSach, tl.TenTheLoai, tg.TenTacGia
+                SELECT s.MaSach, s.TenSach, tl.TenTheLoai, tg.TenTacGia,
+                       s.SoLuong, " + ThuVienDb.SqlConLai + @" AS ConLai
                 FROM Sach s
                 INNER JOIN TheLoai tl ON s.MaTheLoai = tl.MaTheLoai
                 INNER JOIN TacGia tg ON s.MaTacGia = tg.MaTacGia
@@ -72,7 +94,32 @@ namespace DoAnQLTV
         {
             dgvKetQua.Rows.Clear();
             foreach (DataRow r in dt.Rows)
-                dgvKetQua.Rows.Add(r["MaSach"], r["TenSach"], r["TenTheLoai"], r["TenTacGia"]);
+            {
+                int soLuong = Convert.ToInt32(r["SoLuong"]);
+                int conLai = Convert.ToInt32(r["ConLai"]);
+
+                string tinhTrang;
+                Color mau;
+                if (conLai <= 0)
+                {
+                    tinhTrang = "Hết sách";
+                    mau = AppTheme.Danger;
+                }
+                else
+                {
+                    tinhTrang = "Có thể mượn";
+                    mau = AppTheme.Success;
+                }
+
+                int idx = dgvKetQua.Rows.Add(
+                    r["MaSach"], r["TenSach"], r["TenTheLoai"], r["TenTacGia"],
+                    soLuong, conLai, tinhTrang);
+
+                DataGridViewCell o = dgvKetQua.Rows[idx].Cells["colTinhTrang"];
+                o.Style.ForeColor = mau;
+                o.Style.SelectionForeColor = mau;
+                o.Style.Font = AppTheme.Bold;
+            }
 
             dgvKetQua.ClearSelection();
             dgvKetQua.CurrentCell = null;
