@@ -54,11 +54,11 @@ namespace DoAnQLTV
                 return;
             }
 
-            string maNhanVien, tenNhanVien;
+            string maNhanVien, tenNhanVien, vaiTro;
             bool hopLe;
             try
             {
-                hopLe = TaiKhoan.DangNhap(username, password, out maNhanVien, out tenNhanVien);
+                hopLe = TaiKhoan.DangNhap(username, password, out maNhanVien, out tenNhanVien, out vaiTro);
             }
             catch (Exception ex)
             {
@@ -74,10 +74,11 @@ namespace DoAnQLTV
                 return;
             }
 
-            // Gán người đăng nhập TRƯỚC khi tạo FrmMain (FrmMain đọc tên này lúc Load)
+            // Gán người đăng nhập TRƯỚC khi tạo FrmMain (FrmMain đọc các giá trị này lúc Load)
             NhatKy.MaNhanVien = maNhanVien;
             NhatKy.NguoiThucHien = tenNhanVien;
-            NhatKy.Ghi("Đăng nhập", "Đăng nhập hệ thống");
+            TaiKhoan.VaiTroHienTai = vaiTro;
+            NhatKy.Ghi("Đăng nhập", "Đăng nhập hệ thống (" + TaiKhoan.TenHienThiVaiTro(vaiTro) + ")");
 
             FrmMain frmMain = new FrmMain();
 

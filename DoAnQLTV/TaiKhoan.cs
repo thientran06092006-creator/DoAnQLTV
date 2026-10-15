@@ -9,11 +9,30 @@ namespace DoAnQLTV
 {
     /// <summary>
     /// Đăng nhập bằng bảng NhanVien. Tên đăng nhập = MaNhanVien.
-    /// Mật khẩu lưu dạng SHA-256 có "muối" riêng cho từng nhân viên (muối = mã nhân viên),
-    /// nên hai nhân viên cùng mật khẩu vẫn cho ra hai chuỗi băm khác nhau.
+    /// Mật khẩu lưu dạng SHA-256 có "muối" riêng cho từng nhân viên (muối = mã nhân viên).
+    /// Vai trò: "Admin" (quản trị viên) hoặc "NhanVien" (nhân viên thường).
     /// </summary>
     public static class TaiKhoan
     {
+        public const string VaiTroAdmin = "Admin";
+        public const string VaiTroNhanVien = "NhanVien";
+
+        /// <summary>Vai trò của người đang đăng nhập (FrmLogin gán sau khi đăng nhập thành công).</summary>
+        public static string VaiTroHienTai = VaiTroNhanVien;
+
+        public static bool LaQuanTri
+        {
+            get { return string.Equals(VaiTroHienTai, VaiTroAdmin, StringComparison.OrdinalIgnoreCase); }
+        }
+
+        /// <summary>Tên tiếng Việt để hiển thị: Admin -> "Quản trị viên", còn lại -> "Nhân viên".</summary>
+        public static string TenHienThiVaiTro(string vaiTro)
+        {
+            return string.Equals((vaiTro ?? "").Trim(), VaiTroAdmin, StringComparison.OrdinalIgnoreCase)
+                ? "Quản trị viên"
+                : "Nhân viên";
+        }
+
         public static string BamMatKhau(string maNhanVien, string matKhau)
         {
             string muoi = (maNhanVien ?? "").Trim().ToLowerInvariant();
@@ -34,14 +53,35 @@ namespace DoAnQLTV
                 DbConnection.Param("@ma", maNhanVien));
         }
 
-        /// <summary>Kiểm tra đăng nhập. Đúng thì trả về mã + tên nhân viên thật trong CSDL.</summary>
-        public static bool DangNhap(string tenDangNhap, string matKhau, out string maNhanVien, out string tenNhanVien)
+        /// <summary>Mật khẩu nhập vào có đúng với mật khẩu đang lưu của nhân viên này không?</summary>
+        public static bool KiemTraMatKhau(string maNhanVien, string matKhau)
+        {
+            string luu = DbConnection.ExecuteScalar<string>(
+                "SELECT MatKhau FROM NhanVien WHERE MaNhanVien = @ma",
+                DbConnection.Param("@ma", maNhanVien));
+
+            if (string.IsNullOrWhiteSpace(luu)) return false;
+            return string.Equals(luu.Trim(), BamMatKhau(maNhanVien, matKhau), StringComparison.OrdinalIgnoreCase);
+        }
+
+        /// <summary>Tự đổi mật khẩu: phải đúng mật khẩu cũ mới đổi. Trả về false nếu mật khẩu cũ sai.</summary>
+        public static bool DoiMatKhau(string maNhanVien, string matKhauCu, string matKhauMoi)
+        {
+            if (!KiemTraMatKhau(maNhanVien, matKhauCu)) return false;
+            DatMatKhau(maNhanVien, matKhauMoi);
+            return true;
+        }
+
+        /// <summary>Kiểm tra đăng nhập. Đúng thì trả về mã, tên và vai trò thật trong CSDL.</summary>
+        public static bool DangNhap(string tenDangNhap, string matKhau,
+            out string maNhanVien, out string tenNhanVien, out string vaiTro)
         {
             maNhanVien = null;
             tenNhanVien = null;
+            vaiTro = VaiTroNhanVien;
 
             DataTable dt = DbConnection.ExecuteQuery(
-                "SELECT MaNhanVien, TenNhanVien, MatKhau FROM NhanVien WHERE MaNhanVien = @ma",
+                "SELECT MaNhanVien, TenNhanVien, MatKhau, VaiTro FROM NhanVien WHERE MaNhanVien = @ma",
                 DbConnection.Param("@ma", tenDangNhap));
 
             if (dt.Rows.Count == 0) return false;
@@ -56,10 +96,14 @@ namespace DoAnQLTV
 
             maNhanVien = ma;
             tenNhanVien = r["TenNhanVien"].ToString().Trim();
+            vaiTro = string.Equals((r["VaiTro"] == DBNull.Value ? "" : r["VaiTro"].ToString()).Trim(),
+                        VaiTroAdmin, StringComparison.OrdinalIgnoreCase)
+                ? VaiTroAdmin
+                : VaiTroNhanVien;
             return true;
         }
 
-        /// <summary>Hộp thoại nhỏ nhập mật khẩu mới. Trả về null nếu bấm Hủy.</summary>
+        /// <summary>Hộp thoại nhỏ nhập mật khẩu mới (admin đặt cho người khác). Trả về null nếu bấm Hủy.</summary>
         public static string HoiMatKhauMoi(string tieuDe)
         {
             using (Form f = new Form())

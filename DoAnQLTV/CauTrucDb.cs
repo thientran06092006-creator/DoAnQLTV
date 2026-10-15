@@ -5,9 +5,9 @@ namespace DoAnQLTV
 {
     /// <summary>
     /// Gọi 1 lần khi khởi động (Program.cs). Chạy lại nhiều lần vẫn an toàn:
-    ///  - thêm cột NhanVien.MatKhau  (nếu chưa có)
-    ///  - thêm cột PhieuMuon.TienPhat (nếu chưa có)
+    ///  - thêm cột NhanVien.MatKhau, NhanVien.VaiTro, PhieuMuon.TienPhat (nếu chưa có)
     ///  - đảm bảo có nhân viên "admin"
+    ///  - đảm bảo luôn có ít nhất 1 quản trị viên
     ///  - gán mật khẩu mặc định cho nhân viên nào chưa có mật khẩu
     /// </summary>
     public static class CauTrucDb
@@ -17,6 +17,10 @@ namespace DoAnQLTV
             DbConnection.ExecuteNonQuery(
                 "IF COL_LENGTH('dbo.NhanVien', 'MatKhau') IS NULL " +
                 "ALTER TABLE dbo.NhanVien ADD MatKhau NVARCHAR(100) NULL");
+
+            DbConnection.ExecuteNonQuery(
+                "IF COL_LENGTH('dbo.NhanVien', 'VaiTro') IS NULL " +
+                "ALTER TABLE dbo.NhanVien ADD VaiTro NVARCHAR(20) NULL");
 
             DbConnection.ExecuteNonQuery(
                 "IF COL_LENGTH('dbo.PhieuMuon', 'TienPhat') IS NULL " +
@@ -38,6 +42,21 @@ namespace DoAnQLTV
                     System.Diagnostics.Debug.WriteLine("Không tạo được nhân viên admin: " + ex.Message);
                 }
             }
+
+            // Nhân viên chưa có vai trò -> nhân viên thường
+            DbConnection.ExecuteNonQuery(
+                "UPDATE NhanVien SET VaiTro = 'NhanVien' WHERE VaiTro IS NULL OR LTRIM(RTRIM(VaiTro)) = ''");
+
+            // Nếu chưa có quản trị viên nào thì cấp cho "admin"
+            DbConnection.ExecuteNonQuery(
+                "UPDATE NhanVien SET VaiTro = 'Admin' " +
+                "WHERE MaNhanVien = 'admin' AND NOT EXISTS (SELECT 1 FROM NhanVien WHERE VaiTro = 'Admin')");
+
+            // Phòng trường hợp không có mã "admin": cấp cho nhân viên đầu tiên để hệ thống không bị khóa
+            DbConnection.ExecuteNonQuery(
+                "UPDATE NhanVien SET VaiTro = 'Admin' " +
+                "WHERE MaNhanVien = (SELECT TOP 1 MaNhanVien FROM NhanVien ORDER BY MaNhanVien) " +
+                "AND NOT EXISTS (SELECT 1 FROM NhanVien WHERE VaiTro = 'Admin')");
 
             DataTable chuaCo = DbConnection.ExecuteQuery(
                 "SELECT MaNhanVien FROM NhanVien WHERE MatKhau IS NULL OR LTRIM(RTRIM(MatKhau)) = ''");

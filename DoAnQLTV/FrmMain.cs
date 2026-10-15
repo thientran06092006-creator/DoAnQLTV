@@ -580,6 +580,19 @@ namespace DoAnQLTV
             StyleTheTrang(pnlHoatDongGanDay);
             StyleTieuDeKhoi(lblTieuDeHoatDongGanDay);
             StyleBangHoatDong();
+
+            lnkXemNhatKy = new LinkLabel();
+            lnkXemNhatKy.Text = "Xem tất cả";
+            lnkXemNhatKy.AutoSize = true;
+            lnkXemNhatKy.Font = fNhanThe;
+            lnkXemNhatKy.BackColor = Color.Transparent;
+            lnkXemNhatKy.LinkColor = Mau("#2563EB");
+            lnkXemNhatKy.ActiveLinkColor = Mau("#1D4ED8");
+            lnkXemNhatKy.Visible = TaiKhoan.LaQuanTri;   // chỉ quản trị viên xem toàn bộ nhật ký
+            lnkXemNhatKy.LinkClicked += (s, e) => MoFormChucNang(new FrmNhatKy());
+            pnlHoatDongGanDay.Controls.Add(lnkXemNhatKy);
+            lnkXemNhatKy.BringToFront();
+
             pnlHoatDongGanDay.SizeChanged += (s, e) => CanLeHoatDong();
 
             // ---------- Căn lề ----------
@@ -671,6 +684,8 @@ namespace DoAnQLTV
         {
             dgvHoatDongGanDay.SetBounds(S(14), S(46), Math.Max(10, pnlHoatDongGanDay.Width - S(28)),
                 Math.Max(10, pnlHoatDongGanDay.Height - S(46) - S(10)));
+            if (lnkXemNhatKy != null)
+                lnkXemNhatKy.Location = new Point(pnlHoatDongGanDay.Width - lnkXemNhatKy.Width - S(20), S(18));
         }
 
         // =====================================================================
@@ -1486,6 +1501,7 @@ namespace DoAnQLTV
             // Hiện tên người đăng nhập (FrmLogin gán vào NhatKy.NguoiThucHien)
             if (!string.IsNullOrWhiteSpace(NhatKy.NguoiThucHien))
                 lblHoTenNguoiDung.Text = NhatKy.NguoiThucHien;
+            KhoiTaoPhanQuyen();
 
             CapNhatThongKe();
             if (System.ComponentModel.LicenseManager.UsageMode
@@ -1532,10 +1548,98 @@ namespace DoAnQLTV
             CapNhatBieuDo();   // có try/catch, và bỏ qua nếu dữ liệu không đổi
         }
 
+        private ContextMenuStrip menuNguoiDung;
+        private LinkLabel lnkXemNhatKy;
 
+        /// <summary>Phân quyền + menu người dùng. Gọi trong FrmMain_Load.</summary>
+        private void KhoiTaoPhanQuyen()
+        {
+            lblChucVuNguoiDung.Text = TaiKhoan.LaQuanTri ? "Quản trị viên" : "Nhân viên thư viện";
+
+            // Nhân viên thường: ẩn các mục dành riêng cho quản trị viên
+            if (!TaiKhoan.LaQuanTri)
+            {
+                int cao = btnQuanLyNhanVien.Height;
+                btnQuanLyNhanVien.Visible = false;
+                pnlNhomQuanLy.Height -= cao;
+                chieuCaoNhom[pnlNhomQuanLy] -= cao;
+                CapNhatChanSidebar();
+
+                AnTheNhanVien();
+            }
+
+            // Bấm vào tên / ảnh đại diện ở góc phải: menu Đổi mật khẩu, Đăng xuất
+            menuNguoiDung = new ContextMenuStrip();
+            menuNguoiDung.Renderer = new ToolStripProfessionalRenderer(new MenuColors());
+            menuNguoiDung.ShowImageMargin = false;
+            menuNguoiDung.BackColor = Color.White;
+            menuNguoiDung.Font = AppTheme.Base;
+
+            ToolStripMenuItem doiMk = new ToolStripMenuItem("Đổi mật khẩu");
+            doiMk.Padding = new Padding(4, 6, 4, 6);
+            doiMk.Click += (s, e) => MoHopThoaiDoiMatKhau();
+            menuNguoiDung.Items.Add(doiMk);
+
+            ToolStripMenuItem dangXuat = new ToolStripMenuItem("Đăng xuất");
+            dangXuat.Padding = new Padding(4, 6, 4, 6);
+            dangXuat.Click += (s, e) => btnDangXuat_Click(s, e);
+            menuNguoiDung.Items.Add(dangXuat);
+
+            EventHandler mo = (s, e) => menuNguoiDung.Show(Cursor.Position);
+            foreach (Control c in new Control[] { picDaiDien, lblHoTenNguoiDung, lblChucVuNguoiDung })
+            {
+                c.Cursor = Cursors.Hand;
+                c.Click += mo;
+            }
+
+            // Nhắc đổi mật khẩu nếu vẫn đang dùng mật khẩu mặc định
+            BeginInvoke((Action)(() =>
+            {
+                try
+                {
+                    if (TaiKhoan.KiemTraMatKhau(NhatKy.MaNhanVien, QuyDinh.MatKhauMacDinh) &&
+                        AppTheme.Confirm("Tài khoản của bạn đang dùng mật khẩu mặc định.\nBạn có muốn đổi mật khẩu ngay không?"))
+                        MoHopThoaiDoiMatKhau();
+                }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Debug.WriteLine("Không kiểm tra được mật khẩu mặc định: " + ex.Message);
+                }
+            }));
+        }
+
+        private void MoHopThoaiDoiMatKhau()
+        {
+            using (FrmDoiMatKhau f = new FrmDoiMatKhau())
+                f.ShowDialog(this);
+        }
+
+        /// <summary>Bỏ thẻ "Quản lý nhân viên" khỏi Truy cập nhanh và dồn các thẻ còn lại.</summary>
+        private void AnTheNhanVien()
+        {
+            tlpTruyCapNhanh.Controls.Remove(pnlTheQuanLyNhanVien);
+            tlpTruyCapNhanh.SetColumn(pnlTheLapPhieuMuon, 2);
+            tlpTruyCapNhanh.SetColumn(pnlTheTraSach, 3);
+            tlpTruyCapNhanh.SetColumn(pnlTheTimKiemSach, 4);
+            tlpTruyCapNhanh.ColumnStyles.RemoveAt(tlpTruyCapNhanh.ColumnStyles.Count - 1);
+            tlpTruyCapNhanh.ColumnCount = 5;
+            foreach (ColumnStyle cs in tlpTruyCapNhanh.ColumnStyles)
+            {
+                cs.SizeType = SizeType.Percent;
+                cs.Width = 20F;
+            }
+        }
 
         private void MoFormChucNang(Form form)
         {
+
+            if ((form is FrmNhanVien || form is FrmNhatKy) && !TaiKhoan.LaQuanTri)
+            {
+                form.Dispose();
+                AppTheme.Warning("Chức năng này chỉ dành cho quản trị viên.");
+                return;
+            }
+
             Form formDangMo = Application.OpenForms
                 .Cast<Form>()
                 .FirstOrDefault(f =>

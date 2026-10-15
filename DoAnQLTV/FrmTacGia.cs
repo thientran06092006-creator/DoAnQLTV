@@ -158,6 +158,7 @@ namespace DoAnQLTV
                     DbConnection.Param("@MaTacGia", txtMaTacGia.Text.Trim()),
                     DbConnection.Param("@TenTacGia", txtTenTacGia.Text.Trim()));
 
+                NhatKy.Ghi("Thêm tác giả", "Thêm tác giả \"" + txtTenTacGia.Text.Trim() + "\" - Mã TG: " + txtMaTacGia.Text.Trim());
                 AppTheme.Info("Thêm tác giả thành công!");
                 LoadTacGia();
                 XoaForm();
@@ -197,6 +198,7 @@ namespace DoAnQLTV
                     return;
                 }
 
+                NhatKy.Ghi("Sửa tác giả", "Sửa tác giả \"" + txtTenTacGia.Text.Trim() + "\" - Mã TG: " + maDangChon);
                 AppTheme.Info("Cập nhật tác giả thành công!");
                 LoadTacGia();
                 XoaForm();
@@ -230,6 +232,7 @@ namespace DoAnQLTV
                     return;
                 }
 
+                NhatKy.Ghi("Xóa tác giả", "Xóa tác giả \"" + txtTenTacGia.Text.Trim() + "\" - Mã TG: " + maDangChon);
                 AppTheme.Info("Xóa tác giả thành công!");
                 LoadTacGia();
                 XoaForm();

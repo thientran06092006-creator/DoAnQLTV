@@ -158,6 +158,8 @@ namespace DoAnQLTV
                     DbConnection.Param("@MaTheLoai", txtMaTheLoai.Text.Trim()),
                     DbConnection.Param("@TenTheLoai", txtTenTheLoai.Text.Trim()));
 
+                NhatKy.Ghi("Thêm thể loại", "Thêm thể loại \"" + txtTenTheLoai.Text.Trim() + "\" - Mã TL: " + txtMaTheLoai.Text.Trim());
+
                 AppTheme.Info("Thêm thể loại thành công!");
                 LoadTheLoai();
                 XoaForm();
@@ -197,6 +199,7 @@ namespace DoAnQLTV
                     return;
                 }
 
+                NhatKy.Ghi("Sửa thể loại", "Sửa thể loại \"" + txtTenTheLoai.Text.Trim() + "\" - Mã TL: " + maDangChon);
                 AppTheme.Info("Cập nhật thể loại thành công!");
                 LoadTheLoai();
                 XoaForm();
@@ -230,6 +233,7 @@ namespace DoAnQLTV
                     return;
                 }
 
+                NhatKy.Ghi("Xóa thể loại", "Xóa thể loại \"" + txtTenTheLoai.Text.Trim() + "\" - Mã TL: " + maDangChon);
                 AppTheme.Info("Xóa thể loại thành công!");
                 LoadTheLoai();
                 XoaForm();

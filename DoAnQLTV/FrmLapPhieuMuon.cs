@@ -28,6 +28,17 @@ namespace DoAnQLTV
             DatLaiGiaTriMacDinh();
         }
 
+        /// <summary>Số phiếu CHƯA TRẢ và đã QUÁ HẠN của độc giả.</summary>
+        private int DemPhieuQuaHan(string maDocGia)
+        {
+            return DbConnection.ExecuteScalar<int>(@"
+        SELECT COUNT(*) FROM PhieuMuon
+        WHERE MaDocGia = @MaDocGia
+          AND NgayTra IS NULL
+          AND HanTra < CAST(GETDATE() AS DATE)",
+                DbConnection.Param("@MaDocGia", maDocGia));
+        }
+
         // ================= GIAO DIỆN =================
 
         private void ApDungGiaoDien()
@@ -329,6 +340,16 @@ namespace DoAnQLTV
 
                 // Mỗi đầu sách chỉ có 1 bản: đang có người mượn chưa trả thì không cho lập phiếu mới
                 int dangMuon = DemSachDangMuon(LayMa(cboDocGia.Text), null);
+
+                int quaHan = DemPhieuQuaHan(LayMa(cboDocGia.Text));
+                if (quaHan > 0)
+                {
+                    AppTheme.Warning("Độc giả này đang có " + quaHan + " phiếu mượn quá hạn chưa trả.\n" +
+                                     "Vui lòng trả sách quá hạn trước khi mượn thêm.");
+                    cboDocGia.Focus();
+                    return;
+                }
+
                 if (dangMuon >= QuyDinh.SoSachToiDa)
                 {
                     AppTheme.Warning("Độc giả này đang mượn " + dangMuon + " cuốn chưa trả, đã đạt giới hạn tối đa " +

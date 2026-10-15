@@ -67,6 +67,9 @@
     <Compile Include="FrmDocGia.Designer.cs">
       <DependentUpon>FrmDocGia.cs</DependentUpon>
     </Compile>
+    <Compile Include="FrmDoiMatKhau.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="FrmHuongDanSuDung.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -96,6 +99,9 @@
     </Compile>
     <Compile Include="FrmNhanVien.Designer.cs">
       <DependentUpon>FrmNhanVien.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrmNhatKy.cs">
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="FrmSach.cs">
       <SubType>Form</SubType>
