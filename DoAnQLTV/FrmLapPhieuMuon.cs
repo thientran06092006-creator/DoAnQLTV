@@ -187,7 +187,7 @@ namespace DoAnQLTV
 
         private void DatLaiGiaTriMacDinh()
         {
-            txtMaPhieu.Clear();
+            txtMaPhieu.Text = MaTuSinh.TiepTheo("PhieuMuon", "MaPhieu", "PM", 4);
             cboSach.SelectedIndex = -1;
             cboDocGia.SelectedIndex = cboDocGia.Items.Count > 0 ? 0 : -1;
             cboNhanVien.SelectedIndex = TimNhanVienDangNhap();

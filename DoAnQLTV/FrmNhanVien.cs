@@ -28,6 +28,8 @@ namespace DoAnQLTV
             ApDungGiaoDien();
             ThemCotVaiTro();
             LoadNhanVien();
+
+            txtMaNhanVien.Text = MaTuSinh.TiepTheo("NhanVien", "MaNhanVien", "NV", 4);   // <-- THÊM
         }
 
         // ================= GIAO DIỆN =================
@@ -171,7 +173,7 @@ namespace DoAnQLTV
 
         private void XoaForm()
         {
-            txtMaNhanVien.Clear();
+            txtMaNhanVien.Text = MaTuSinh.TiepTheo("NhanVien", "MaNhanVien", "NV", 4);   // <-- THAY cho txtMaNhanVien.Clear();
             txtTenNhanVien.Clear();
             txtSoDienThoai.Clear();
             txtDiaChi.Clear();

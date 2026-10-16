@@ -21,6 +21,7 @@ namespace DoAnQLTV
             AppTheme.ApplyForm(this);
             ThemKhungLichSu();
             ApDungGiaoDien();
+            ThemCotHetHan();
             LoadDocGia();
             XoaLichSu();
         }
@@ -47,20 +48,21 @@ namespace DoAnQLTV
             dgvLichSu.Name = "dgvLichSu";
             dgvLichSu.SetBounds(1, 42, 938, 185);
 
-            ThemCot("colLsMaPhieu", "Mã phiếu", 13F);
-            ThemCot("colLsSach", "Sách", 30F);
-            ThemCot("colLsNgayMuon", "Ngày mượn", 13F);
-            ThemCot("colLsHanTra", "Hạn trả", 13F);
-            ThemCot("colLsNgayTra", "Ngày trả", 13F);
-            ThemCot("colLsTrangThai", "Trạng thái", 17F);
-            ThemCot("colLsTienPhat", "Tiền phạt", 24F);
+            ThemCotLichSu("colLsMaPhieu", "Mã phiếu", 12F);
+            ThemCotLichSu("colLsSach", "Sách", 26F);
+            ThemCotLichSu("colLsNgayMuon", "Ngày mượn", 12F);
+            ThemCotLichSu("colLsHanTra", "Hạn trả", 12F);
+            ThemCotLichSu("colLsNgayTra", "Ngày trả", 12F);
+            ThemCotLichSu("colLsGiaHan", "Gia hạn", 9F);
+            ThemCotLichSu("colLsTrangThai", "Trạng thái", 15F);
+            ThemCotLichSu("colLsTienPhat", "Tiền phạt", 22F);
 
             pnlLichSu.Controls.Add(lblTomTat);
             pnlLichSu.Controls.Add(dgvLichSu);
             Controls.Add(pnlLichSu);
         }
 
-        private void ThemCot(string ten, string tieuDe, float trongSo)
+        private void ThemCotLichSu(string ten, string tieuDe, float trongSo)
         {
             DataGridViewTextBoxColumn col = new DataGridViewTextBoxColumn();
             col.Name = ten;
@@ -68,6 +70,19 @@ namespace DoAnQLTV
             col.FillWeight = trongSo;
             col.ReadOnly = true;
             dgvLichSu.Columns.Add(col);
+        }
+
+        /// <summary>Thêm cột "Hết hạn thẻ" vào danh sách độc giả (bằng code, không sửa Designer).</summary>
+        private void ThemCotHetHan()
+        {
+            if (dgvKetQua.Columns.Contains("colHetHan")) return;
+
+            DataGridViewTextBoxColumn col = new DataGridViewTextBoxColumn();
+            col.Name = "colHetHan";
+            col.HeaderText = "Hết hạn thẻ";
+            col.FillWeight = 30F;
+            col.ReadOnly = true;
+            dgvKetQua.Columns.Add(col);
         }
 
         private void ApDungGiaoDien()
@@ -96,7 +111,7 @@ namespace DoAnQLTV
         private DataTable TruyVanDocGia(string tuKhoa)
         {
             const string sql = @"
-                SELECT MaDocGia, TenDocGia, NgaySinh, DiaChi, SoDienThoai
+                SELECT MaDocGia, TenDocGia, NgaySinh, DiaChi, SoDienThoai, NgayHetHanThe
                 FROM DocGia
                 WHERE (@TuKhoa IS NULL
                        OR MaDocGia LIKE @TuKhoa
@@ -129,12 +144,30 @@ namespace DoAnQLTV
                     ? ""
                     : Convert.ToDateTime(r["NgaySinh"]).ToString(DinhDangNgay);
 
-                dgvKetQua.Rows.Add(
+                bool hetHan = false;
+                string hetHanText = "";
+                if (r["NgayHetHanThe"] != DBNull.Value)
+                {
+                    DateTime het = Convert.ToDateTime(r["NgayHetHanThe"]).Date;
+                    hetHan = het < DateTime.Today;
+                    hetHanText = het.ToString(DinhDangNgay) + (hetHan ? " (hết hạn)" : "");
+                }
+
+                int idx = dgvKetQua.Rows.Add(
                     r["MaDocGia"],
                     r["TenDocGia"],
                     ngaySinh,
                     r["DiaChi"],
-                    r["SoDienThoai"]);
+                    r["SoDienThoai"],
+                    hetHanText);
+
+                if (hetHan)
+                {
+                    DataGridViewCell o = dgvKetQua.Rows[idx].Cells["colHetHan"];
+                    o.Style.ForeColor = AppTheme.Danger;
+                    o.Style.SelectionForeColor = AppTheme.Danger;
+                    o.Style.Font = AppTheme.Bold;
+                }
             }
 
             dgvKetQua.ClearSelection();
@@ -150,7 +183,7 @@ namespace DoAnQLTV
             lblTomTat.Text = GoiY;
         }
 
-        /// <summary>Hiện toàn bộ phiếu của độc giả + tóm tắt: đang mượn, quá hạn, tiền phạt (đã thu / chưa thu).</summary>
+        /// <summary>Hiện toàn bộ phiếu của độc giả + tóm tắt: thẻ, đang mượn, quá hạn, tiền phạt (đã thu / chưa thu).</summary>
         private void HienLichSu(string maDocGia, string tenDocGia)
         {
             try
@@ -158,11 +191,15 @@ namespace DoAnQLTV
                 DataTable dt = DbConnection.ExecuteQuery(@"
                     SELECT pm.MaPhieu,
                            s.MaSach + ' - ' + s.TenSach AS Sach,
-                           pm.NgayMuon, pm.HanTra, pm.NgayTra, pm.TienPhat, pm.DaThuPhat
+                           pm.NgayMuon, pm.HanTra, pm.NgayTra, pm.TienPhat, pm.DaThuPhat, pm.SoLanGiaHan
                     FROM PhieuMuon pm
                     INNER JOIN Sach s ON pm.MaSach = s.MaSach
                     WHERE pm.MaDocGia = @MaDocGia
                     ORDER BY pm.NgayMuon DESC, pm.MaPhieu DESC",
+                    DbConnection.Param("@MaDocGia", maDocGia));
+
+                DateTime hetHanThe = DbConnection.ExecuteScalar<DateTime>(
+                    "SELECT NgayHetHanThe FROM DocGia WHERE MaDocGia = @MaDocGia",
                     DbConnection.Param("@MaDocGia", maDocGia));
 
                 dgvLichSu.Rows.Clear();
@@ -173,6 +210,7 @@ namespace DoAnQLTV
                 foreach (DataRow r in dt.Rows)
                 {
                     DateTime hanTra = Convert.ToDateTime(r["HanTra"]).Date;
+                    int soLanGiaHan = Convert.ToInt32(r["SoLanGiaHan"]);
                     string ngayTraText = "";
                     string trangThai;
                     string tienPhatText = "";
@@ -225,6 +263,7 @@ namespace DoAnQLTV
                         Convert.ToDateTime(r["NgayMuon"]).ToString(DinhDangNgay),
                         hanTra.ToString(DinhDangNgay),
                         ngayTraText,
+                        soLanGiaHan > 0 ? soLanGiaHan + " lần" : "",
                         trangThai,
                         tienPhatText);
 
@@ -245,17 +284,28 @@ namespace DoAnQLTV
                 dgvLichSu.ClearSelection();
                 dgvLichSu.CurrentCell = null;
 
-                string tomTat = tenDocGia + "  |  Đang mượn: " + dangMuon + "/" + QuyDinh.SoSachToiDa +
-                                " cuốn  |  Quá hạn: " + quaHan +
-                                "  |  Tổng số phiếu: " + dt.Rows.Count +
-                                "  |  Tiền phạt: " + QuyDinh.DinhDangTien(tongPhat);
+                // Thẻ: NULL (default) nghĩa là không giới hạn
+                bool theHetHan = hetHanThe != default(DateTime) && hetHanThe.Date < DateTime.Today;
+                string chuThe = hetHanThe == default(DateTime)
+                    ? "Thẻ: không giới hạn"
+                    : (theHetHan
+                        ? "THẺ ĐÃ HẾT HẠN (" + hetHanThe.ToString(DinhDangNgay) + ")"
+                        : "Thẻ đến " + hetHanThe.ToString(DinhDangNgay));
+
+                string tomTat = tenDocGia + "  |  " + chuThe +
+                                "  |  Đang mượn: " + dangMuon + "/" + QuyDinh.SoSachToiDa +
+                                "  |  Quá hạn: " + quaHan +
+                                "  |  Phiếu: " + dt.Rows.Count +
+                                "  |  Phạt: " + QuyDinh.DinhDangTien(tongPhat);
                 if (phatChuaThu > 0)
                     tomTat += " (chưa thu " + QuyDinh.DinhDangTien(phatChuaThu) + ")";
                 if (phatTamTinh > 0)
                     tomTat += " + " + QuyDinh.DinhDangTien(phatTamTinh) + " tạm tính";
 
                 lblTomTat.Text = tomTat;
-                lblTomTat.ForeColor = (quaHan > 0 || phatChuaThu > 0) ? AppTheme.Danger : AppTheme.Primary;
+                lblTomTat.ForeColor = (theHetHan || quaHan > 0 || phatChuaThu > 0)
+                    ? AppTheme.Danger
+                    : AppTheme.Primary;
             }
             catch (Exception ex)
             {

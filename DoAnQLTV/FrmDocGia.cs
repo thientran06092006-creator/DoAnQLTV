@@ -15,15 +15,65 @@ namespace DoAnQLTV
         // Mã độc giả đang được chọn để sửa/xóa. null = đang ở chế độ nhập mới.
         private string maDangChon = null;
 
+        // Thành phần thêm bằng code (không sửa Designer)
+        private Label lblHetHan;
+        private Label lblTrangThaiThe;
+        private DateTimePicker dtpHetHan;
+        private Button btnGiaHanThe;
+
         public FrmDocGia()
         {
             InitializeComponent();
             AppTheme.ApplyForm(this);
+            ThemThanhPhanMoi();
             ApDungGiaoDien();
+            ThemCotHetHan();
             LoadDocGia();
+            DatGiaTriMoi();
         }
 
         // ================= GIAO DIỆN =================
+
+        /// <summary>Chừa thêm 1 hàng cho "Hết hạn thẻ", thêm nút "Gia hạn thẻ".</summary>
+        private void ThemThanhPhanMoi()
+        {
+            const int doi = 48;
+
+            pnlThongTin.Height += doi;
+            foreach (Button b in new Button[] { btnThem, btnSua, btnXoa, btnTimKiem, btnLamMoi })
+                b.Top += doi;
+            pnlDanhSach.Top += doi;
+            pnlDanhSach.Height -= doi;   // thu bớt để form không cao thêm
+
+            lblHetHan = new Label();
+            lblHetHan.AutoSize = true;
+            lblHetHan.Font = lblDiaChi.Font;
+            lblHetHan.ForeColor = lblDiaChi.ForeColor;
+            lblHetHan.Text = "Hết hạn thẻ";
+            lblHetHan.Location = new Point(24, 172);
+            pnlThongTin.Controls.Add(lblHetHan);
+
+            dtpHetHan = new DateTimePicker();
+            dtpHetHan.Format = DateTimePickerFormat.Custom;
+            dtpHetHan.CustomFormat = DinhDangNgay;
+            dtpHetHan.Font = new Font("Segoe UI", 11F);
+            dtpHetHan.SetBounds(130, 168, 300, 27);
+            dtpHetHan.ValueChanged += (s, e) => CapNhatTrangThaiThe();
+            pnlThongTin.Controls.Add(dtpHetHan);
+
+            lblTrangThaiThe = new Label();
+            lblTrangThaiThe.AutoSize = true;
+            lblTrangThaiThe.Font = AppTheme.Bold;
+            lblTrangThaiThe.Location = new Point(448, 172);
+            pnlThongTin.Controls.Add(lblTrangThaiThe);
+
+            btnGiaHanThe = new Button();
+            btnGiaHanThe.Name = "btnGiaHanThe";
+            btnGiaHanThe.Text = "Gia hạn thẻ";
+            btnGiaHanThe.SetBounds(684, 178 + doi, 120, 40);
+            btnGiaHanThe.Click += btnGiaHanThe_Click;
+            pnlThongTin.Controls.Add(btnGiaHanThe);
+        }
 
         private void ApDungGiaoDien()
         {
@@ -49,6 +99,34 @@ namespace DoAnQLTV
                 ColorTranslator.FromHtml("#E2E8F0"),
                 ColorTranslator.FromHtml("#CBD5E1"),
                 AppTheme.TextDark);
+            AppTheme.StyleOutlineButton(btnGiaHanThe);
+        }
+
+        private void ThemCotHetHan()
+        {
+            if (dgvDocGia.Columns.Contains("colHetHan")) return;
+
+            DataGridViewTextBoxColumn col = new DataGridViewTextBoxColumn();
+            col.Name = "colHetHan";
+            col.HeaderText = "Hết hạn thẻ";
+            col.FillWeight = 32F;
+            col.ReadOnly = true;
+            dgvDocGia.Columns.Add(col);
+        }
+
+        private void CapNhatTrangThaiThe()
+        {
+            DateTime het = dtpHetHan.Value.Date;
+            if (het < DateTime.Today)
+            {
+                lblTrangThaiThe.Text = "Thẻ ĐÃ HẾT HẠN";
+                lblTrangThaiThe.ForeColor = AppTheme.Danger;
+            }
+            else
+            {
+                lblTrangThaiThe.Text = "Thẻ còn hạn (" + (het - DateTime.Today).Days + " ngày)";
+                lblTrangThaiThe.ForeColor = AppTheme.Success;
+            }
         }
 
         // ================= NẠP DỮ LIỆU =================
@@ -57,7 +135,7 @@ namespace DoAnQLTV
         private DataTable TruyVanDocGia(string tuKhoa)
         {
             const string sql = @"
-                SELECT MaDocGia, TenDocGia, NgaySinh, DiaChi, SoDienThoai
+                SELECT MaDocGia, TenDocGia, NgaySinh, DiaChi, SoDienThoai, NgayHetHanThe
                 FROM DocGia
                 WHERE (@TuKhoa IS NULL
                        OR MaDocGia LIKE @TuKhoa
@@ -90,12 +168,30 @@ namespace DoAnQLTV
                     ? ""
                     : Convert.ToDateTime(r["NgaySinh"]).ToString(DinhDangNgay);
 
-                dgvDocGia.Rows.Add(
+                bool hetHan = false;
+                string hetHanText = "";
+                if (r["NgayHetHanThe"] != DBNull.Value)
+                {
+                    DateTime het = Convert.ToDateTime(r["NgayHetHanThe"]).Date;
+                    hetHan = het < DateTime.Today;
+                    hetHanText = het.ToString(DinhDangNgay) + (hetHan ? " (hết hạn)" : "");
+                }
+
+                int idx = dgvDocGia.Rows.Add(
                     r["MaDocGia"],
                     r["TenDocGia"],
                     ngaySinh,
                     r["DiaChi"],
-                    r["SoDienThoai"]);
+                    r["SoDienThoai"],
+                    hetHanText);
+
+                if (hetHan)
+                {
+                    DataGridViewCell o = dgvDocGia.Rows[idx].Cells["colHetHan"];
+                    o.Style.ForeColor = AppTheme.Danger;
+                    o.Style.SelectionForeColor = AppTheme.Danger;
+                    o.Style.Font = AppTheme.Bold;
+                }
             }
 
             dgvDocGia.ClearSelection();
@@ -111,14 +207,24 @@ namespace DoAnQLTV
             txtMaDocGia.BackColor = khoa ? ColorTranslator.FromHtml("#F1F5F9") : Color.White;
         }
 
+        /// <summary>Điền sẵn mã độc giả kế tiếp (vẫn sửa được) và hạn thẻ mặc định.</summary>
+        private void DatGiaTriMoi()
+        {
+            txtMaDocGia.Text = MaTuSinh.TiepTheo("DocGia", "MaDocGia", "DG", 4);
+            dtpHetHan.Value = DateTime.Today.AddMonths(QuyDinh.SoThangHanThe);
+            CapNhatTrangThaiThe();
+        }
+
         private void DoLenForm(string maDocGia, string tenDocGia, DateTime? ngaySinh,
-                               string diaChi, string soDienThoai)
+                               string diaChi, string soDienThoai, DateTime? hetHanThe)
         {
             txtMaDocGia.Text = maDocGia;
             txtTenDocGia.Text = tenDocGia;
             dtpNgaySinh.Value = ngaySinh ?? DateTime.Today;
             txtDiaChi.Text = diaChi;
             txtSoDienThoai.Text = soDienThoai;
+            dtpHetHan.Value = hetHanThe ?? DateTime.Today.AddMonths(QuyDinh.SoThangHanThe);
+            CapNhatTrangThaiThe();
 
             maDangChon = maDocGia;
             KhoaMa(true);
@@ -126,7 +232,6 @@ namespace DoAnQLTV
 
         private void XoaForm()
         {
-            txtMaDocGia.Clear();
             txtTenDocGia.Clear();
             txtDiaChi.Clear();
             txtSoDienThoai.Clear();
@@ -134,10 +239,11 @@ namespace DoAnQLTV
 
             maDangChon = null;
             KhoaMa(false);
+            DatGiaTriMoi();
 
             dgvDocGia.ClearSelection();
             dgvDocGia.CurrentCell = null;
-            txtMaDocGia.Focus();
+            txtTenDocGia.Focus();
         }
 
         private bool KiemTraDuLieu()
@@ -188,13 +294,19 @@ namespace DoAnQLTV
             return true;
         }
 
+        /// <summary>
+        /// Đọc ngày từ ô lưới. Chấp nhận "dd/MM/yyyy" hoặc "dd/MM/yyyy (hết hạn)" (lấy 10 ký tự đầu).
+        /// </summary>
         private static DateTime? DocNgay(object giaTri)
         {
             if (giaTri == null || giaTri == DBNull.Value) return null;
+            if (giaTri is DateTime) return (DateTime)giaTri;
+
+            string s = giaTri.ToString().Trim();
+            if (s.Length > 10) s = s.Substring(0, 10);
 
             DateTime kq;
-            if (giaTri is DateTime) return (DateTime)giaTri;
-            if (DateTime.TryParseExact(giaTri.ToString(), DinhDangNgay,
+            if (DateTime.TryParseExact(s, DinhDangNgay,
                     CultureInfo.InvariantCulture, DateTimeStyles.None, out kq))
                 return kq;
             return null;
@@ -212,7 +324,8 @@ namespace DoAnQLTV
                 row.Cells["colTenDocGia"].Value?.ToString(),
                 DocNgay(row.Cells["colNgaySinh"].Value),
                 row.Cells["colDiaChi"].Value?.ToString(),
-                row.Cells["colSoDienThoai"].Value?.ToString());
+                row.Cells["colSoDienThoai"].Value?.ToString(),
+                DocNgay(row.Cells["colHetHan"].Value));
         }
 
         private void btnThem_Click(object sender, EventArgs e)
@@ -225,20 +338,28 @@ namespace DoAnQLTV
 
             if (!KiemTraDuLieu()) return;
 
+            if (dtpHetHan.Value.Date < DateTime.Today)
+            {
+                AppTheme.Warning("Hạn thẻ của độc giả mới phải từ hôm nay trở đi.");
+                dtpHetHan.Focus();
+                return;
+            }
+
             try
             {
                 DbConnection.ExecuteNonQuery(@"
-                    INSERT INTO DocGia (MaDocGia, TenDocGia, NgaySinh, DiaChi, SoDienThoai)
-                    VALUES (@MaDocGia, @TenDocGia, @NgaySinh, @DiaChi, @SoDienThoai)",
+                    INSERT INTO DocGia (MaDocGia, TenDocGia, NgaySinh, DiaChi, SoDienThoai, NgayHetHanThe)
+                    VALUES (@MaDocGia, @TenDocGia, @NgaySinh, @DiaChi, @SoDienThoai, @HetHan)",
                     DbConnection.Param("@MaDocGia", txtMaDocGia.Text.Trim()),
                     DbConnection.Param("@TenDocGia", txtTenDocGia.Text.Trim()),
                     DbConnection.Param("@NgaySinh", dtpNgaySinh.Value.Date),
                     DbConnection.Param("@DiaChi", txtDiaChi.Text.Trim()),
-                    DbConnection.Param("@SoDienThoai", txtSoDienThoai.Text.Trim()));
+                    DbConnection.Param("@SoDienThoai", txtSoDienThoai.Text.Trim()),
+                    DbConnection.Param("@HetHan", dtpHetHan.Value.Date));
 
                 NhatKy.Ghi("Thêm độc giả", "Thêm độc giả \"" + txtTenDocGia.Text.Trim() + "\" - Mã DG: " + txtMaDocGia.Text.Trim());
 
-                AppTheme.Info("Thêm độc giả thành công!");
+                AppTheme.Info("Thêm độc giả thành công!\nThẻ có hiệu lực đến " + dtpHetHan.Value.ToString(DinhDangNgay) + ".");
                 LoadDocGia();
                 XoaForm();
             }
@@ -269,12 +390,14 @@ namespace DoAnQLTV
                     SET TenDocGia = @TenDocGia,
                         NgaySinh = @NgaySinh,
                         DiaChi = @DiaChi,
-                        SoDienThoai = @SoDienThoai
+                        SoDienThoai = @SoDienThoai,
+                        NgayHetHanThe = @HetHan
                     WHERE MaDocGia = @MaDocGia",
                     DbConnection.Param("@TenDocGia", txtTenDocGia.Text.Trim()),
                     DbConnection.Param("@NgaySinh", dtpNgaySinh.Value.Date),
                     DbConnection.Param("@DiaChi", txtDiaChi.Text.Trim()),
                     DbConnection.Param("@SoDienThoai", txtSoDienThoai.Text.Trim()),
+                    DbConnection.Param("@HetHan", dtpHetHan.Value.Date),
                     DbConnection.Param("@MaDocGia", maDangChon));
 
                 if (soDong == 0)
@@ -365,7 +488,8 @@ namespace DoAnQLTV
                         r["TenDocGia"].ToString(),
                         DocNgay(r["NgaySinh"]),
                         r["DiaChi"].ToString(),
-                        r["SoDienThoai"].ToString());
+                        r["SoDienThoai"].ToString(),
+                        DocNgay(r["NgayHetHanThe"]));
                 }
             }
             catch (Exception ex)
@@ -378,6 +502,46 @@ namespace DoAnQLTV
         {
             LoadDocGia();
             XoaForm();
+        }
+
+        /// <summary>Gia hạn thẻ thêm QuyDinh.SoThangHanThe tháng, tính từ hạn hiện tại (hoặc từ hôm nay nếu đã hết hạn).</summary>
+        private void btnGiaHanThe_Click(object sender, EventArgs e)
+        {
+            if (maDangChon == null)
+            {
+                AppTheme.Warning("Vui lòng chọn độc giả cần gia hạn thẻ.");
+                return;
+            }
+
+            try
+            {
+                // Đọc hạn thẻ hiện tại trong CSDL (không tin giá trị đang sửa dở trên form)
+                DateTime hienTai = DbConnection.ExecuteScalar<DateTime>(
+                    "SELECT NgayHetHanThe FROM DocGia WHERE MaDocGia = @Ma",
+                    DbConnection.Param("@Ma", maDangChon));
+
+                DateTime goc = hienTai.Date > DateTime.Today ? hienTai.Date : DateTime.Today;
+                DateTime moi = goc.AddMonths(QuyDinh.SoThangHanThe);
+
+                if (!AppTheme.Confirm("Gia hạn thẻ của độc giả " + maDangChon + " thêm " + QuyDinh.SoThangHanThe +
+                                      " tháng,\nhạn mới: " + moi.ToString(DinhDangNgay) + "?"))
+                    return;
+
+                DbConnection.ExecuteNonQuery(
+                    "UPDATE DocGia SET NgayHetHanThe = @HetHan WHERE MaDocGia = @Ma",
+                    DbConnection.Param("@HetHan", moi),
+                    DbConnection.Param("@Ma", maDangChon));
+
+                NhatKy.Ghi("Gia hạn thẻ", "Gia hạn thẻ độc giả " + maDangChon + " đến " + moi.ToString(DinhDangNgay));
+
+                AppTheme.Info("Đã gia hạn thẻ đến " + moi.ToString(DinhDangNgay) + ".");
+                LoadDocGia();
+                XoaForm();
+            }
+            catch (Exception ex)
+            {
+                AppTheme.Error("Không thể gia hạn thẻ.\n\n" + ex.Message);
+            }
         }
     }
 }

@@ -12,17 +12,18 @@ namespace DoAnQLTV
         private string maSachDangChon = null;
 
         // Thành phần thêm bằng code (không sửa Designer)
-        private Label lblSoLuong;
-        private Label lblDonVi;
         private NumericUpDown nudSoLuong;
+        private TextBox txtNhaXuatBan;
+        private TextBox txtNamXuatBan;
+        private TextBox txtViTriKe;
 
         public FrmSach()
         {
             InitializeComponent();
             AppTheme.ApplyForm(this);
-            ThemOSoLuong();
+            ThemO();
             ApDungGiaoDien();
-            ThemCotSoLuong();
+            ThemCotMoi();
 
             LoadComboBox(cboTheLoai,
                 "SELECT MaTheLoai, TenTheLoai FROM TheLoai ORDER BY TenTheLoai",
@@ -33,29 +34,50 @@ namespace DoAnQLTV
                 "TenTacGia", "MaTacGia", "tác giả");
 
             LoadSach();
+            DatMaMoi();
         }
 
         // ================= GIAO DIỆN =================
 
-        /// <summary>Chừa thêm 1 hàng cho ô "Số lượng": đẩy hàng nút và danh sách xuống 48px.</summary>
-        private void ThemOSoLuong()
+        private Label TaoNhan(string text, int x, int y)
         {
-            const int doi = 48;
+            Label lbl = new Label();
+            lbl.AutoSize = true;
+            lbl.Font = lblMaSach.Font;
+            lbl.ForeColor = lblMaSach.ForeColor;
+            lbl.Text = text;
+            lbl.Location = new Point(x, y);
+            pnlThongTin.Controls.Add(lbl);
+            return lbl;
+        }
+
+        private TextBox TaoOTexto(int x, int y, int rong, int toiDa)
+        {
+            TextBox txt = new TextBox();
+            txt.MaxLength = toiDa;
+            txt.SetBounds(x, y, rong, 27);
+            pnlThongTin.Controls.Add(txt);
+            return txt;
+        }
+
+        /// <summary>
+        /// Thêm 2 hàng ô nhập: [Số lượng | Nhà XB] và [Năm XB | Vị trí kệ].
+        /// Đẩy hàng nút và danh sách xuống, đồng thời thu bớt chiều cao danh sách cho vừa màn hình.
+        /// </summary>
+        private void ThemO()
+        {
+            const int doi = 96;       // 2 hàng x 48
+            const int thuBotDS = 56;  // thu chiều cao danh sách
 
             pnlThongTin.Height += doi;
             foreach (Button b in new Button[] { btnThem, btnSua, btnXoa, btnTimKiem, btnLamMoi })
                 b.Top += doi;
             pnlDanhSach.Top += doi;
-            ClientSize = new Size(ClientSize.Width, ClientSize.Height + doi);
+            pnlDanhSach.Height -= thuBotDS;
+            ClientSize = new Size(ClientSize.Width, ClientSize.Height + doi - thuBotDS);
 
-            lblSoLuong = new Label();
-            lblSoLuong.AutoSize = true;
-            lblSoLuong.Font = lblMaSach.Font;
-            lblSoLuong.ForeColor = lblMaSach.ForeColor;
-            lblSoLuong.Text = "Số lượng";
-            lblSoLuong.Location = new Point(24, 132);
-            pnlThongTin.Controls.Add(lblSoLuong);
-
+            // Hàng 3
+            TaoNhan("Số lượng", 24, 132);
             nudSoLuong = new NumericUpDown();
             nudSoLuong.Minimum = 1;
             nudSoLuong.Maximum = 1000;
@@ -64,13 +86,19 @@ namespace DoAnQLTV
             nudSoLuong.SetBounds(110, 128, 110, 27);
             pnlThongTin.Controls.Add(nudSoLuong);
 
-            lblDonVi = new Label();
-            lblDonVi.AutoSize = true;
-            lblDonVi.Font = AppTheme.Base;
-            lblDonVi.ForeColor = AppTheme.TextMuted;
-            lblDonVi.Text = "bản (cuốn) của đầu sách này";
-            lblDonVi.Location = new Point(232, 132);
-            pnlThongTin.Controls.Add(lblDonVi);
+            Label donVi = TaoNhan("bản", 230, 132);
+            donVi.Font = AppTheme.Base;
+            donVi.ForeColor = AppTheme.TextMuted;
+
+            TaoNhan("Nhà XB", 476, 132);
+            txtNhaXuatBan = TaoOTexto(560, 128, 340, 100);
+
+            // Hàng 4
+            TaoNhan("Năm XB", 24, 180);
+            txtNamXuatBan = TaoOTexto(110, 176, 110, 4);
+
+            TaoNhan("Vị trí kệ", 476, 180);
+            txtViTriKe = TaoOTexto(560, 176, 340, 50);
         }
 
         private void ApDungGiaoDien()
@@ -83,6 +111,9 @@ namespace DoAnQLTV
 
             AppTheme.StyleTextBox(txtMaSach);
             AppTheme.StyleTextBox(txtTenSach);
+            AppTheme.StyleTextBox(txtNhaXuatBan);
+            AppTheme.StyleTextBox(txtNamXuatBan);
+            AppTheme.StyleTextBox(txtViTriKe);
 
             AppTheme.StyleComboBox(cboTheLoai);
             AppTheme.StyleComboBox(cboTacGia);
@@ -97,27 +128,25 @@ namespace DoAnQLTV
                 AppTheme.TextDark);   // nút phụ màu xám nhạt
         }
 
-        private void ThemCotSoLuong()
+        private void ThemCot(string ten, string tieuDe, float trongSo)
         {
-            if (!dgvSach.Columns.Contains("colSoLuong"))
-            {
-                DataGridViewTextBoxColumn col = new DataGridViewTextBoxColumn();
-                col.Name = "colSoLuong";
-                col.HeaderText = "Số lượng";
-                col.FillWeight = 40F;
-                col.ReadOnly = true;
-                dgvSach.Columns.Add(col);
-            }
+            if (dgvSach.Columns.Contains(ten)) return;
 
-            if (!dgvSach.Columns.Contains("colConLai"))
-            {
-                DataGridViewTextBoxColumn col = new DataGridViewTextBoxColumn();
-                col.Name = "colConLai";
-                col.HeaderText = "Còn lại";
-                col.FillWeight = 40F;
-                col.ReadOnly = true;
-                dgvSach.Columns.Add(col);
-            }
+            DataGridViewTextBoxColumn col = new DataGridViewTextBoxColumn();
+            col.Name = ten;
+            col.HeaderText = tieuDe;
+            col.FillWeight = trongSo;
+            col.ReadOnly = true;
+            dgvSach.Columns.Add(col);
+        }
+
+        private void ThemCotMoi()
+        {
+            ThemCot("colSoLuong", "Số lượng", 32F);
+            ThemCot("colConLai", "Còn lại", 30F);
+            ThemCot("colNXB", "Nhà XB", 70F);
+            ThemCot("colNam", "Năm XB", 30F);
+            ThemCot("colViTri", "Vị trí kệ", 40F);
         }
 
         // ================= NẠP DỮ LIỆU =================
@@ -138,12 +167,13 @@ namespace DoAnQLTV
             }
         }
 
-        /// <summary>Lấy danh sách sách (kèm số lượng và số bản còn lại); tuKhoa rỗng/null = lấy tất cả.</summary>
+        /// <summary>Lấy danh sách sách (kèm số lượng, số bản còn lại, thông tin xuất bản); tuKhoa rỗng/null = lấy tất cả.</summary>
         private DataTable TruyVanSach(string tuKhoa)
         {
             const string sql = @"
                 SELECT s.MaSach, s.TenSach, tl.TenTheLoai, tg.TenTacGia,
-                       s.SoLuong, " + ThuVienDb.SqlConLai + @" AS ConLai
+                       s.SoLuong, " + ThuVienDb.SqlConLai + @" AS ConLai,
+                       s.NhaXuatBan, s.NamXuatBan, s.ViTriKe
                 FROM Sach s
                 INNER JOIN TheLoai tl ON s.MaTheLoai = tl.MaTheLoai
                 INNER JOIN TacGia  tg ON s.MaTacGia  = tg.MaTacGia
@@ -166,6 +196,11 @@ namespace DoAnQLTV
             }
         }
 
+        private static string Chuoi(object giaTri)
+        {
+            return giaTri == null || giaTri == DBNull.Value ? "" : giaTri.ToString();
+        }
+
         private void HienThiLuoi(DataTable dt)
         {
             dgvSach.Rows.Clear();
@@ -175,7 +210,8 @@ namespace DoAnQLTV
 
                 int idx = dgvSach.Rows.Add(
                     r["MaSach"], r["TenSach"], r["TenTheLoai"], r["TenTacGia"],
-                    r["SoLuong"], conLai);
+                    r["SoLuong"], conLai,
+                    Chuoi(r["NhaXuatBan"]), Chuoi(r["NamXuatBan"]), Chuoi(r["ViTriKe"]));
 
                 // Hết sách thì tô đỏ cột "Còn lại"
                 if (conLai <= 0)
@@ -193,13 +229,23 @@ namespace DoAnQLTV
 
         // ================= HÀM DÙNG CHUNG TRÊN FORM =================
 
-        private void DoLenForm(string maSach, string tenSach, string tenTheLoai, string tenTacGia, int soLuong)
+        /// <summary>Điền sẵn mã sách kế tiếp (vẫn sửa được).</summary>
+        private void DatMaMoi()
+        {
+            txtMaSach.Text = MaTuSinh.TiepTheo("Sach", "MaSach", "S", 4);
+        }
+
+        private void DoLenForm(string maSach, string tenSach, string tenTheLoai, string tenTacGia,
+                               int soLuong, string nhaXuatBan, string namXuatBan, string viTriKe)
         {
             txtMaSach.Text = maSach;
             txtTenSach.Text = tenSach;
             cboTheLoai.SelectedIndex = cboTheLoai.FindStringExact(tenTheLoai);
             cboTacGia.SelectedIndex = cboTacGia.FindStringExact(tenTacGia);
             nudSoLuong.Value = Math.Max(nudSoLuong.Minimum, Math.Min(nudSoLuong.Maximum, soLuong));
+            txtNhaXuatBan.Text = nhaXuatBan ?? "";
+            txtNamXuatBan.Text = namXuatBan ?? "";
+            txtViTriKe.Text = viTriKe ?? "";
 
             maSachDangChon = maSach;
             txtMaSach.ReadOnly = true;   // Không cho đổi mã khi đang sửa (mã là khóa chính)
@@ -207,18 +253,21 @@ namespace DoAnQLTV
 
         private void XoaForm()
         {
-            txtMaSach.Clear();
             txtTenSach.Clear();
             cboTheLoai.SelectedIndex = -1;
             cboTacGia.SelectedIndex = -1;
             nudSoLuong.Value = 1;
+            txtNhaXuatBan.Clear();
+            txtNamXuatBan.Clear();
+            txtViTriKe.Clear();
 
             maSachDangChon = null;
             txtMaSach.ReadOnly = false;
+            DatMaMoi();
 
             dgvSach.ClearSelection();
             dgvSach.CurrentCell = null;
-            txtMaSach.Focus();
+            txtTenSach.Focus();
         }
 
         private bool CanhBao(string thongBao, Control control)
@@ -238,7 +287,31 @@ namespace DoAnQLTV
                 return CanhBao("Vui lòng chọn thể loại.", cboTheLoai);
             if (cboTacGia.SelectedValue == null)
                 return CanhBao("Vui lòng chọn tác giả.", cboTacGia);
+
+            // Năm xuất bản: có thể để trống
+            string nam = txtNamXuatBan.Text.Trim();
+            if (nam != "")
+            {
+                int n;
+                if (!int.TryParse(nam, out n) || n < 1000 || n > DateTime.Today.Year + 1)
+                    return CanhBao("Năm xuất bản không hợp lệ (nhập 4 chữ số, từ 1000 đến " +
+                                   (DateTime.Today.Year + 1) + ").", txtNamXuatBan);
+            }
+
             return true;
+        }
+
+        /// <summary>Chuỗi rỗng thì lưu NULL.</summary>
+        private static object NullNeuRong(string s)
+        {
+            s = (s ?? "").Trim();
+            return s == "" ? null : s;
+        }
+
+        private object NamXuatBanDeLuu()
+        {
+            string nam = txtNamXuatBan.Text.Trim();
+            return nam == "" ? null : (object)int.Parse(nam);
         }
 
         private static int DocSo(object giaTri)
@@ -259,7 +332,10 @@ namespace DoAnQLTV
                 row.Cells["colTenSach"].Value?.ToString(),
                 row.Cells["colTheLoai"].Value?.ToString(),
                 row.Cells["colTacGia"].Value?.ToString(),
-                DocSo(row.Cells["colSoLuong"].Value));
+                DocSo(row.Cells["colSoLuong"].Value),
+                row.Cells["colNXB"].Value?.ToString(),
+                row.Cells["colNam"].Value?.ToString(),
+                row.Cells["colViTri"].Value?.ToString());
         }
 
         private void btnThem_Click(object sender, EventArgs e)
@@ -275,13 +351,16 @@ namespace DoAnQLTV
             try
             {
                 DbConnection.ExecuteNonQuery(@"
-                    INSERT INTO Sach (MaSach, TenSach, MaTheLoai, MaTacGia, SoLuong)
-                    VALUES (@MaSach, @TenSach, @MaTheLoai, @MaTacGia, @SoLuong)",
+                    INSERT INTO Sach (MaSach, TenSach, MaTheLoai, MaTacGia, SoLuong, NhaXuatBan, NamXuatBan, ViTriKe)
+                    VALUES (@MaSach, @TenSach, @MaTheLoai, @MaTacGia, @SoLuong, @NhaXuatBan, @NamXuatBan, @ViTriKe)",
                     DbConnection.Param("@MaSach", txtMaSach.Text.Trim()),
                     DbConnection.Param("@TenSach", txtTenSach.Text.Trim()),
                     DbConnection.Param("@MaTheLoai", cboTheLoai.SelectedValue),
                     DbConnection.Param("@MaTacGia", cboTacGia.SelectedValue),
-                    DbConnection.Param("@SoLuong", (int)nudSoLuong.Value));
+                    DbConnection.Param("@SoLuong", (int)nudSoLuong.Value),
+                    DbConnection.Param("@NhaXuatBan", NullNeuRong(txtNhaXuatBan.Text)),
+                    DbConnection.Param("@NamXuatBan", NamXuatBanDeLuu()),
+                    DbConnection.Param("@ViTriKe", NullNeuRong(txtViTriKe.Text)));
 
                 NhatKy.Ghi("Thêm sách", "Thêm sách \"" + txtTenSach.Text.Trim() + "\" - Mã sách: " +
                     txtMaSach.Text.Trim() + " (" + (int)nudSoLuong.Value + " bản)");
@@ -327,15 +406,21 @@ namespace DoAnQLTV
 
                 int soDong = DbConnection.ExecuteNonQuery(@"
                     UPDATE Sach
-                    SET TenSach   = @TenSach,
-                        MaTheLoai = @MaTheLoai,
-                        MaTacGia  = @MaTacGia,
-                        SoLuong   = @SoLuong
+                    SET TenSach    = @TenSach,
+                        MaTheLoai  = @MaTheLoai,
+                        MaTacGia   = @MaTacGia,
+                        SoLuong    = @SoLuong,
+                        NhaXuatBan = @NhaXuatBan,
+                        NamXuatBan = @NamXuatBan,
+                        ViTriKe    = @ViTriKe
                     WHERE MaSach = @MaSach",
                     DbConnection.Param("@TenSach", txtTenSach.Text.Trim()),
                     DbConnection.Param("@MaTheLoai", cboTheLoai.SelectedValue),
                     DbConnection.Param("@MaTacGia", cboTacGia.SelectedValue),
                     DbConnection.Param("@SoLuong", (int)nudSoLuong.Value),
+                    DbConnection.Param("@NhaXuatBan", NullNeuRong(txtNhaXuatBan.Text)),
+                    DbConnection.Param("@NamXuatBan", NamXuatBanDeLuu()),
+                    DbConnection.Param("@ViTriKe", NullNeuRong(txtViTriKe.Text)),
                     DbConnection.Param("@MaSach", maSachDangChon));
 
                 if (soDong == 0)
@@ -424,7 +509,10 @@ namespace DoAnQLTV
                         r["TenSach"].ToString(),
                         r["TenTheLoai"].ToString(),
                         r["TenTacGia"].ToString(),
-                        Convert.ToInt32(r["SoLuong"]));
+                        Convert.ToInt32(r["SoLuong"]),
+                        Chuoi(r["NhaXuatBan"]),
+                        Chuoi(r["NamXuatBan"]),
+                        Chuoi(r["ViTriKe"]));
                 }
             }
             catch (Exception ex)

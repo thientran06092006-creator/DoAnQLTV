@@ -144,6 +144,8 @@ namespace DoAnQLTV
         private DoubleBufferedPanel pnlLogo, pnlFooter, pnlBanner, pnlChuThichMuonTra, pnlChuThichTheLoai;
         private ContextMenuStrip menuThongBao;
 
+        private LinkLabel lnkThongKe;
+
         private readonly Dictionary<Button, MucSidebar> mucSidebar = new Dictionary<Button, MucSidebar>();
         private readonly HashSet<Button> dangRe = new HashSet<Button>();
         private readonly HashSet<Button> nhomDaDong = new HashSet<Button>();
@@ -479,6 +481,18 @@ namespace DoAnQLTV
             pnlBanner = new DoubleBufferedPanel();
             pnlBanner.BackColor = AppTheme.Background;
             pnlBanner.Paint += VeBanner;
+
+            lnkThongKe = new LinkLabel();
+            lnkThongKe.Text = "Thống kê chi tiết";
+            lnkThongKe.AutoSize = true;
+            lnkThongKe.Font = fNhanThe;
+            lnkThongKe.BackColor = Color.Transparent;
+            lnkThongKe.LinkColor = Mau("#2563EB");
+            lnkThongKe.ActiveLinkColor = Mau("#1D4ED8");
+            lnkThongKe.LinkClicked += (s, e) => MoFormChucNang(new FrmThongKe());
+            pnlBieuDoMuonTra.Controls.Add(lnkThongKe);
+            lnkThongKe.BringToFront();
+
             pnlBanner.SizeChanged += (s, e) => CanLeBanner();
             pnlContent.Controls.Add(pnlBanner);
 
@@ -672,6 +686,12 @@ namespace DoAnQLTV
         {
             if (pnlChuThichMuonTra == null) return;
             pnlChuThichMuonTra.Location = new Point(pnlBieuDoMuonTra.Width - pnlChuThichMuonTra.Width - S(22), S(14));
+
+            if (lnkThongKe != null)
+            {
+                lnkThongKe.Visible = pnlBieuDoMuonTra.Width > S(560);   // màn hình hẹp thì ẩn cho khỏi đè chữ
+                lnkThongKe.Location = new Point(pnlChuThichMuonTra.Left - lnkThongKe.Width - S(14), S(18));
+            }
         }
 
         private void CanLeTheTruyCap()

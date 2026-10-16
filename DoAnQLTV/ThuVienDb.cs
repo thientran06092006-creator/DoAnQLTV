@@ -4,9 +4,9 @@ using System.Data.SqlClient;
 namespace DoAnQLTV
 {
     /// <summary>
-    /// Lỗi vi phạm quy định nghiệp vụ (hết sách, vượt giới hạn mượn, còn sách quá hạn...).
+    /// Lỗi vi phạm quy định nghiệp vụ (hết sách, vượt giới hạn mượn, thẻ hết hạn...).
     /// Form bắt lỗi này và hiện cảnh báo cho người dùng. Truong cho biết nên đưa con trỏ vào ô nào
-    /// ("sach" hoặc "docgia").
+    /// ("sach", "docgia" hoặc "phieu").
     /// </summary>
     public class LoiNghiepVu : Exception
     {
@@ -20,7 +20,7 @@ namespace DoAnQLTV
 
     /// <summary>
     /// Các thao tác mượn sách cần đảm bảo "kiểm tra rồi mới ghi" không bị lách khi 2 máy cùng thao tác.
-    /// Mỗi thao tác chạy trong 1 transaction và khóa dòng Sach / DocGia (UPDLOCK, HOLDLOCK),
+    /// Mỗi thao tác chạy trong 1 transaction và khóa dòng Sach / DocGia / PhieuMuon (UPDLOCK, HOLDLOCK),
     /// nên 2 nhân viên cùng mượn bản cuối của 1 cuốn sẽ được xử lý lần lượt, người sau bị từ chối.
     /// </summary>
     public static class ThuVienDb
@@ -44,12 +44,32 @@ namespace DoAnQLTV
         }
 
         /// <summary>
+        /// Thẻ độc giả hết hạn chưa? Cột NgayHetHanThe để trống (NULL) nghĩa là không giới hạn.
+        /// Trả về ngày hết hạn nếu thẻ ĐÃ hết hạn, ngược lại trả về null.
+        /// </summary>
+        private static DateTime? NgayTheHetHan(SqlConnection conn, SqlTransaction tran, string maDocGia)
+        {
+            DateTime het = Scalar<DateTime>(conn, tran,
+                "SELECT NgayHetHanThe FROM DocGia WHERE MaDocGia = @d",
+                DbConnection.Param("@d", maDocGia));
+
+            if (het == default(DateTime)) return null;           // NULL -> không giới hạn
+            return het.Date < DateTime.Today ? (DateTime?)het.Date : null;
+        }
+
+        private static string ThongBaoTheHetHan(DateTime ngayHet, string viec)
+        {
+            return "Thẻ của độc giả này đã hết hạn từ ngày " + ngayHet.ToString("dd/MM/yyyy") + ".\n" +
+                   "Vui lòng gia hạn thẻ (mục Quản lý độc giả) trước khi " + viec + ".";
+        }
+
+        /// <summary>
         /// Kiểm tra điều kiện được mượn. Ném LoiNghiepVu nếu vi phạm.
         /// boQuaMaPhieu: bỏ qua phiếu này khi đếm (dùng lúc sửa chính phiếu đó).
-        /// kiemTraQuaHan: chỉ kiểm tra khi lập phiếu MỚI.
+        /// laPhieuMoi: chỉ khi lập phiếu MỚI mới kiểm tra thẻ hết hạn và sách quá hạn.
         /// </summary>
         private static void KiemTraDieuKienMuon(SqlConnection conn, SqlTransaction tran,
-            string maDocGia, string maSach, string boQuaMaPhieu, bool kiemTraQuaHan)
+            string maDocGia, string maSach, string boQuaMaPhieu, bool laPhieuMoi)
         {
             // ----- Sách: khóa dòng rồi đếm số bản đang mượn -----
             string tenSach = Scalar<string>(conn, tran,
@@ -74,15 +94,19 @@ namespace DoAnQLTV
                     "Sách \"" + tenSach + "\" đã được mượn hết (" + dangMuonSach + "/" + soLuong +
                     " bản).\nVui lòng chọn sách khác.", "sach");
 
-            // ----- Độc giả: khóa dòng rồi kiểm tra quá hạn và giới hạn -----
+            // ----- Độc giả: khóa dòng rồi kiểm tra thẻ, quá hạn và giới hạn -----
             string maTonTai = Scalar<string>(conn, tran,
                 "SELECT MaDocGia FROM DocGia WITH (UPDLOCK, HOLDLOCK) WHERE MaDocGia = @d",
                 DbConnection.Param("@d", maDocGia));
             if (maTonTai == null)
                 throw new LoiNghiepVu("Độc giả được chọn không còn tồn tại.", "docgia");
 
-            if (kiemTraQuaHan)
+            if (laPhieuMoi)
             {
+                DateTime? theHetHan = NgayTheHetHan(conn, tran, maDocGia);
+                if (theHetHan.HasValue)
+                    throw new LoiNghiepVu(ThongBaoTheHetHan(theHetHan.Value, "mượn sách"), "docgia");
+
                 int quaHan = Scalar<int>(conn, tran,
                     @"SELECT COUNT(*) FROM PhieuMuon
                       WHERE MaDocGia = @d AND NgayTra IS NULL
@@ -169,6 +193,85 @@ namespace DoAnQLTV
             });
 
             return soDong;
+        }
+
+        /// <summary>
+        /// Gia hạn phiếu: cộng thêm QuyDinh.SoNgayMoiLanGiaHan ngày vào hạn trả.
+        /// Điều kiện: phiếu chưa trả, CHƯA quá hạn, chưa gia hạn quá QuyDinh.SoLanGiaHanToiDa lần,
+        /// và thẻ độc giả còn hạn. Vi phạm thì ném LoiNghiepVu.
+        /// </summary>
+        public static void GiaHan(string maPhieu, out DateTime hanMoi, out int lanThu)
+        {
+            DateTime ketQuaHan = DateTime.MinValue;
+            int ketQuaLan = 0;
+
+            DbConnection.ExecuteInTransaction((conn, tran) =>
+            {
+                DateTime hanTra = DateTime.MinValue;
+                bool daTra = false;
+                int soLan = 0;
+                string maDocGia = null;
+                bool tonTai = false;
+
+                // Khóa dòng phiếu rồi đọc trạng thái hiện tại
+                using (SqlCommand cmd = new SqlCommand(
+                    @"SELECT HanTra, NgayTra, SoLanGiaHan, MaDocGia
+                      FROM PhieuMuon WITH (UPDLOCK, HOLDLOCK)
+                      WHERE MaPhieu = @p", conn, tran))
+                {
+                    cmd.Parameters.Add(DbConnection.Param("@p", maPhieu));
+                    using (SqlDataReader rd = cmd.ExecuteReader())
+                    {
+                        if (rd.Read())
+                        {
+                            tonTai = true;
+                            hanTra = Convert.ToDateTime(rd["HanTra"]).Date;
+                            daTra = rd["NgayTra"] != DBNull.Value;
+                            soLan = Convert.ToInt32(rd["SoLanGiaHan"]);
+                            maDocGia = rd["MaDocGia"].ToString();
+                        }
+                    }
+                }
+
+                if (!tonTai)
+                    throw new LoiNghiepVu("Không tìm thấy phiếu mượn " + maPhieu + ".", "phieu");
+
+                if (daTra)
+                    throw new LoiNghiepVu("Phiếu " + maPhieu + " đã trả sách, không thể gia hạn.", "phieu");
+
+                if (hanTra < DateTime.Today)
+                    throw new LoiNghiepVu(
+                        "Phiếu " + maPhieu + " đã quá hạn từ ngày " + hanTra.ToString("dd/MM/yyyy") +
+                        " nên không thể gia hạn.\nHãy trả sách và nộp tiền phạt (nếu có).", "phieu");
+
+                if (soLan >= QuyDinh.SoLanGiaHanToiDa)
+                    throw new LoiNghiepVu(
+                        "Phiếu " + maPhieu + " đã gia hạn " + soLan + " lần, đạt giới hạn tối đa " +
+                        QuyDinh.SoLanGiaHanToiDa + " lần.", "phieu");
+
+                DateTime? theHetHan = NgayTheHetHan(conn, tran, maDocGia);
+                if (theHetHan.HasValue)
+                    throw new LoiNghiepVu(ThongBaoTheHetHan(theHetHan.Value, "gia hạn phiếu"), "phieu");
+
+                DateTime moi = hanTra.AddDays(QuyDinh.SoNgayMoiLanGiaHan);
+
+                using (SqlCommand cmd = new SqlCommand(
+                    @"UPDATE PhieuMuon
+                      SET HanTra = @HanMoi,
+                          SoLanGiaHan = SoLanGiaHan + 1
+                      WHERE MaPhieu = @p", conn, tran))
+                {
+                    cmd.Parameters.Add(DbConnection.Param("@HanMoi", moi));
+                    cmd.Parameters.Add(DbConnection.Param("@p", maPhieu));
+                    cmd.ExecuteNonQuery();
+                }
+
+                ketQuaHan = moi;
+                ketQuaLan = soLan + 1;
+            });
+
+            hanMoi = ketQuaHan;
+            lanThu = ketQuaLan;
         }
     }
 }

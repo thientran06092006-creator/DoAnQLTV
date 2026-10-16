@@ -17,6 +17,8 @@ namespace DoAnQLTV
             AppTheme.ApplyForm(this);
             ApDungGiaoDien();
             LoadTacGia();
+
+            txtMaTacGia.Text = MaTuSinh.TiepTheo("TacGia", "MaTacGia", "TG", 4);   // <-- THÊM
         }
 
         // ================= GIAO DIỆN =================
@@ -98,7 +100,7 @@ namespace DoAnQLTV
 
         private void XoaForm()
         {
-            txtMaTacGia.Clear();
+            txtMaTacGia.Text = MaTuSinh.TiepTheo("TacGia", "MaTacGia", "TG", 4);   // <-- THAY cho txtMaTacGia.Clear();
             txtTenTacGia.Clear();
 
             maDangChon = null;
@@ -106,7 +108,7 @@ namespace DoAnQLTV
 
             dgvTacGia.ClearSelection();
             dgvTacGia.CurrentCell = null;
-            txtMaTacGia.Focus();
+            txtTenTacGia.Focus();   // <-- đổi từ txtMaTacGia.Focus()
         }
 
         private bool KiemTraDuLieu()

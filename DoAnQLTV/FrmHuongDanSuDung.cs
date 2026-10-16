@@ -32,8 +32,8 @@ namespace DoAnQLTV
 
         // ================= NỘI DUNG HƯỚNG DẪN =================
         // Nội dung được nạp bằng code (thay cho chữ nằm trong resource của Designer).
-        // Các con số (mức phạt, giới hạn mượn, mật khẩu mặc định) lấy từ QuyDinh
-        // nên đổi quy định thì hướng dẫn tự đổi theo.
+        // Các con số (mức phạt, giới hạn mượn, số lần gia hạn, hạn thẻ, mật khẩu mặc định) lấy từ
+        // QuyDinh nên đổi quy định thì hướng dẫn tự đổi theo.
 
         private Font fTieuDe;
         private Font fMuc;
@@ -52,11 +52,6 @@ namespace DoAnQLTV
         {
             rtbHuongDan.AppendText("\n");
             Them(text, fTieuDe, AppTheme.Primary);
-        }
-
-        private void Muc(string text)
-        {
-            Them(text, fMuc, AppTheme.TextDark);
         }
 
         private void Dong(string text)
@@ -85,9 +80,11 @@ namespace DoAnQLTV
             Dong("Đăng xuất: mục \"Đăng xuất\" ở thanh bên hoặc ở menu khi bấm vào tên người dùng.");
 
             // ---------- 2 ----------
-            TieuDe("2. Trang chủ");
+            TieuDe("2. Trang chủ và thống kê");
             Dong("Bốn thẻ thống kê: tổng số đầu sách, số độc giả, số phiếu đang hiệu lực và số phiếu quá hạn.");
             Dong("Biểu đồ mượn - trả theo tháng và biểu đồ thể loại sách. Biểu tượng chuông hiện thông báo khi có phiếu quá hạn.");
+            Dong("Bấm \"Thống kê chi tiết\" (cạnh biểu đồ mượn - trả) để xem: top 10 sách được mượn nhiều, top 10 độc giả "
+                 + "mượn nhiều và tiền phạt theo tháng (đã thu / chưa thu). Có thể chọn khoảng ngày cần xem.");
             Dong("\"Truy cập nhanh\" mở nhanh các chức năng hay dùng.");
             Dong("\"Hoạt động gần đây\" hiện 4 thao tác mới nhất. Quản trị viên bấm \"Xem tất cả\" để xem toàn bộ nhật ký.");
 
@@ -95,19 +92,25 @@ namespace DoAnQLTV
             TieuDe("3. Quản lý sách, thể loại, tác giả");
             Dong("Chọn một dòng trong danh sách để sửa hoặc xóa. Bấm \"Làm mới\" để quay về chế độ nhập mới. "
                  + "Mã là khóa chính nên không đổi được khi đang sửa.");
-            Dong("Mỗi đầu sách có \"Số lượng\" (số bản). Cột \"Còn lại\" = số lượng trừ số bản đang được mượn chưa trả; "
-                 + "hết sách thì hiện màu đỏ.");
+            Dong("Mã được điền sẵn theo mã lớn nhất hiện có (ví dụ S0007 sau S0006). Bạn vẫn có thể sửa lại mã nếu muốn.");
+            Dong("Thông tin sách gồm: tên, thể loại, tác giả, số lượng bản, nhà xuất bản, năm xuất bản và vị trí kệ. "
+                 + "Nhà xuất bản, năm và vị trí kệ có thể để trống.");
+            Dong("Cột \"Còn lại\" = số lượng trừ số bản đang được mượn chưa trả; hết sách thì hiện màu đỏ.");
             Dong("Không thể giảm số lượng thấp hơn số bản đang được mượn. Không thể xóa sách, thể loại hoặc tác giả "
                  + "đang được sử dụng.");
             Dong("Ô \"Tên\" cũng dùng làm từ khóa khi bấm \"Tìm kiếm\".");
 
             // ---------- 4 ----------
-            TieuDe("4. Quản lý độc giả và tra cứu");
+            TieuDe("4. Độc giả, thẻ độc giả và tra cứu");
             Dong("Quản lý độc giả: thêm, sửa, xóa. Số điện thoại gồm 9 đến 11 chữ số.");
-            Dong("Thông tin độc giả: tìm hoặc bấm vào một độc giả để xem lịch sử mượn, số cuốn đang mượn, số phiếu quá hạn "
-                 + "và tiền phạt (đã thu / chưa thu).");
-            Dong("Tìm kiếm sách: tìm theo mã, tên, thể loại hoặc tác giả; xem số lượng, số bản còn lại và tình trạng "
-                 + "\"Có thể mượn\" / \"Hết sách\".");
+            Dong("Mỗi độc giả có \"Hết hạn thẻ\". Độc giả mới được cấp thẻ " + QuyDinh.SoThangHanThe
+                 + " tháng. Thẻ hết hạn thì không được mượn sách mới và không được gia hạn phiếu.");
+            Dong("Bấm \"Gia hạn thẻ\" để cộng thêm " + QuyDinh.SoThangHanThe
+                 + " tháng (tính từ hạn hiện tại, hoặc từ hôm nay nếu thẻ đã hết hạn).");
+            Dong("Thông tin độc giả: tìm hoặc bấm vào một độc giả để xem hạn thẻ, lịch sử mượn, số cuốn đang mượn, "
+                 + "số phiếu quá hạn và tiền phạt (đã thu / chưa thu).");
+            Dong("Tìm kiếm sách: tìm theo mã, tên, thể loại, tác giả, nhà xuất bản hoặc vị trí kệ. Cột \"Còn / Đang mượn\" "
+                 + "cho biết số bản còn và số bản đang được mượn; cột \"Tình trạng\" là \"Có thể mượn\" hoặc \"Hết sách\".");
 
             // ---------- 5 ----------
             TieuDe("5. Quản lý nhân viên (chỉ quản trị viên)");
@@ -117,11 +120,11 @@ namespace DoAnQLTV
 
             // ---------- 6 ----------
             TieuDe("6. Lập phiếu mượn");
-            Dong("Nhập mã phiếu, chọn độc giả, nhân viên (mặc định là người đang đăng nhập), sách, ngày mượn và hạn trả "
-                 + "(mặc định 7 ngày). Bấm \"Lập phiếu\" hoặc \"Thêm\".");
+            Dong("Mã phiếu được điền sẵn (ví dụ PM0008), bạn vẫn sửa được. Chọn độc giả, nhân viên (mặc định là người đang "
+                 + "đăng nhập), sách, ngày mượn và hạn trả (mặc định 7 ngày). Bấm \"Lập phiếu\" hoặc \"Thêm\".");
             Dong("Danh sách sách hiện kèm số bản còn lại, ví dụ \"(còn 2/3)\". Sách hết bản thì không thể mượn.");
             Dong("Mỗi độc giả được mượn tối đa " + QuyDinh.SoSachToiDa + " cuốn cùng lúc (tính các phiếu chưa trả).");
-            Dong("Độc giả còn sách quá hạn chưa trả thì không được mượn thêm.");
+            Dong("Không cho mượn khi độc giả còn sách quá hạn chưa trả hoặc thẻ đã hết hạn.");
 
             // ---------- 7 ----------
             TieuDe("7. Trả sách và tiền phạt");
@@ -130,15 +133,18 @@ namespace DoAnQLTV
             Dong("Sau khi trả, chương trình hỏi đã thu tiền phạt chưa. Nếu chưa, bạn có thể thu sau ở Danh sách phiếu mượn.");
 
             // ---------- 8 ----------
-            TieuDe("8. Danh sách phiếu mượn, thu phạt và báo cáo");
+            TieuDe("8. Danh sách phiếu mượn, gia hạn, thu phạt và báo cáo");
             Dong("Trạng thái: Đang mượn (xanh dương), Đã trả (xanh lá), Quá hạn (đỏ, kèm số ngày và tiền phạt tạm tính).");
+            Dong("Gia hạn: chọn phiếu đang mượn, bấm \"Gia hạn\" để cộng thêm " + QuyDinh.SoNgayMoiLanGiaHan
+                 + " ngày vào hạn trả. Mỗi phiếu gia hạn tối đa " + QuyDinh.SoLanGiaHanToiDa
+                 + " lần, và chỉ gia hạn được khi phiếu CHƯA quá hạn. Cột \"Gia hạn\" cho biết số lần đã gia hạn.");
             Dong("Thu phạt: chọn phiếu đã trả có tiền phạt, bấm \"Thu phạt\" và xác nhận. Cột \"Tiền phạt\" sẽ chuyển thành \"Đã thu\".");
             Dong("\"Xuất Excel quá hạn\" lưu danh sách phiếu quá hạn ra file .xlsx; \"In quá hạn\" mở bản xem trước để in.");
 
             // ---------- 9 ----------
             TieuDe("9. Nhật ký hoạt động");
-            Dong("Mọi thao tác quan trọng (đăng nhập, thêm/sửa/xóa, mượn, trả, thu phạt, đổi mật khẩu...) đều được ghi lại "
-                 + "cùng thời gian và người thực hiện.");
+            Dong("Mọi thao tác quan trọng (đăng nhập, thêm/sửa/xóa, mượn, trả, gia hạn, thu phạt, đổi mật khẩu...) đều được "
+                 + "ghi lại cùng thời gian và người thực hiện.");
             Dong("Quản trị viên có thể lọc nhật ký theo ngày, nhân viên, loại hoạt động và từ khóa.");
 
             // ---------- Lưu ý ----------

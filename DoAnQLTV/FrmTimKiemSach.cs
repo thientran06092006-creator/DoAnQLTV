@@ -12,7 +12,7 @@ namespace DoAnQLTV
             InitializeComponent();
             AppTheme.ApplyForm(this);
             ApDungGiaoDien();
-            ThemCotTinhTrang();
+            ThemCotMoi();
             LoadSach();
         }
 
@@ -36,14 +36,6 @@ namespace DoAnQLTV
             AcceptButton = btnTimKiem;
         }
 
-        /// <summary>Thêm cột "Số lượng", "Còn lại", "Tình trạng" bằng code, không cần sửa Designer.</summary>
-        private void ThemCotTinhTrang()
-        {
-            ThemCot("colSoLuong", "Số lượng", 18F);
-            ThemCot("colConLai", "Còn lại", 18F);
-            ThemCot("colTinhTrang", "Tình trạng", 26F);
-        }
-
         private void ThemCot(string ten, string tieuDe, float trongSo)
         {
             if (dgvKetQua.Columns.Contains(ten)) return;
@@ -56,6 +48,24 @@ namespace DoAnQLTV
             dgvKetQua.Columns.Add(col);
         }
 
+        /// <summary>
+        /// Thêm cột bằng code (không sửa Designer) và chỉnh lại độ rộng cho vừa 9 cột:
+        /// Mã | Tên | Thể loại | Tác giả | Nhà XB | Năm XB | Vị trí kệ | Còn / Đang mượn | Tình trạng
+        /// </summary>
+        private void ThemCotMoi()
+        {
+            dgvKetQua.Columns["colMaSach"].FillWeight = 12F;
+            dgvKetQua.Columns["colTenSach"].FillWeight = 30F;
+            dgvKetQua.Columns["colTheLoai"].FillWeight = 16F;
+            dgvKetQua.Columns["colTacGia"].FillWeight = 20F;
+
+            ThemCot("colNXB", "Nhà XB", 20F);
+            ThemCot("colNam", "Năm XB", 10F);
+            ThemCot("colViTri", "Vị trí kệ", 14F);
+            ThemCot("colConDangMuon", "Còn / Đang mượn", 18F);
+            ThemCot("colTinhTrang", "Tình trạng", 16F);
+        }
+
         // ================= NẠP DỮ LIỆU =================
 
         /// <summary>Lấy danh sách sách; tuKhoa rỗng/null = lấy tất cả.</summary>
@@ -63,7 +73,8 @@ namespace DoAnQLTV
         {
             const string sql = @"
                 SELECT s.MaSach, s.TenSach, tl.TenTheLoai, tg.TenTacGia,
-                       s.SoLuong, " + ThuVienDb.SqlConLai + @" AS ConLai
+                       s.NhaXuatBan, s.NamXuatBan, s.ViTriKe,
+                       s.SoLuong, " + ThuVienDb.SqlDangMuon + @" AS DangMuon
                 FROM Sach s
                 INNER JOIN TheLoai tl ON s.MaTheLoai = tl.MaTheLoai
                 INNER JOIN TacGia tg ON s.MaTacGia = tg.MaTacGia
@@ -71,7 +82,9 @@ namespace DoAnQLTV
                        OR s.MaSach LIKE @TuKhoa
                        OR s.TenSach LIKE @TuKhoa
                        OR tl.TenTheLoai LIKE @TuKhoa
-                       OR tg.TenTacGia LIKE @TuKhoa)
+                       OR tg.TenTacGia LIKE @TuKhoa
+                       OR s.NhaXuatBan LIKE @TuKhoa
+                       OR s.ViTriKe LIKE @TuKhoa)
                 ORDER BY s.MaSach";
 
             object tuKhoaLike = string.IsNullOrEmpty(tuKhoa) ? null : "%" + tuKhoa + "%";
@@ -90,13 +103,19 @@ namespace DoAnQLTV
             }
         }
 
+        private static string Chuoi(object giaTri)
+        {
+            return giaTri == null || giaTri == DBNull.Value ? "" : giaTri.ToString();
+        }
+
         private void HienThiLuoi(DataTable dt)
         {
             dgvKetQua.Rows.Clear();
             foreach (DataRow r in dt.Rows)
             {
                 int soLuong = Convert.ToInt32(r["SoLuong"]);
-                int conLai = Convert.ToInt32(r["ConLai"]);
+                int dangMuon = Convert.ToInt32(r["DangMuon"]);
+                int conLai = soLuong - dangMuon;
 
                 string tinhTrang;
                 Color mau;
@@ -113,7 +132,9 @@ namespace DoAnQLTV
 
                 int idx = dgvKetQua.Rows.Add(
                     r["MaSach"], r["TenSach"], r["TenTheLoai"], r["TenTacGia"],
-                    soLuong, conLai, tinhTrang);
+                    Chuoi(r["NhaXuatBan"]), Chuoi(r["NamXuatBan"]), Chuoi(r["ViTriKe"]),
+                    Math.Max(conLai, 0) + " / " + dangMuon,
+                    tinhTrang);
 
                 DataGridViewCell o = dgvKetQua.Rows[idx].Cells["colTinhTrang"];
                 o.Style.ForeColor = mau;
