@@ -14,6 +14,10 @@ namespace DoAnQLTV
         public FrmTacGia()
         {
             InitializeComponent();
+
+            txtMaTacGia.MaxLength = 20;
+            txtTenTacGia.MaxLength = 100;
+
             AppTheme.ApplyForm(this);
             ApDungGiaoDien();
             LoadTacGia();

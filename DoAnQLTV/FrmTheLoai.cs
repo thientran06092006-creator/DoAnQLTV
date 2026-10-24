@@ -14,6 +14,10 @@ namespace DoAnQLTV
         public FrmTheLoai()
         {
             InitializeComponent();
+
+            txtMaTheLoai.MaxLength = 20;
+            txtTenTheLoai.MaxLength = 100;
+
             AppTheme.ApplyForm(this);
             ApDungGiaoDien();
             LoadTheLoai();

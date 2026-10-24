@@ -24,6 +24,12 @@ namespace DoAnQLTV
         public FrmDocGia()
         {
             InitializeComponent();
+
+            txtMaDocGia.MaxLength = 20;
+            txtTenDocGia.MaxLength = 100;
+            txtDiaChi.MaxLength = 200;
+            txtSoDienThoai.MaxLength = 15;
+
             AppTheme.ApplyForm(this);
             ThemThanhPhanMoi();
             ApDungGiaoDien();

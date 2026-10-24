@@ -1,5 +1,7 @@
 using System;
 using System.Data.SqlClient;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace DoAnQLTV
 {
@@ -160,18 +162,85 @@ namespace DoAnQLTV
         /// Phiếu ĐÃ TRẢ là lịch sử cũ nên không bị kiểm tra số bản / giới hạn.
         /// </summary>
         public static int SuaPhieu(string maPhieu, string maDocGia, string maNhanVien,
-            string maSach, DateTime ngayMuon, DateTime hanTra)
+    string maSach, DateTime ngayMuon, DateTime hanTra)
         {
             int soDong = 0;
 
             DbConnection.ExecuteInTransaction((conn, tran) =>
             {
-                int dangMo = Scalar<int>(conn, tran,
-                    "SELECT COUNT(*) FROM PhieuMuon WITH (UPDLOCK, HOLDLOCK) WHERE MaPhieu = @p AND NgayTra IS NULL",
-                    DbConnection.Param("@p", maPhieu));
+                // Khóa dòng phiếu rồi đọc trạng thái hiện tại
+                bool tonTai = false;
+                string docGiaCu = null;
+                DateTime hanTraCu = DateTime.MinValue;
+                DateTime? ngayTra = null;
+                decimal? tienPhatCu = null;
+                bool daThuPhat = false;
 
-                if (dangMo > 0)
-                    KiemTraDieuKienMuon(conn, tran, maDocGia, maSach, maPhieu, false);
+                using (SqlCommand cmd = new SqlCommand(
+                    @"SELECT MaDocGia, HanTra, NgayTra, TienPhat, DaThuPhat
+                      FROM PhieuMuon WITH (UPDLOCK, HOLDLOCK)
+                      WHERE MaPhieu = @p", conn, tran))
+                {
+                    cmd.Parameters.Add(DbConnection.Param("@p", maPhieu));
+                    using (SqlDataReader rd = cmd.ExecuteReader())
+                    {
+                        if (rd.Read())
+                        {
+                            tonTai = true;
+                            docGiaCu = rd["MaDocGia"].ToString();
+                            hanTraCu = Convert.ToDateTime(rd["HanTra"]).Date;
+                            if (rd["NgayTra"] != DBNull.Value)
+                                ngayTra = Convert.ToDateTime(rd["NgayTra"]).Date;
+                            if (rd["TienPhat"] != DBNull.Value)
+                                tienPhatCu = Convert.ToDecimal(rd["TienPhat"]);
+                            daThuPhat = Convert.ToBoolean(rd["DaThuPhat"]);
+                        }
+                    }
+                }
+                if (!tonTai) return;   // soDong = 0 -> form báo "không tìm thấy phiếu"
+
+                bool doiTienPhat = false;
+                decimal tienPhatMoi = 0m;
+
+                if (ngayTra == null)
+                {
+                    // Phiếu chưa trả: không được kéo dài hạn trả bằng cách sửa phiếu
+                    // (phải dùng Gia hạn để còn bị giới hạn số lần và điều kiện chưa quá hạn).
+                    if (hanTra.Date > hanTraCu)
+                        throw new LoiNghiepVu(
+                            "Không thể kéo dài hạn trả bằng cách sửa phiếu.\n" +
+                            "Hãy dùng nút Gia hạn (mỗi phiếu tối đa " + QuyDinh.SoLanGiaHanToiDa +
+                            " lần và chỉ gia hạn được khi chưa quá hạn).", "phieu");
+
+                    // Kiểm tra số bản còn lại và giới hạn mượn (bỏ qua chính phiếu này);
+                    // nếu đổi sang độc giả khác thì kiểm tra thẻ và phiếu quá hạn như phiếu mới.
+                    bool doiDocGia = !string.Equals(maDocGia, docGiaCu, StringComparison.OrdinalIgnoreCase);
+                    KiemTraDieuKienMuon(conn, tran, maDocGia, maSach, maPhieu, doiDocGia);
+                }
+                else
+                {
+                    // Phiếu đã trả là lịch sử: không chặn theo số bản hay giới hạn mượn,
+                    // nhưng ngày tháng phải còn hợp lệ và không làm lệch tiền phạt đã thu.
+                    if (ngayMuon.Date > ngayTra.Value)
+                        throw new LoiNghiepVu(
+                            "Ngày mượn không được sau ngày trả sách (" +
+                            ngayTra.Value.ToString("dd/MM/yyyy") + ").", "phieu");
+
+                    decimal phatCu = tienPhatCu.HasValue
+                        ? tienPhatCu.Value
+                        : QuyDinh.TinhTienPhat(hanTraCu, ngayTra.Value);
+                    decimal phatMoi = QuyDinh.TinhTienPhat(hanTra, ngayTra.Value);
+
+                    if (phatMoi != phatCu)
+                    {
+                        if (daThuPhat)
+                            throw new LoiNghiepVu(
+                                "Phiếu này đã thu phạt " + QuyDinh.DinhDangTien(phatCu) +
+                                " nên không thể đổi hạn trả làm thay đổi tiền phạt.", "phieu");
+                        doiTienPhat = true;
+                        tienPhatMoi = phatMoi;
+                    }
+                }
 
                 using (SqlCommand cmd = new SqlCommand(@"
                     UPDATE PhieuMuon
@@ -179,7 +248,8 @@ namespace DoAnQLTV
                         MaNhanVien = @MaNhanVien,
                         MaSach = @MaSach,
                         NgayMuon = @NgayMuon,
-                        HanTra = @HanTra
+                        HanTra = @HanTra,
+                        TienPhat = CASE WHEN @DoiTienPhat = 1 THEN @TienPhat ELSE TienPhat END
                     WHERE MaPhieu = @MaPhieu", conn, tran))
                 {
                     cmd.Parameters.Add(DbConnection.Param("@MaDocGia", maDocGia));
@@ -187,6 +257,8 @@ namespace DoAnQLTV
                     cmd.Parameters.Add(DbConnection.Param("@MaSach", maSach));
                     cmd.Parameters.Add(DbConnection.Param("@NgayMuon", ngayMuon));
                     cmd.Parameters.Add(DbConnection.Param("@HanTra", hanTra));
+                    cmd.Parameters.Add(DbConnection.Param("@DoiTienPhat", doiTienPhat ? 1 : 0));
+                    cmd.Parameters.Add(DbConnection.Param("@TienPhat", tienPhatMoi));
                     cmd.Parameters.Add(DbConnection.Param("@MaPhieu", maPhieu));
                     soDong = cmd.ExecuteNonQuery();
                 }
@@ -275,3 +347,6 @@ namespace DoAnQLTV
         }
     }
 }
+
+
+

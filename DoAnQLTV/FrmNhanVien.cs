@@ -23,6 +23,12 @@ namespace DoAnQLTV
         public FrmNhanVien()
         {
             InitializeComponent();
+
+            txtMaNhanVien.MaxLength = 20;
+            txtTenNhanVien.MaxLength = 100;
+            txtSoDienThoai.MaxLength = 15;
+            txtDiaChi.MaxLength = 200;
+
             AppTheme.ApplyForm(this);
             ThemThanhPhanMoi();
             ApDungGiaoDien();

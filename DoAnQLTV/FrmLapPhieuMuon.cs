@@ -18,6 +18,9 @@ namespace DoAnQLTV
         public FrmLapPhieuMuon()
         {
             InitializeComponent();
+
+            txtMaPhieu.MaxLength = 20;
+
             AppTheme.ApplyForm(this);
             ApDungGiaoDien();
 
@@ -189,7 +192,7 @@ namespace DoAnQLTV
         {
             txtMaPhieu.Text = MaTuSinh.TiepTheo("PhieuMuon", "MaPhieu", "PM", 4);
             cboSach.SelectedIndex = -1;
-            cboDocGia.SelectedIndex = cboDocGia.Items.Count > 0 ? 0 : -1;
+            cboDocGia.SelectedIndex = -1;   // bắt buộc chọn độc giả, tránh lập nhầm cho độc giả đầu danh sách
             cboNhanVien.SelectedIndex = TimNhanVienDangNhap();
             dtpNgayMuon.Value = DateTime.Today;
             dtpHanTra.Value = DateTime.Today.AddDays(SoNgayMuonMacDinh);
@@ -319,6 +322,13 @@ namespace DoAnQLTV
             }
 
             if (!KiemTraDuLieu()) return;
+
+            if (dtpHanTra.Value.Date < DateTime.Today)
+            {
+                AppTheme.Warning("Hạn trả của phiếu mới không được trước ngày hôm nay.");
+                dtpHanTra.Focus();
+                return;
+            }
 
             try
             {

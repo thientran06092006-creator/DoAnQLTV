@@ -20,6 +20,10 @@ namespace DoAnQLTV
         public FrmSach()
         {
             InitializeComponent();
+
+            txtMaSach.MaxLength = 20;
+            txtTenSach.MaxLength = 200;
+
             AppTheme.ApplyForm(this);
             ThemO();
             ApDungGiaoDien();
@@ -391,37 +395,66 @@ namespace DoAnQLTV
 
             try
             {
-                // Không cho giảm số bản xuống thấp hơn số bản đang được mượn chưa trả
-                int dangMuon = DbConnection.ExecuteScalar<int>(
-                    "SELECT COUNT(*) FROM PhieuMuon WHERE MaSach = @MaSach AND NgayTra IS NULL",
-                    DbConnection.Param("@MaSach", maSachDangChon));
+                // Không cho giảm số bản xuống thấp hơn số bản đang được mượn chưa trả.
+                // Kiểm tra và cập nhật trong 1 transaction, khóa dòng sách (giống lúc lập phiếu)
+                // để không bị lập phiếu xen vào giữa hai bước.
+                int soLuongMoi = (int)nudSoLuong.Value;
+                int dangMuon = 0;
+                int soDong = 0;
+                bool biChan = false;
 
-                if ((int)nudSoLuong.Value < dangMuon)
+                DbConnection.ExecuteInTransaction((conn, tran) =>
+                {
+                    using (SqlCommand khoa = new SqlCommand(
+                        "SELECT MaSach FROM Sach WITH (UPDLOCK, HOLDLOCK) WHERE MaSach = @MaSach", conn, tran))
+                    {
+                        khoa.Parameters.Add(DbConnection.Param("@MaSach", maSachDangChon));
+                        khoa.ExecuteScalar();
+                    }
+
+                    using (SqlCommand dem = new SqlCommand(
+                        "SELECT COUNT(*) FROM PhieuMuon WHERE MaSach = @MaSach AND NgayTra IS NULL", conn, tran))
+                    {
+                        dem.Parameters.Add(DbConnection.Param("@MaSach", maSachDangChon));
+                        dangMuon = Convert.ToInt32(dem.ExecuteScalar());
+                    }
+
+                    if (soLuongMoi < dangMuon)
+                    {
+                        biChan = true;
+                        return;
+                    }
+
+                    using (SqlCommand sua = new SqlCommand(@"
+                        UPDATE Sach
+                        SET TenSach    = @TenSach,
+                            MaTheLoai  = @MaTheLoai,
+                            MaTacGia   = @MaTacGia,
+                            SoLuong    = @SoLuong,
+                            NhaXuatBan = @NhaXuatBan,
+                            NamXuatBan = @NamXuatBan,
+                            ViTriKe    = @ViTriKe
+                        WHERE MaSach = @MaSach", conn, tran))
+                    {
+                        sua.Parameters.Add(DbConnection.Param("@TenSach", txtTenSach.Text.Trim()));
+                        sua.Parameters.Add(DbConnection.Param("@MaTheLoai", cboTheLoai.SelectedValue));
+                        sua.Parameters.Add(DbConnection.Param("@MaTacGia", cboTacGia.SelectedValue));
+                        sua.Parameters.Add(DbConnection.Param("@SoLuong", soLuongMoi));
+                        sua.Parameters.Add(DbConnection.Param("@NhaXuatBan", NullNeuRong(txtNhaXuatBan.Text)));
+                        sua.Parameters.Add(DbConnection.Param("@NamXuatBan", NamXuatBanDeLuu()));
+                        sua.Parameters.Add(DbConnection.Param("@ViTriKe", NullNeuRong(txtViTriKe.Text)));
+                        sua.Parameters.Add(DbConnection.Param("@MaSach", maSachDangChon));
+                        soDong = sua.ExecuteNonQuery();
+                    }
+                });
+
+                if (biChan)
                 {
                     AppTheme.Warning("Sách này đang có " + dangMuon + " bản được mượn chưa trả.\n" +
                                      "Số lượng không được nhỏ hơn " + dangMuon + ".");
                     nudSoLuong.Focus();
                     return;
                 }
-
-                int soDong = DbConnection.ExecuteNonQuery(@"
-                    UPDATE Sach
-                    SET TenSach    = @TenSach,
-                        MaTheLoai  = @MaTheLoai,
-                        MaTacGia   = @MaTacGia,
-                        SoLuong    = @SoLuong,
-                        NhaXuatBan = @NhaXuatBan,
-                        NamXuatBan = @NamXuatBan,
-                        ViTriKe    = @ViTriKe
-                    WHERE MaSach = @MaSach",
-                    DbConnection.Param("@TenSach", txtTenSach.Text.Trim()),
-                    DbConnection.Param("@MaTheLoai", cboTheLoai.SelectedValue),
-                    DbConnection.Param("@MaTacGia", cboTacGia.SelectedValue),
-                    DbConnection.Param("@SoLuong", (int)nudSoLuong.Value),
-                    DbConnection.Param("@NhaXuatBan", NullNeuRong(txtNhaXuatBan.Text)),
-                    DbConnection.Param("@NamXuatBan", NamXuatBanDeLuu()),
-                    DbConnection.Param("@ViTriKe", NullNeuRong(txtViTriKe.Text)),
-                    DbConnection.Param("@MaSach", maSachDangChon));
 
                 if (soDong == 0)
                 {
