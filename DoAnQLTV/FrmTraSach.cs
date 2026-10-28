@@ -9,7 +9,8 @@ namespace DoAnQLTV
     public partial class FrmTraSach : Form
     {
         private const string DinhDangNgay = "dd/MM/yyyy";
-        private const int SoNgayMuonMacDinh = 7;
+        // SỬA LỖI: Xóa hằng số SoNgayMuonMacDinh = 7 — form này chỉ xử lý trả sách,
+        // không lập phiếu mượn mới nên không cần hạn trả mặc định.
 
         public FrmTraSach()
         {
@@ -147,7 +148,9 @@ namespace DoAnQLTV
             cboDocGia.SelectedIndex = -1;   // để trống cho đến khi chọn phiếu (tránh hiện nhầm độc giả đầu danh sách)
             cboSach.SelectedIndex = -1;
             dtpNgayMuon.Value = DateTime.Today;
-            dtpHanTra.Value = DateTime.Today.AddDays(SoNgayMuonMacDinh);
+            // SỬA LỖI: Thay AddDays(SoNgayMuonMacDinh) bằng DateTime.Today — dtpHanTra ở form này
+            // bị vô hiệu hóa (Enabled = false) và chỉ để xem thông tin phiếu đã chọn, không lập phiếu mới.
+            dtpHanTra.Value = DateTime.Today;
             dtpNgayTra.Value = DateTime.Today;
         }
 

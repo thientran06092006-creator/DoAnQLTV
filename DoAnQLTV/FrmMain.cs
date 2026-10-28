@@ -1678,6 +1678,9 @@ namespace DoAnQLTV
                 return;
             }
 
+            // Phóng to form con lên một chút để hiển thị đầy đủ thông tin, không bị cắt bớt chữ
+            PhongToFormCon(form);
+
             form.StartPosition = FormStartPosition.CenterScreen;
 
             form.FormClosed += (s, e) =>
@@ -1689,6 +1692,38 @@ namespace DoAnQLTV
             form.Show();
         }
 
+        /// <summary>
+        /// Phóng to các form con lên một chút (rộng hơn khoảng 20%, cao hơn khoảng 15%)
+        /// để giao diện rộng rãi, các bảng danh sách hiển thị đầy đủ thông tin, không bị cắt bớt chữ.
+        /// </summary>
+        private void PhongToFormCon(Form form)
+        {
+            try
+            {
+                // Tỷ lệ phóng to mặc định: rộng hơn 20%, cao hơn 15%
+                float tyLeX = 1.20f;
+                float tyLeY = 1.15f;
+
+                // Kiểm tra vùng làm việc của màn hình để không vượt quá kích thước màn hình
+                Rectangle workingArea = Screen.FromControl(this).WorkingArea;
+                if (form.Width * tyLeX > workingArea.Width * 0.95f)
+                    tyLeX = (workingArea.Width * 0.95f) / form.Width;
+                if (form.Height * tyLeY > workingArea.Height * 0.92f)
+                    tyLeY = (workingArea.Height * 0.92f) / form.Height;
+
+                if (tyLeX > 1.0f || tyLeY > 1.0f)
+                {
+                    form.Scale(new SizeF(Math.Max(1.0f, tyLeX), Math.Max(1.0f, tyLeY)));
+                }
+
+                // Cho phép nút phóng to (Maximize) trên thanh tiêu đề của form con
+                form.MaximizeBox = true;
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine("Không phóng to được form con: " + ex.Message);
+            }
+        }
 
         private void FrmMain_Activated(object sender, EventArgs e)
         {

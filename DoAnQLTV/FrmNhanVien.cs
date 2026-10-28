@@ -294,7 +294,8 @@ namespace DoAnQLTV
                     DbConnection.Param("@MatKhau", TaiKhoan.BamMatKhau(ma, QuyDinh.MatKhauMacDinh)),
                     DbConnection.Param("@VaiTro", VaiTroDangChon()));
 
-                NatKyThem(ma);
+                // SỬA LỖI: Đổi NatKyThem -> NhatKyThem (sai chính tả: thiếu chữ "h" trong "Nhật Ký")
+                NhatKyThem(ma);
 
                 AppTheme.Info("Thêm nhân viên thành công!\nMật khẩu mặc định: " + QuyDinh.MatKhauMacDinh);
                 LoadNhanVien();
@@ -310,7 +311,8 @@ namespace DoAnQLTV
             }
         }
 
-        private void NatKyThem(string ma)
+        // SỬA LỖI: Đổi tên hàm NatKyThem -> NhatKyThem (đúng chính tả: Nhật Ký, không phải Nat Ký)
+        private void NhatKyThem(string ma)
         {
             NhatKy.Ghi("Thêm nhân viên",
                 "Thêm nhân viên \"" + txtTenNhanVien.Text.Trim() + "\" - Mã NV: " + ma +

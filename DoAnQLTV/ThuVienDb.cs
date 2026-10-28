@@ -161,8 +161,9 @@ namespace DoAnQLTV
         /// Sửa phiếu mượn. Trả về số dòng được sửa (0 = không tìm thấy phiếu).
         /// Phiếu ĐÃ TRẢ là lịch sử cũ nên không bị kiểm tra số bản / giới hạn.
         /// </summary>
+        // SỬA LỖI: Căn thụt lề tham số dòng 2 từ 4 khoảng trắng thành 12 khoảng trắng (nhất quán với LapPhieu)
         public static int SuaPhieu(string maPhieu, string maDocGia, string maNhanVien,
-    string maSach, DateTime ngayMuon, DateTime hanTra)
+            string maSach, DateTime ngayMuon, DateTime hanTra)
         {
             int soDong = 0;
 
@@ -347,6 +348,3 @@ namespace DoAnQLTV
         }
     }
 }
-
-
-

@@ -146,11 +146,21 @@ namespace DoAnQLTV
 
         private void ThemCotMoi()
         {
-            ThemCot("colSoLuong", "Số lượng", 32F);
-            ThemCot("colConLai", "Còn lại", 30F);
-            ThemCot("colNXB", "Nhà XB", 70F);
-            ThemCot("colNam", "Năm XB", 30F);
-            ThemCot("colViTri", "Vị trí kệ", 40F);
+            ThemCot("colSoLuong", "Số lượng", 20F);
+            ThemCot("colConLai", "Còn lại", 20F);
+            ThemCot("colNXB", "Nhà XB", 90F);
+            ThemCot("colNam", "Năm XB", 22F);
+            ThemCot("colViTri", "Vị trí kệ", 50F);
+
+            // Tối ưu tỷ lệ độ rộng để tên sách và thông tin hiển thị trọn vẹn, không bị cắt dấu "..."
+            if (dgvSach.Columns.Contains("colTenSach"))
+                dgvSach.Columns["colTenSach"].FillWeight = 180F;
+            if (dgvSach.Columns.Contains("colTheLoai"))
+                dgvSach.Columns["colTheLoai"].FillWeight = 85F;
+            if (dgvSach.Columns.Contains("colTacGia"))
+                dgvSach.Columns["colTacGia"].FillWeight = 85F;
+            if (dgvSach.Columns.Contains("colMaSach"))
+                dgvSach.Columns["colMaSach"].FillWeight = 35F;
         }
 
         // ================= NẠP DỮ LIỆU =================
